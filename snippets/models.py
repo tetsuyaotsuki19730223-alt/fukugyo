@@ -12,7 +12,13 @@ class Diagnosis(models.Model):
         ("build", "構築型（SaaS/ツール）"),
     ]
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="diagnoses")
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="diagnoses",
+        null=True,
+        blank=True,
+    )
     q1_status = models.CharField(max_length=20)
     q2_time = models.CharField(max_length=20)
     q3_strength = models.CharField(max_length=20)
