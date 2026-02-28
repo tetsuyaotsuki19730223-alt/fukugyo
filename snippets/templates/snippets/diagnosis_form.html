@@ -1,0 +1,7 @@
+<h1>副業タイプ診断（5問）</h1>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">診断する</button>
+</form>

@@ -1,0 +1,8 @@
+<h1>{{ object.title }}</h1>
+<pre>{{ object.code }}</pre>
+
+<p>
+  <a href="{% url 'snippet_list' %}">Back</a> |
+  <a href="{% url 'snippet_update' object.pk %}">Edit</a> |
+  <a href="{% url 'snippet_delete' object.pk %}">Delete</a>
+</p>

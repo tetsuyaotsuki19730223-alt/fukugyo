@@ -1,0 +1,38 @@
+<h1>Snippets</h1>
+<p><a href="{% url 'snippet_create' %}">+ New</a></p>
+
+<ul>
+  {% for s in snippets %}
+    <li>
+      <a href="{% url 'snippet_detail' s.pk %}">{{ s.title }}</a>
+      — <a href="{% url 'snippet_update' s.pk %}">Edit</a>
+      — <a href="{% url 'snippet_delete' s.pk %}">Delete</a>
+    </li>
+  {% empty %}
+    <li>No snippets yet.</li>
+  {% endfor %}
+</ul>
+
+{% if user.is_authenticated %}
+  <form action="{% url 'create_checkout_session' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">サブスク登録する</button>
+  </form>
+  <p><a href="{% url 'premium_page' %}">Premiumを見る</a></p>
+{% else %}
+  <p><a href="/accounts/login/">ログイン</a></p>
+{% endif %}
+
+{% if user.is_authenticated %}
+<button id="checkout">サブスク登録する</button>
+<script>
+document.getElementById("checkout").addEventListener("click", async () => {
+  const res = await fetch("{% url 'create_checkout_session' %}", {
+    method: "POST",
+    headers: {"X-CSRFToken": "{{ csrf_token }}"},
+  });
+  const data = await res.json();
+  location.href = data.url;
+});
+</script>
+{% endif %}

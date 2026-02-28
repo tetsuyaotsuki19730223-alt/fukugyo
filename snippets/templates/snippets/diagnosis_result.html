@@ -1,0 +1,17 @@
+<h1>診断結果：{{ d.get_result_type_display }}</h1>
+
+<h2>今日やる1アクション（無料）</h2>
+<p>{{ free_action }}</p>
+
+{% if is_premium %}
+  <h2>7日ロードマップ（有料）</h2>
+  <ol>
+    {% for item in premium_roadmap %}
+      <li>{{ item }}</li>
+    {% endfor %}
+  </ol>
+{% else %}
+  <h2>7日ロードマップ（有料）</h2>
+  <p>続きはプレミアムで解放されます。</p>
+  <p><a href="{% url 'premium_page' %}">Premiumページへ</a></p>
+{% endif %}

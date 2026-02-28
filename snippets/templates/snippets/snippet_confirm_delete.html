@@ -1,0 +1,9 @@
+<h1>Delete Snippet</h1>
+<p>Are you sure you want to delete "{{ object }}"?</p>
+
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Yes, delete</button>
+</form>
+
+<p><a href="{% url 'snippet_detail' object.pk %}">Cancel</a></p>
