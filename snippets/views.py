@@ -22,6 +22,9 @@ from .forms import DiagnosisForm
 from .models import Diagnosis
 from .services import judge_result_type
 
+stripe.api_key = settings.STRIPE_SECRET_KEY
+# Stripeの「Price ID」（例: price_***）を環境変数などで管理
+STRIPE_PRICE_ID = getattr(settings, "STRIPE_PRICE_ID", None) or "price_xxx"
 
 def diagnosis_start(request):
     if request.method == "POST":
@@ -45,11 +48,17 @@ def diagnosis_start(request):
     return render(request, "snippets/diagnosis_form.html", {"form": form})
 
 
-@login_required
 def diagnosis_result(request, pk: int):
-    d = get_object_or_404(Diagnosis, pk=pk, user=request.user)
-    is_premium = hasattr(request.user, "profile") and request.user.profile.is_premium
-
+    def diagnosis_result(request, pk: int):
+    # ログインしていれば「自分の診断」だけ見せる
+    # 未ログインなら user が NULL の診断だけ見せる（匿名診断）
+        if request.user.is_authenticated:
+            d = get_object_or_404(Diagnosis, pk=pk, user=request.user)
+            is_premium = hasattr(request.user, "profile") and request.user.profile.is_premium
+        else:
+            d = get_object_or_404(Diagnosis, pk=pk, user__isnull=True)
+            is_premium = False
+            
     # タイプ別の無料メッセージ（今日やる1アクション）
     free_action = {
         "stable": "今日やる：クラウドソーシングで『自分ができる仕事』を3つ探して、案件URLをメモする。",
@@ -113,10 +122,7 @@ def stripe_webhook(request):
 
     return HttpResponse(status=200)
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
 
-# Stripeの「Price ID」（例: price_***）を環境変数などで管理
-STRIPE_PRICE_ID = getattr(settings, "STRIPE_PRICE_ID", None) or "price_xxx"
 
 @login_required
 @require_POST
@@ -139,6 +145,7 @@ def create_checkout_session(request):
     )
     return JsonResponse({"url": session.url})
 
+@login_required
 @premium_required
 def premium_page(request):
     return render(request, "snippets/premium.html")
