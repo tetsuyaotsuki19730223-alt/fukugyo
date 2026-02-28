@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-ih%v0o05mn5gess!l89$92c+g66_pz5h^c_v*ej@978x#)+&qe
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -136,3 +136,7 @@ STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET", "")
 
 # 開発時のURL（本番はドメインに）
 SITE_URL = os.environ.get("SITE_URL", "http://127.0.0.1:8000")
+
+CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",")
+if CSRF_TRUSTED_ORIGINS == [""]:
+    CSRF_TRUSTED_ORIGINS = []
