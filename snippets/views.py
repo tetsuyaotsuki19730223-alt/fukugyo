@@ -48,18 +48,18 @@ def diagnosis_start(request):
     return render(request, "snippets/diagnosis_form.html", {"form": form})
 
 
+from django.shortcuts import render, get_object_or_404
+
 def diagnosis_result(request, pk: int):
-    def diagnosis_result(request, pk: int):
-    # ログインしていれば「自分の診断」だけ見せる
-    # 未ログインなら user が NULL の診断だけ見せる（匿名診断）
-        if request.user.is_authenticated:
-            d = get_object_or_404(Diagnosis, pk=pk, user=request.user)
-            is_premium = hasattr(request.user, "profile") and request.user.profile.is_premium
-        else:
-            d = get_object_or_404(Diagnosis, pk=pk, user__isnull=True)
-            is_premium = False
-            
-    # タイプ別の無料メッセージ（今日やる1アクション）
+    # ログインしていれば「自分の診断」だけ
+    if request.user.is_authenticated:
+        d = get_object_or_404(Diagnosis, pk=pk, user=request.user)
+        is_premium = hasattr(request.user, "profile") and request.user.profile.is_premium
+    else:
+        # 未ログインの場合は「匿名診断(user=NULL)」だけ見せる
+        d = get_object_or_404(Diagnosis, pk=pk, user__isnull=True)
+        is_premium = False
+
     free_action = {
         "stable": "今日やる：クラウドソーシングで『自分ができる仕事』を3つ探して、案件URLをメモする。",
         "influence": "今日やる：発信テーマを1つ決めて、自己紹介ポストを下書きする（100字でOK）。",
@@ -67,7 +67,6 @@ def diagnosis_result(request, pk: int):
         "build": "今日やる：解決したい悩みを1つ選び、入力→出力が1画面で完結するツール案を1つ書く。",
     }[d.result_type]
 
-    # 有料で見せる “7日ロードマップ”（最初は固定テキストでOK）
     premium_roadmap = {
         "stable": ["Day1: できる作業を棚卸し", "Day2: 提案文テンプレ作成", "Day3: 5件応募", "Day4: 初回納品の型", "Day5: 実績まとめ", "Day6: 単価UP提案", "Day7: 継続化"],
         "influence": ["Day1: テーマ決定", "Day2: 3本下書き", "Day3: 投稿", "Day4: 型を作る", "Day5: 導線整備", "Day6: 商品案", "Day7: 初販売導線"],
