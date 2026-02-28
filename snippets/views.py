@@ -168,7 +168,7 @@ class SnippetCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.created_by = self.request.user
         return super().form_valid(form)
-    
+        
 class OwnerRequiredMixin(UserPassesTestMixin):
     def test_func(self):
         obj = self.get_object()
