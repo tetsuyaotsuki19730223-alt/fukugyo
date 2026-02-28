@@ -23,14 +23,14 @@ from .models import Diagnosis
 from .services import judge_result_type
 
 
-@login_required
 def diagnosis_start(request):
     if request.method == "POST":
         form = DiagnosisForm(request.POST)
         if form.is_valid():
             result_type = judge_result_type(form.cleaned_data)
+            user = request.user if request.user.is_authenticated else None
             d = Diagnosis.objects.create(
-                user=request.user,
+                user=user,
                 q1_status=form.cleaned_data["q1_status"],
                 q2_time=form.cleaned_data["q2_time"],
                 q3_strength=form.cleaned_data["q3_strength"],
