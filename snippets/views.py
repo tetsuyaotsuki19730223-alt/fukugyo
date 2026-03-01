@@ -22,6 +22,7 @@ from .forms import DiagnosisForm
 from .models import Diagnosis
 from .services import judge_result_type
 from django.http import FileResponse, Http404
+import os
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 # Stripeの「Price ID」（例: price_***）を環境変数などで管理
@@ -127,6 +128,17 @@ def stripe_webhook(request):
 @login_required
 @require_POST
 def create_checkout_session(request):
+    # DEBUG: 本番で環境変数が渡っているか確認（キー名だけ）
+    if not getattr(settings, "STRIPE_PRICE_ID", ""):
+        stripe_keys = sorted([k for k in os.environ.keys() if "STRIPE" in k])
+        return HttpResponse(
+            "STRIPE_PRICE_ID is empty. STRIPE-related env keys: " + ", ".join(stripe_keys),
+            status=500,
+        )
+    
+    if not settings.STRIPE_SECRET_KEY:
+        raise ValueError("STRIPE_SECRET_KEY is not set")
+    
     # Profile を必ず用意
     from .models import Profile
     profile, _ = Profile.objects.get_or_create(user=request.user)
