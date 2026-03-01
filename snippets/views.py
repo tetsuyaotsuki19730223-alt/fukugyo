@@ -163,6 +163,7 @@ def create_checkout_session(request):
 
 @login_required
 def premium_page(request):
+    from .models import Profile
     profile, _ = Profile.objects.get_or_create(user=request.user)
     if not profile.is_premium:
         return render(request, "snippets/premium_required.html")
@@ -203,7 +204,30 @@ class SnippetDeleteView(LoginRequiredMixin, OwnerRequiredMixin, DeleteView):
     template_name = "snippets/snippet_confirm_delete.html"
     success_url = reverse_lazy("snippet_list")
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.conf import settings
+import stripe
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+@login_required
 def billing_success(request):
+    session_id = request.GET.get("session_id")
+    if not session_id:
+        return redirect("billing_cancel")
+
+    session = stripe.checkout.Session.retrieve(session_id)
+    sub_id = session.get("subscription")
+    customer_id = session.get("customer")
+
+    from .models import Profile
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+    profile.stripe_subscription_id = sub_id
+    profile.stripe_customer_id = customer_id
+    profile.is_premium = True
+    profile.save()
+
     return render(request, "snippets/billing_success.html")
 
 def billing_cancel(request):
@@ -234,3 +258,13 @@ def premium_download_stable(request):
         filename="stable_7day_roadmap.pdf",
         content_type="application/pdf",
     )
+
+from django.http import HttpResponse
+from django.conf import settings
+
+def debug_db(request):
+    engine = settings.DATABASES["default"]["ENGINE"]
+    name = settings.DATABASES["default"].get("NAME", "")
+    # 安全のため、DB名は表示しない（SQLite判定にだけ使う）
+    db_type = "sqlite3" if "sqlite3" in engine else ("postgresql" if "postgresql" in engine else engine)
+    return HttpResponse(f"DB_ENGINE={db_type}", status=200)
