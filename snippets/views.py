@@ -119,7 +119,6 @@ def stripe_webhook(request):
     # 支払い失敗や解約でOFFにする（最低限）
     if event_type in ("customer.subscription.deleted",):
         sub_id = data_obj.get("id")
-        from .models import Profile
         Profile.objects.filter(stripe_subscription_id=sub_id).update(is_premium=False)
 
     return HttpResponse(status=200)
@@ -134,7 +133,6 @@ def create_checkout_session(request):
         raise ValueError("STRIPE_SECRET_KEY is not set")
     
     # Profile を必ず用意
-    from .models import Profile
     profile, _ = Profile.objects.get_or_create(user=request.user)
 
     # Customer を必ず用意
@@ -147,7 +145,7 @@ def create_checkout_session(request):
     if not getattr(settings, "STRIPE_PRICE_ID", None):
         raise ValueError("STRIPE_PRICE_ID is not set")
 
-    domain = getattr(settings, "SITE_URL", "http://localhost:8000").rstrip("/")
+    domain = settings.SITE_URL
 
     # ここで必ず session を作る（分岐させない）
     session = stripe.checkout.Session.create(
@@ -163,7 +161,6 @@ def create_checkout_session(request):
 
 @login_required
 def premium_page(request):
-    from .models import Profile
     profile, _ = Profile.objects.get_or_create(user=request.user)
     if not profile.is_premium:
         return render(request, "snippets/premium_required.html")
@@ -204,45 +201,45 @@ class SnippetDeleteView(LoginRequiredMixin, OwnerRequiredMixin, DeleteView):
     template_name = "snippets/snippet_confirm_delete.html"
     success_url = reverse_lazy("snippet_list")
 
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.conf import settings
 import stripe
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
+from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from .models import Profile
+
+
 @login_required
 def billing_success(request):
     session_id = request.GET.get("session_id")
+
+    # 直アクセスでも、すでにPremiumなら成功ページを見せる
+    profile, _ = Profile.objects.get_or_create(user=request.user)
     if not session_id:
+        if profile.is_premium:
+            return render(request, "snippets/billing_success.html")
         return redirect("billing_cancel")
 
+    # session_id があるときだけ Stripeから情報を取りに行ってPremium確定
     session = stripe.checkout.Session.retrieve(session_id)
-    sub_id = session.get("subscription")
-    customer_id = session.get("customer")
-
-    from .models import Profile
-    profile, _ = Profile.objects.get_or_create(user=request.user)
-    profile.stripe_subscription_id = sub_id
-    profile.stripe_customer_id = customer_id
+    profile.stripe_customer_id = session.get("customer")
+    profile.stripe_subscription_id = session.get("subscription")
     profile.is_premium = True
-    profile.save()
+    profile.save(update_fields=["stripe_customer_id", "stripe_subscription_id", "is_premium"])
 
     return render(request, "snippets/billing_success.html")
 
 def billing_cancel(request):
     return render(request, "snippets/billing_cancel.html")
 
-from django.contrib.auth.decorators import login_required
-from django.http import FileResponse, Http404
 from django.shortcuts import redirect
-from django.conf import settings
 from pathlib import Path
 
 @login_required
 def premium_download_stable(request):
     # Premiumチェック
-    from .models import Profile
     profile, _ = Profile.objects.get_or_create(user=request.user)
     if not profile.is_premium:
         return redirect("premium_page")
@@ -259,12 +256,3 @@ def premium_download_stable(request):
         content_type="application/pdf",
     )
 
-from django.http import HttpResponse
-from django.conf import settings
-
-def debug_db(request):
-    engine = settings.DATABASES["default"]["ENGINE"]
-    name = settings.DATABASES["default"].get("NAME", "")
-    # 安全のため、DB名は表示しない（SQLite判定にだけ使う）
-    db_type = "sqlite3" if "sqlite3" in engine else ("postgresql" if "postgresql" in engine else engine)
-    return HttpResponse(f"DB_ENGINE={db_type}", status=200)
