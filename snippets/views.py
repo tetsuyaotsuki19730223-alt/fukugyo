@@ -215,14 +215,15 @@ from .models import Profile
 def billing_success(request):
     session_id = request.GET.get("session_id")
 
-    # 直アクセスでも、すでにPremiumなら成功ページを見せる
     profile, _ = Profile.objects.get_or_create(user=request.user)
+
+    # 直アクセス（session_idなし）でも、すでにPremiumなら成功ページを表示
     if not session_id:
         if profile.is_premium:
             return render(request, "snippets/billing_success.html")
         return redirect("billing_cancel")
 
-    # session_id があるときだけ Stripeから情報を取りに行ってPremium確定
+    # session_idあり：Stripeで検証してPremium確定
     session = stripe.checkout.Session.retrieve(session_id)
     profile.stripe_customer_id = session.get("customer")
     profile.stripe_subscription_id = session.get("subscription")
@@ -230,6 +231,7 @@ def billing_success(request):
     profile.save(update_fields=["stripe_customer_id", "stripe_subscription_id", "is_premium"])
 
     return render(request, "snippets/billing_success.html")
+
 
 def billing_cancel(request):
     return render(request, "snippets/billing_cancel.html")
