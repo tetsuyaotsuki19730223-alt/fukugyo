@@ -209,16 +209,24 @@ def billing_success(request):
 def billing_cancel(request):
     return render(request, "snippets/billing_cancel.html")
 
+from django.contrib.auth.decorators import login_required
+from django.http import FileResponse, Http404
+from django.shortcuts import redirect
+from django.conf import settings
+from pathlib import Path
+
 @login_required
 def premium_download_stable(request):
+    # Premiumチェック
+    from .models import Profile
     profile, _ = Profile.objects.get_or_create(user=request.user)
     if not profile.is_premium:
-        # 課金案内ページへ（または403でもOK）
         return redirect("premium_page")
 
-    pdf_path = settings.BASE_DIR / "static" / "premium" / "stable_7day_roadmap.pdf"
+    # PDFの実体パス（あなたの配置：プロジェクト直下 static/premium/）
+    pdf_path = Path(settings.BASE_DIR) / "static" / "premium" / "stable_7day_roadmap.pdf"
     if not pdf_path.exists():
-        raise Http404("PDF not found")
+        raise Http404(f"PDF not found: {pdf_path}")
 
     return FileResponse(
         open(pdf_path, "rb"),
