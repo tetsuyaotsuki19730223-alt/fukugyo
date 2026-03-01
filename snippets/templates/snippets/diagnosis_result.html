@@ -80,24 +80,10 @@
 
 
 {% if is_premium %}
-  <h2>7日ロードマップ（有料）</h2>
-  <ol>
-    {% for item in premium_roadmap %}
-      <li>{{ item }}</li>
-    {% endfor %}
-  </ol>
+  <a class="btn" href="{% url 'premium_page' %}">7日ロードマップを見る（Premium）</a>
+  {# もしダウンロードURLを作ってるならこちらが最強 #}
+  {# <a class="btn" href="{% url 'premium_download_stable' %}">PDFをダウンロード</a> #}
 {% else %}
-  <h2>7日ロードマップ（有料）</h2>
-    <p>迷いを消して、7日で「最初の収益導線」まで作ります。</p>
-    <ul>
-        <li>月980円</li>
-        <li>いつでも解約OK</li>
-        <li>テンプレ・ToDo・進捗管理つき</li>
-    </ul>
-    <p>
-        <a href="{% url 'premium_page' %}">
-            <button>7日ロードマップを解放する</button>
-        </a>
-    </p>
+  <a class="btn" href="{% url 'premium_page' %}">7日ロードマップを開放する</a>
 {% endif %}
 {% endblock %}
