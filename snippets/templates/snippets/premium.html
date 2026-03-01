@@ -1,3 +1,4 @@
+{% load static %}
 {% extends "snippets/base.html" %}
 
 {% block title %}Premium{% endblock %}
@@ -8,6 +9,8 @@
 <p>stable型 7日ロードマップ（PDF）はこちら：</p>
 
 <p>
-  <a href="<!-- ここにPDFのURL（後で） -->">PDFをダウンロード</a>
+  <a href="{% static 'premium/stable_7day_roadmap.pdf' %}" download>
+    PDFをダウンロード
+  </a>
 </p>
 {% endblock %}
