@@ -126,23 +126,33 @@ def stripe_webhook(request):
 @login_required
 @require_POST
 def create_checkout_session(request):
-    # Customer作成（まだ無ければ）
-    profile = request.user.profile
+    # Profile を必ず用意
+    from .models import Profile
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+
+    # Customer を必ず用意
     if not profile.stripe_customer_id:
         customer = stripe.Customer.create(email=request.user.email or None)
         profile.stripe_customer_id = customer["id"]
         profile.save(update_fields=["stripe_customer_id"])
 
+    # 必須設定チェック（ここで落として原因を明確化）
+    if not getattr(settings, "STRIPE_PRICE_ID", None):
+        raise ValueError("STRIPE_PRICE_ID is not set")
+
+    domain = getattr(settings, "SITE_URL", "http://localhost:8000").rstrip("/")
+
+    # ここで必ず session を作る（分岐させない）
     session = stripe.checkout.Session.create(
         mode="subscription",
         customer=profile.stripe_customer_id,
-        line_items=[{"price": STRIPE_PRICE_ID, "quantity": 1}],
-        success_url=settings.SITE_URL + "/billing/success/",
-        cancel_url=settings.SITE_URL + "/billing/cancel/",
-        # metadataに user_id を入れておくとWebhookで紐付けが楽
-        metadata={"user_id": str(request.user.id)},
+        line_items=[{"price": settings.STRIPE_PRICE_ID, "quantity": 1}],
+        success_url=domain + "/billing/success/?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url=domain + "/billing/cancel/",
     )
-    return JsonResponse({"url": session.url})
+
+    # ここで必ず redirect
+    return redirect(session.url)
 
 @login_required
 @premium_required
