@@ -134,9 +134,10 @@ def create_checkout_session(request):
 
     # GETでアクセスされたら、環境変数のキー名だけ表示して終了（値は表示しない）
     if request.method == "GET":
-        stripe_keys = sorted([k for k in os.environ.keys() if "STRIPE" in k])
+        from django.conf import settings
         return HttpResponse(
-            "DEBUG: STRIPE env keys = " + ", ".join(stripe_keys),
+            f"DEBUG settings: PRICE={'SET' if settings.STRIPE_PRICE_ID else 'EMPTY'}, "
+            f"SECRET={'SET' if settings.STRIPE_SECRET_KEY else 'EMPTY'}",
             status=200,
         )
         
