@@ -1,2 +1,45 @@
-<h1>決済完了</h1>
-<p>反映まで少し時間がかかる場合があります。</p>
+{% extends "snippets/base.html" %}
+
+{% block title %}決済完了{% endblock %}
+
+{% block content %}
+<h1>決済が完了しました ✅</h1>
+
+<p>
+ありがとうございます。<br>
+Premiumが有効になりました。
+</p>
+
+<hr>
+
+<h2>まずはここから</h2>
+<p>
+<strong>① 7日ロードマップ（PDF）をダウンロード</strong><br>
+（すぐに使える状態にしています）
+</p>
+
+<p>
+<a href="{% url 'premium_page' %}">▶ Premiumページへ（PDFダウンロード）</a>
+</p>
+
+<hr>
+
+<h2>迷わないためのルール</h2>
+<ul>
+  <li>今日は Day1 だけやる（全部やろうとしない）</li>
+  <li>タイマー15分でOK（短く始める）</li>
+  <li>“完成”より“実行”が勝ち</li>
+</ul>
+
+<hr>
+
+<h2>次の行動（30秒）</h2>
+<p>
+PDFを開いたら、Day1のチェック欄に ✅ を入れてください。<br>
+それだけで「進んだ実感」が残ります。
+</p>
+
+<p style="margin-top: 24px;">
+<a href="{% url 'diagnosis_start' %}">診断に戻る</a>
+</p>
+{% endblock %}
