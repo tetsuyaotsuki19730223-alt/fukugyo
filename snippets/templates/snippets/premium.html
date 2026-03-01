@@ -1,2 +1,13 @@
-<h1>🔥 PREMIUM CONTENT 🔥</h1>
-<p>ここは有料会員だけが見れます。</p>
+{% extends "snippets/base.html" %}
+
+{% block title %}Premium{% endblock %}
+
+{% block content %}
+<h1>Premium only</h1>
+
+<p>stable型 7日ロードマップ（PDF）はこちら：</p>
+
+<p>
+  <a href="<!-- ここにPDFのURL（後で） -->">PDFをダウンロード</a>
+</p>
+{% endblock %}

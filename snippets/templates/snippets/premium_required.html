@@ -1,0 +1,42 @@
+{% extends "snippets/base.html" %}
+
+{% block title %}7日ロードマップを解放{% endblock %}
+
+{% block content %}
+<h1>7日ロードマップを解放する</h1>
+
+<p>
+副業を始めたいのに、<br>
+「調べて終わる」「準備で止まる」「自分にできるか不安」<br>
+このループにハマっていませんか？
+</p>
+
+<h2>このロードマップで起きること</h2>
+<ul>
+  <li>Day1：あなたの中にある「売れる証拠」を見つける</li>
+  <li>Day2：実在する案件を見て「需要」を確認する</li>
+  <li>Day3：応募できるプロフィールを作る</li>
+  <li>Day4：提案文テンプレを完成させる</li>
+  <li><strong>Day5：5件応募して、送信ボタンを押す</strong></li>
+  <li>Day6：返信率を上げる改善</li>
+  <li>Day7：継続の種を作る</li>
+</ul>
+
+<p>
+<strong>7日後、あなたは「初案件に応募した状態」</strong>になっています。<br>
+（副業の理解ではなく、行動を完了させる設計です）
+</p>
+
+<hr>
+
+<p><strong>月額980円</strong> / いつでも解約OK</p>
+
+<form method="post" action="{% url 'create_checkout_session' %}">
+  {% csrf_token %}
+  <button type="submit">今すぐ解放する</button>
+</form>
+
+<p style="margin-top: 16px;">
+※決済後すぐにPremiumが有効になり、ダウンロードできます。
+</p>
+{% endblock %}

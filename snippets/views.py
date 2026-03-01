@@ -155,8 +155,10 @@ def create_checkout_session(request):
     return redirect(session.url)
 
 @login_required
-@premium_required
 def premium_page(request):
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+    if not profile.is_premium:
+        return render(request, "snippets/premium_required.html")
     return render(request, "snippets/premium.html")
 
 class SnippetListView(ListView):
