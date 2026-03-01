@@ -127,19 +127,8 @@ def stripe_webhook(request):
 
 
 @login_required
-@require_http_methods(["GET", "POST"])
+@require_POST
 def create_checkout_session(request):
-    import os
-    from django.http import HttpResponse
-
-    # GETでアクセスされたら、環境変数のキー名だけ表示して終了（値は表示しない）
-    if request.method == "GET":
-        from django.conf import settings
-        return HttpResponse(
-            f"DEBUG settings: PRICE={'SET' if settings.STRIPE_PRICE_ID else 'EMPTY'}, "
-            f"SECRET={'SET' if settings.STRIPE_SECRET_KEY else 'EMPTY'}",
-            status=200,
-        )
         
     if not settings.STRIPE_SECRET_KEY:
         raise ValueError("STRIPE_SECRET_KEY is not set")
