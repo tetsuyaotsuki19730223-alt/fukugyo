@@ -21,6 +21,7 @@ from django.urls import reverse
 from .forms import DiagnosisForm
 from .models import Diagnosis
 from .services import judge_result_type
+from django.http import FileResponse, Http404
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 # Stripeの「Price ID」（例: price_***）を環境変数などで管理
@@ -201,3 +202,21 @@ def billing_success(request):
 
 def billing_cancel(request):
     return render(request, "snippets/billing_cancel.html")
+
+@login_required
+def premium_download_stable(request):
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+    if not profile.is_premium:
+        # 課金案内ページへ（または403でもOK）
+        return redirect("premium_page")
+
+    pdf_path = settings.BASE_DIR / "static" / "premium" / "stable_7day_roadmap.pdf"
+    if not pdf_path.exists():
+        raise Http404("PDF not found")
+
+    return FileResponse(
+        open(pdf_path, "rb"),
+        as_attachment=True,
+        filename="stable_7day_roadmap.pdf",
+        content_type="application/pdf",
+    )

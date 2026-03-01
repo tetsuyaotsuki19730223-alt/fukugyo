@@ -21,4 +21,5 @@ urlpatterns = [
 
     path("diagnosis/", views.diagnosis_start, name="diagnosis_start"),
     path("diagnosis/<int:pk>/", views.diagnosis_result, name="diagnosis_result"),
+    path("premium/download/stable/", views.premium_download_stable, name="premium_download_stable"),
 ]
