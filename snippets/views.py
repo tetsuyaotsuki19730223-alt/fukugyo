@@ -77,11 +77,24 @@ def diagnosis_result(request, pk: int):
         "build": ["Day1: ペイン選定", "Day2: 1画面プロト", "Day3: 使う人1人", "Day4: 改善", "Day5: 課金ポイント", "Day6: LP", "Day7: 初期募集"],
     }[d.result_type]
 
-    return render(request, "snippets/diagnosis_result.html", {
+    from django.http import HttpResponse
+
+    # DEBUG: どのテンプレを返しているか確認
+    # return HttpResponse("DEBUG: diagnosis_result reached", status=200)
+
+    from django.template.response import TemplateResponse
+
+    resp = TemplateResponse(request, "snippets/diagnosis_result.html", {
         "d": d,
         "is_premium": is_premium,
         "free_action": free_action,
     })
+    resp.render()
+
+    # DEBUG印をHTML末尾に混ぜる（本番確認用）
+    resp.content = resp.content + b"\n<!-- DEBUG: HIT diagnosis_result view -->\n"
+    return resp
+
 
 @csrf_exempt
 def stripe_webhook(request):
@@ -258,8 +271,3 @@ def premium_download_stable(request):
         content_type="application/pdf",
     )
 
-def debug_version(request):
-    return HttpResponse("VERSION: 2026-03-02-02", status=200)
-
-def debug_version(request):
-    return HttpResponse("VERSION=2026-03-02-03", status=200)
