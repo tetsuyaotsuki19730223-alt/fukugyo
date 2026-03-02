@@ -54,6 +54,8 @@ def diagnosis_start(request):
 from django.shortcuts import render, get_object_or_404
 
 def diagnosis_result(request, pk: int):
+    from django.http import HttpResponse
+    return HttpResponse("DEBUG: diagnosis_result HIT", status=200)
     # ログインしていれば「自分の診断」だけ
     if request.user.is_authenticated:
         d = get_object_or_404(Diagnosis, pk=pk, user=request.user)
