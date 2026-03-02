@@ -264,3 +264,133 @@ def premium_download_stable(request):
         content_type="application/pdf",
     )
 
+from io import BytesIO
+from pathlib import Path
+
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.http import Http404, FileResponse
+from django.shortcuts import redirect
+
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+
+from .models import Profile, Diagnosis
+
+
+def _register_japanese_font():
+    # 例: snippets/static/fonts/ipaexg.ttf
+    font_path = Path(settings.BASE_DIR) / "snippets" / "static" / "fonts" / "ipaexg.ttf"
+    if not font_path.exists():
+        raise FileNotFoundError(f"Japanese font not found: {font_path}")
+    # フォント名は任意（ここでは IPAexGothic）
+    pdfmetrics.registerFont(TTFont("IPAexGothic", str(font_path)))
+
+
+def _build_roadmap_pdf(display_name: str, result_type: str) -> bytes:
+    """
+    名前 + タイプ別のPDFをメモリ上で生成して bytes を返す
+    """
+    _register_japanese_font()
+
+    buf = BytesIO()
+    c = canvas.Canvas(buf, pagesize=A4)
+    width, height = A4
+
+    c.setFont("IPAexGothic", 18)
+    c.drawString(40, height - 60, f"{display_name} さん専用")
+    c.setFont("IPAexGothic", 22)
+
+    type_title = {
+        "stable": "安定型（クラウドソーシング）",
+        "influence": "影響力型（発信）",
+        "attack": "攻撃型（物販/マーケ）",
+        "build": "構築型（SaaS/ツール）",
+    }.get(result_type, "タイプ不明")
+
+    c.drawString(40, height - 95, f"7日ロードマップ：{type_title}")
+
+    c.setFont("IPAexGothic", 12)
+    c.drawString(40, height - 125, "※ まずは Day1 だけやればOK。タイマー15分で十分です。")
+
+    # --- 本文（仮の中身。あとで自由に差し替えOK） ---
+    roadmap = {
+        "stable": [
+            "Day1: 案件を3つ探してURLをメモ",
+            "Day2: 提案文テンプレを作る（200字）",
+            "Day3: 1件応募する",
+            "Day4: 実績になりそうな小案件を狙う",
+            "Day5: 継続提案（次の一手）",
+            "Day6: 単価UPの条件整理",
+            "Day7: 週次振り返り→次週の3手",
+        ],
+        "influence": [
+            "Day1: 発信テーマを1つ決める",
+            "Day2: 自己紹介ポストを作る",
+            "Day3: 1日1投稿×3日分を下書き",
+            "Day4: 反応の良い型を真似る",
+            "Day5: プロフィール整備",
+            "Day6: 無料プレゼント案を作る",
+            "Day7: 来週の投稿カレンダー作成",
+        ],
+        "attack": [
+            "Day1: 売れてる商品を10個調査",
+            "Day2: 仕入れ/販売チャネル候補を決める",
+            "Day3: まず1商品を仮出品",
+            "Day4: タイトル/画像/説明を改善",
+            "Day5: 価格テスト（±10%）",
+            "Day6: リピートできる仕組み化",
+            "Day7: 数字の振り返り→継続判断",
+        ],
+        "build": [
+            "Day1: 解決したい悩みを1つに絞る",
+            "Day2: 入力→出力の1画面を設計",
+            "Day3: 最小機能で実装（動くが正義）",
+            "Day4: 使い方ページを作る",
+            "Day5: 課金導線（Premium）を整える",
+            "Day6: ユーザーの声を1件取る",
+            "Day7: 次の改善3点を決める",
+        ],
+    }.get(result_type, [])
+
+    y = height - 170
+    c.setFont("IPAexGothic", 13)
+    for line in roadmap:
+        c.drawString(50, y, f"・{line}")
+        y -= 22
+        if y < 60:
+            c.showPage()
+            c.setFont("IPAexGothic", 13)
+            y = height - 60
+
+    c.showPage()
+    c.save()
+
+    pdf = buf.getvalue()
+    buf.close()
+    return pdf
+
+
+@login_required
+def premium_download_dynamic(request):
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+    if not profile.is_premium:
+        return redirect("premium_page")  # or premium_required page
+
+    # 最新の診断結果でタイプを決める（必要ならpk指定版にしてもOK）
+    d = Diagnosis.objects.filter(user=request.user).order_by("-id").first()
+    if not d:
+        return redirect("diagnosis_start")
+
+    display_name = request.user.get_full_name() or request.user.username
+    pdf_bytes = _build_roadmap_pdf(display_name, d.result_type)
+
+    filename = f"{d.result_type}_7day_roadmap_{request.user.username}.pdf"
+    return FileResponse(
+        BytesIO(pdf_bytes),
+        as_attachment=True,
+        filename=filename,
+        content_type="application/pdf",
+    )
