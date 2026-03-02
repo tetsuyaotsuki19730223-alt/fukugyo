@@ -80,7 +80,8 @@ WSGI_APPLICATION = 'djangosnippets.wsgi.application'
 DATABASES = {
     "default": dj_database_url.config(
         default="sqlite:///db.sqlite3",  # ローカル未設定時の保険（任意）
-        conn_max_age=600,
+        conn_max_age=0,
+        ssl_require=True,
     )
 }
 
