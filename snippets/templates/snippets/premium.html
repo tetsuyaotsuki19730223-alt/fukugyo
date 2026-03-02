@@ -1,14 +1,62 @@
 {% extends "snippets/base.html" %}
-
-{% block title %}Premium{% endblock %}
-
 {% block content %}
-<h1>Premium only</h1>
 
-<p>stable型 7日ロードマップ（PDF）はこちら：</p>
+<h1>あなた専用の7日ロードマップ</h1>
+
+<p style="color:#ff4d4d; font-weight:bold;">
+※ 診断結果に基づいた専用設計です
+</p>
 
 <p>
-  <a href="{% url 'premium_download_stable' %}">PDFをダウンロード</a>
+この7日間でやることは3つだけ。
 </p>
-<a class="btn" href="{% url 'premium_download_dynamic' %}">PDFをダウンロード（名前入り）</a>
+
+<ul>
+  <li>最小で始める</li>
+  <li>迷わない順番で進める</li>
+  <li>公開を後回しにしない</li>
+</ul>
+
+<hr>
+
+<h3>なぜ7日なのか？</h3>
+
+<p>
+副業で止まる人の多くは、
+「考えすぎる」か「やりすぎる」。
+</p>
+
+<p>
+7日間は、<strong>動き続ける感覚を掴むための期間</strong>です。
+</p>
+
+<hr>
+
+<h3>これが手に入ります</h3>
+
+<ul>
+  <li>具体的なToDoリスト</li>
+  <li>迷わない進行順</li>
+  <li>実践テンプレ</li>
+</ul>
+
+<hr>
+
+<p style="text-align:center; font-size:14px; color:#666;">
+月980円（1日あたり約32円）<br>
+いつでも解約できます
+</p>
+
+<div style="text-align:center; margin:40px 0;">
+<form id="checkout-form" method="post" action="{% url 'create_checkout_session' %}">
+  {% csrf_token %}
+  <div style="text-align:center; margin:40px 0;">
+    <button type="submit"
+      style="background:#ff4d4d;color:white;padding:18px 36px;font-size:20px;font-weight:bold;border-radius:8px;border:none;cursor:pointer;">
+      🔓 止まらない7日間を始める
+    </button>
+  </div>
+</form>
+</div>
+
 {% endblock %}

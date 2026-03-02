@@ -29,6 +29,20 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 # Stripeの「Price ID」（例: price_***）を環境変数などで管理
 STRIPE_PRICE_ID = getattr(settings, "STRIPE_PRICE_ID", None) or "price_xxx"
 
+def get_roadmap_pdf_relpath(result_type: str) -> str:
+    """
+    static/premium/ 配下のPDFをタイプ別に探し、
+    無ければ stable_7day_roadmap.pdf にフォールバックする。
+    """
+    safe = (result_type or "").strip()
+    candidate = f"premium/{safe}_7day_roadmap.pdf"
+    abs_path = os.path.join(settings.BASE_DIR, "static", candidate)
+
+    if safe and os.path.exists(abs_path):
+        return candidate
+
+    return "premium/stable_7day_roadmap.pdf"
+
 def diagnosis_start(request):
     if request.method == "POST":
         form = DiagnosisForm(request.POST)
@@ -111,7 +125,7 @@ def stripe_webhook(request):
     return HttpResponse(status=200)
 
 
-
+from django.shortcuts import redirect
 @login_required
 @require_POST
 def create_checkout_session(request):
@@ -132,23 +146,29 @@ def create_checkout_session(request):
     if not getattr(settings, "STRIPE_PRICE_ID", None):
         raise ValueError("STRIPE_PRICE_ID is not set")
 
-    domain = settings.SITE_URL
+    success_url = request.build_absolute_uri(
+        reverse("billing_success")
+    ) + "?session_id={CHECKOUT_SESSION_ID}"
+
+    cancel_url = request.build_absolute_uri(
+        reverse("billing_cancel")
+    )
 
     # ここで必ず session を作る（分岐させない）
     session = stripe.checkout.Session.create(
         mode="subscription",
         customer=profile.stripe_customer_id,
         line_items=[{"price": settings.STRIPE_PRICE_ID, "quantity": 1}],
-        success_url=domain + "/billing/success/?session_id={CHECKOUT_SESSION_ID}",
-        cancel_url=domain + "/billing/cancel/",
+        success_url=success_url,
+        cancel_url=cancel_url,
     )
+    
+    return redirect(session.url, permanent=False)
 
-    # ここで必ず redirect
-    return redirect(session.url)
-
-from django.conf import settings
-from django.http import FileResponse
 import os
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
 
 @login_required
 def premium_page(request):
@@ -160,17 +180,11 @@ def premium_page(request):
     if not d:
         return redirect("diagnosis_start")
 
-    file_map = {
-        "stable": "stable_7day_roadmap.pdf",
-        "influence": "influence_7day_roadmap.pdf",
-        "attack": "attack_7day_roadmap.pdf",
-        "build": "build_7day_roadmap.pdf",
-    }
+    # ★タイプ別PDFが無ければ stable にフォールバック
+    pdf_relpath = get_roadmap_pdf_relpath(d.result_type)
 
-    filename = file_map.get(d.result_type)
-    file_path = os.path.join(settings.BASE_DIR, "static", "premium", filename)
-
-    return FileResponse(open(file_path, "rb"), as_attachment=True)
+    # テンプレで使う（staticのURLを組み立てるだけなら relpath で十分）
+    return render(request, "snippets/premium.html", {"pdf_relpath": pdf_relpath})
 
 class SnippetListView(ListView):
     model = Snippet
@@ -253,16 +267,9 @@ def premium_download_stable(request):
         return redirect("premium_page")
 
     # PDFの実体パス（あなたの配置：プロジェクト直下 static/premium/）
-    pdf_path = Path(settings.BASE_DIR) / "static" / "premium" / "stable_7day_roadmap.pdf"
-    if not pdf_path.exists():
-        raise Http404(f"PDF not found: {pdf_path}")
-
-    return FileResponse(
-        open(pdf_path, "rb"),
-        as_attachment=True,
-        filename="stable_7day_roadmap.pdf",
-        content_type="application/pdf",
-    )
+    pdf_relpath = get_roadmap_pdf_relpath(d.result_type)
+    abs_path = os.path.join(settings.BASE_DIR, "static", pdf_relpath)
+    return FileResponse(open(abs_path, "rb"), as_attachment=True, filename=os.path.basename(abs_path))
 
 from io import BytesIO
 from pathlib import Path
