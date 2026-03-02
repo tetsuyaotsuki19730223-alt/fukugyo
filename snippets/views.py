@@ -146,12 +146,31 @@ def create_checkout_session(request):
     # ここで必ず redirect
     return redirect(session.url)
 
+from django.conf import settings
+from django.http import FileResponse
+import os
+
 @login_required
 def premium_page(request):
-    profile, _ = Profile.objects.get_or_create(user=request.user)
-    if not profile.is_premium:
+    if not request.user.profile.is_premium:
         return render(request, "snippets/premium_required.html")
-    return render(request, "snippets/premium.html")
+
+    # 最新の診断結果を取得
+    d = Diagnosis.objects.filter(user=request.user).order_by("-id").first()
+    if not d:
+        return redirect("diagnosis_start")
+
+    file_map = {
+        "stable": "stable_7day_roadmap.pdf",
+        "influence": "influence_7day_roadmap.pdf",
+        "attack": "attack_7day_roadmap.pdf",
+        "build": "build_7day_roadmap.pdf",
+    }
+
+    filename = file_map.get(d.result_type)
+    file_path = os.path.join(settings.BASE_DIR, "static", "premium", filename)
+
+    return FileResponse(open(file_path, "rb"), as_attachment=True)
 
 class SnippetListView(ListView):
     model = Snippet
