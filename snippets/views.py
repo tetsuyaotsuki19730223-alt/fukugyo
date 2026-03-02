@@ -375,6 +375,7 @@ def _build_roadmap_pdf(display_name: str, result_type: str) -> bytes:
 
 @login_required
 def premium_download_dynamic(request):
+    font_path = Path(settings.BASE_DIR) / "snippets" / "static" / "fonts" / "ipaexg.ttf"
     profile, _ = Profile.objects.get_or_create(user=request.user)
     if not profile.is_premium:
         return redirect("premium_page")  # or premium_required page
