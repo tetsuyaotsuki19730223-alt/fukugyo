@@ -54,16 +54,8 @@ def diagnosis_start(request):
 from django.shortcuts import render, get_object_or_404
 
 def diagnosis_result(request, pk: int):
-    from django.http import HttpResponse
-    return HttpResponse("DEBUG: diagnosis_result HIT", status=200)
-    # ログインしていれば「自分の診断」だけ
-    if request.user.is_authenticated:
-        d = get_object_or_404(Diagnosis, pk=pk, user=request.user)
-        is_premium = hasattr(request.user, "profile") and request.user.profile.is_premium
-    else:
-        # 未ログインの場合は「匿名診断(user=NULL)」だけ見せる
-        d = get_object_or_404(Diagnosis, pk=pk, user__isnull=True)
-        is_premium = False
+    d = get_object_or_404(Diagnosis, pk=pk, user=request.user)
+    is_premium = hasattr(request.user, "profile") and request.user.profile.is_premium
 
     free_action = {
         "stable": "今日やる：クラウドソーシングで『自分ができる仕事』を3つ探して、案件URLをメモする。",
@@ -72,31 +64,11 @@ def diagnosis_result(request, pk: int):
         "build": "今日やる：解決したい悩みを1つ選び、入力→出力が1画面で完結するツール案を1つ書く。",
     }[d.result_type]
 
-    premium_roadmap = {
-        "stable": ["Day1: できる作業を棚卸し", "Day2: 提案文テンプレ作成", "Day3: 5件応募", "Day4: 初回納品の型", "Day5: 実績まとめ", "Day6: 単価UP提案", "Day7: 継続化"],
-        "influence": ["Day1: テーマ決定", "Day2: 3本下書き", "Day3: 投稿", "Day4: 型を作る", "Day5: 導線整備", "Day6: 商品案", "Day7: 初販売導線"],
-        "attack": ["Day1: ジャンル決定", "Day2: 仕入れ基準", "Day3: 10商品調査", "Day4: 出品", "Day5: 改善", "Day6: 回転強化", "Day7: 仕組み化"],
-        "build": ["Day1: ペイン選定", "Day2: 1画面プロト", "Day3: 使う人1人", "Day4: 改善", "Day5: 課金ポイント", "Day6: LP", "Day7: 初期募集"],
-    }[d.result_type]
-
-    from django.http import HttpResponse
-
-    # DEBUG: どのテンプレを返しているか確認
-    # return HttpResponse("DEBUG: diagnosis_result reached", status=200)
-
-    from django.template.response import TemplateResponse
-
-    resp = TemplateResponse(request, "snippets/diagnosis_result.html", {
+    return render(request, "snippets/diagnosis_result.html", {
         "d": d,
         "is_premium": is_premium,
         "free_action": free_action,
     })
-    resp.render()
-
-    # DEBUG印をHTML末尾に混ぜる（本番確認用）
-    resp.content = resp.content + b"\n<!-- DEBUG: HIT diagnosis_result view -->\n"
-    return resp
-
 
 @csrf_exempt
 def stripe_webhook(request):
