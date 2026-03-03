@@ -293,9 +293,21 @@
   ※Premiumの利用にはログインが必要です（決済前にログインします）
 </p>
 
-  <div style="text-align:center; margin:40px 0;">
+{% if request.user.is_authenticated %}
+  {% if is_premium %}
+    <a class="btn" href="{% url 'premium_page' %}">7日ロードマップを見る（Premium）</a>
+  {% else %}
     <a class="btn" href="{% url 'premium_offer' %}">7日ロードマップを開放する</a>
-  </div>
+  {% endif %}
+{% else %}
+  <a class="btn" href="{% url 'login' %}?next={% url 'premium_offer' %}">
+    ログインして7日ロードマップを開放する
+  </a>
+  <p style="font-size: 12px; color: #666; margin-top: 8px;">
+    ※購入とダウンロードにはログインが必要です
+  </p>
+{% endif %}
+
 {% endif %}
 <!-- DIAG_TEMPLATE_VERSION: 2026-03-02-02 -->
 {% endblock %}
