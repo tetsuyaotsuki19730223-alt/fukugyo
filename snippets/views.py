@@ -94,11 +94,16 @@ def diagnosis_result(request, pk: int):
         "build": "今日やる：解決したい悩みを1つ選び、入力→出力が1画面で完結するツール案を1つ書く。",
     }[d.result_type]
 
-    return render(request, "snippets/diagnosis_result.html", {
+    from django.template.response import TemplateResponse
+
+    resp = TemplateResponse(request, "snippets/diagnosis_result.html", {
         "d": d,
         "is_premium": is_premium,
         "free_action": free_action,
     })
+    resp.render()
+    resp.content += b"\n<!-- DEBUG: diagnosis_result v2026-03-03 -->\n"
+    return resp
 
 @csrf_exempt
 def stripe_webhook(request):
