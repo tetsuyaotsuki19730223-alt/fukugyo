@@ -5,3 +5,4 @@ stripe
 psycopg[binary]
 dj-database-url
 reportlab
+python-dotenv
