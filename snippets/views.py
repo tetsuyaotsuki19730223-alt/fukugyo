@@ -647,3 +647,7 @@ def billing_stats(request):
         "premium_rate": round(premium_rate, 1),
         "last7_premium": last7_premium,
     })
+
+def premium_offer(request):
+    # ログイン不要の“買うページ”
+    return render(request, "snippets/premium_offer.html")

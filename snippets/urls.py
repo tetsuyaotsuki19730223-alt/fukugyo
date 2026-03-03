@@ -8,6 +8,7 @@ urlpatterns = [
     path("<int:pk>/edit/", views.SnippetUpdateView.as_view(), name="snippet_update"),
     path("<int:pk>/delete/", views.SnippetDeleteView.as_view(), name="snippet_delete"),
 
+    path("premium/offer/", views.premium_offer, name="premium_offer"),
     path("premium/", views.premium_page, name="premium_page"),
     path("billing/create-checkout-session/", views.create_checkout_session, name="create_checkout_session"),
     path("billing/success/", views.billing_success, name="billing_success"),
