@@ -47,13 +47,50 @@
 いつでも解約できます
 </p>
 
+<hr>
+<h3>正直に言います。</h3>
+
+<p>
+このまま何も変えなければ、
+3ヶ月後も今と同じ悩みを抱えている可能性が高いです。
+</p>
+
+<p>
+行動しないことも、選択です。
+</p>
+
+<hr>
+
+<h3>最後に、ひとつだけ聞かせてください。</h3>
+
+<p>
+あなたは本当に、  
+「変わりたい」と思っていますか？
+</p>
+
+<p>
+もし答えがYESなら、  
+今日がその1日目です。
+</p>
+
+<p>
+1日あたり約32円。  
+コンビニのコーヒーより安い。
+</p>
+
+<p style="font-size:14px;color:#666;text-align:center;">
+※ いつでもワンクリックで解約できます。<br>
+※ テスト決済では実際に課金されません。
+</p>
+
 <div style="text-align:center; margin:40px 0;">
 <form id="checkout-form" method="post" action="{% url 'create_checkout_session' %}">
   {% csrf_token %}
   <div style="text-align:center; margin:40px 0;">
     <button type="submit"
+      onclick="gtag('event', 'premium_click', {event_category: 'conversion'});"
       style="background:#ff4d4d;color:white;padding:18px 36px;font-size:20px;font-weight:bold;border-radius:8px;border:none;cursor:pointer;">
-      🔓 止まらない7日間を始める
+      🔓 今すぐ止まらない構造を手に入れる（月980円）
     </button>
   </div>
 </form>

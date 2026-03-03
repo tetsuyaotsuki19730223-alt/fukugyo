@@ -1,0 +1,62 @@
+{% extends "snippets/base.html" %}
+{% block content %}
+
+<h1>AI副業コーチ</h1>
+
+{% if gap_message %}
+  <p style="background:#ffecec;padding:12px;border-radius:8px;">
+    <b>注意：</b><br>
+    {{ gap_message }}
+  </p>
+{% endif %}
+
+<p>あなたのタイプ：<b>{{ result_type }}</b></p>
+<p>連続日数：<b>{{ streak_days }}</b> 日</p>
+{% if special_message %}
+  <p style="background:#fff7e6;padding:12px;border-radius:8px;">
+    <b>コーチメモ：</b><br>
+    {{ special_message }}
+  </p>
+{% endif %}
+<hr>
+
+<h2>今日やる1アクション</h2>
+<p style="font-size:18px;"><b>{{ today_action }}</b></p>
+
+{% if today_completed %}
+  <p style="color:green;"><b>✅ 今日は完了しました</b></p>
+{% else %}
+  <form method="post" action="{% url 'coach_checkin' %}">
+    {% csrf_token %}
+    <button type="submit"
+      style="background:#2d6cdf;color:white;padding:12px 18px;border:none;border-radius:8px;cursor:pointer;">
+      ✅ 今日やった
+    </button>
+  </form>
+{% endif %}
+
+{% if today_completed %}
+  <hr>
+  <h3>今日の振り返り</h3>
+
+  <form method="post" action="{% url 'coach_checkin' %}">
+    {% csrf_token %}
+    <textarea name="reflection" rows="4" style="width:100%;"
+      placeholder="今日やってみてどうでしたか？"></textarea>
+
+    <button type="submit"
+      style="margin-top:10px;background:#444;color:white;padding:8px 14px;border:none;border-radius:6px;">
+      振り返りを保存
+    </button>
+  </form>
+
+  {% if feedback %}
+    <hr>
+    <h3>AIコーチからのフィードバック</h3>
+    <p style="background:#f3f3f3;padding:15px;border-radius:8px;">
+      {{ feedback }}
+    </p>
+  {% endif %}
+{% endif %}
+
+{% endblock %}

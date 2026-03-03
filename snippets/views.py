@@ -46,24 +46,33 @@ def get_roadmap_pdf_relpath(result_type: str) -> str:
 
     return "premium/stable_7day_roadmap.pdf"
 
+from django.shortcuts import render, redirect
+from .forms import DiagnosisForm
+from .models import Diagnosis
+from .services import judge_result_type
+
 def diagnosis_start(request):
     if request.method == "POST":
         form = DiagnosisForm(request.POST)
         if form.is_valid():
             d = form.save(commit=False)
 
-            # ★ここが重要：匿名なら user を入れない
+            # ログインしてる時だけ紐付け
             if request.user.is_authenticated:
                 d.user = request.user
 
+            # 結果タイプを必ずセット
             d.result_type = judge_result_type(form.cleaned_data)
+
             d.save()
 
+            # ★ここはPOSTで保存成功した時だけ
             request.session["last_diagnosis_id"] = d.id
+
             return redirect("diagnosis_result", pk=d.pk)
     else:
         form = DiagnosisForm()
-    
+
     return render(request, "snippets/diagnosis_form.html", {"form": form})
 
 from django.contrib.auth.decorators import login_required
@@ -74,16 +83,18 @@ from .models import Diagnosis
 from django.http import Http404
 
 
+
+
 def diagnosis_result(request, pk: int):
-    # ログイン済みなら「user_id」を使う（request.user を渡さない）
-    if request.user.is_authenticated:
-        d = get_object_or_404(Diagnosis, pk=pk, user_id=request.user.id)
-    else:
-        # 匿名は「直前に自分が作った結果」だけ
+    # 匿名は「直前の診断ID」以外は見せない
+    if not request.user.is_authenticated:
         last_id = request.session.get("last_diagnosis_id")
         if last_id != pk:
             raise Http404("Not found")
         d = get_object_or_404(Diagnosis, pk=pk)
+    else:
+        # ログイン済みは本人の診断だけ
+        d = get_object_or_404(Diagnosis, pk=pk, user_id=request.user.id)
 
     is_premium = (
         request.user.is_authenticated
@@ -98,17 +109,11 @@ def diagnosis_result(request, pk: int):
         "build": "今日やる：解決したい悩みを1つ選び、入力→出力が1画面で完結するツール案を1つ書く。",
     }.get(d.result_type, "今日やる：診断をもう一度やり直してください。")
 
-    from django.template.response import TemplateResponse
-
-    resp = TemplateResponse(request, "snippets/diagnosis_result.html", {
+    return render(request, "snippets/diagnosis_result.html", {
         "d": d,
         "is_premium": is_premium,
         "free_action": free_action,
     })
-    resp.render()
-    resp.content += b"\n<!-- DEPLOY_CHECK: DR_20260303 -->\n"
-    return resp
-
 
 @csrf_exempt
 def stripe_webhook(request):

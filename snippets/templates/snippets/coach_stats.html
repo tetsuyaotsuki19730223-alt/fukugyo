@@ -1,0 +1,13 @@
+{% extends "snippets/base.html" %}
+{% block content %}
+
+<h1>AIコーチ統計</h1>
+
+<ul>
+  <li>今日チェックイン人数：{{ today_count }}</li>
+  <li>昨日チェックイン人数：{{ yesterday_count }}</li>
+  <li>直近7日アクティブ人数：{{ weekly_active }}</li>
+  <li>最大連続日数：{{ max_streak }}</li>
+</ul>
+
+{% endblock %}

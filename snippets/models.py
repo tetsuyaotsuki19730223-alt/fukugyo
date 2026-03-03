@@ -61,3 +61,18 @@ class Profile(models.Model):
 def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
+
+class DailyProgress(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    date = models.DateField()
+    action = models.TextField()
+    completed = models.BooleanField(default=False)
+    reflection = models.TextField(blank=True)
+
+    class Meta:
+        unique_together = ("user", "date")
+        ordering = ["-date"]
+
+    def __str__(self):
+        return f"{self.user_id} {self.date} {'OK' if self.completed else 'NG'}"
+    

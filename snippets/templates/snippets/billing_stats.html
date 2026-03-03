@@ -1,0 +1,12 @@
+{% extends "snippets/base.html" %}
+{% block content %}
+
+<h1>Billing Stats</h1>
+
+<ul>
+  <li>ユーザー総数：{{ total_users }}</li>
+  <li>Premium人数：{{ premium_users }}</li>
+  <li>Premium率：{{ premium_rate }}%</li>
+</ul>
+
+{% endblock %}

@@ -1,11 +1,17 @@
 {% extends "snippets/base.html" %}
 
 {% block content %}
+<p style="background:#f5f9ff;padding:14px;border-radius:8px;">
+  <strong>3分診断 → 今日やる1アクションが出ます。</strong><br>
+  Premiumで「止まらないAI副業コーチ（毎日チェックイン機能）」が解放されます。
+</p>
 <h1>副業タイプ診断（5問）</h1>
-
 <form method="post">
   {% csrf_token %}
   {{ form.as_p }}
-  <button type="submit">診断する</button>
+  <button type="submit">無料で診断する（3分）</button>
 </form>
+<p style="font-size:13px;color:#666;margin-top:8px;">
+  ※ログイン不要で診断できます。結果はすぐ表示されます。
+</p>
 {% endblock %}

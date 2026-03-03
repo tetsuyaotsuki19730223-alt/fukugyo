@@ -1,6 +1,7 @@
 from django import forms
+from .models import Diagnosis
 
-class DiagnosisForm(forms.Form):
+class DiagnosisForm(forms.ModelForm):
     Q1 = [("employee", "会社員"), ("freelance", "フリーランス志望"), ("unemployed", "無職・転職中"), ("side", "副業経験あり")]
     Q2 = [("lt30", "1日30分未満"), ("h1", "1時間"), ("h2", "2時間以上"), ("weekend", "休日まとめて")]
     Q3 = [("make", "作る（制作/開発）"), ("post", "発信（文章/動画）"), ("resell", "仕入れ/リサーチ"), ("analyze", "分析/改善")]
@@ -12,3 +13,7 @@ class DiagnosisForm(forms.Form):
     q3_strength = forms.ChoiceField(choices=Q3, widget=forms.RadioSelect)
     q4_risk = forms.ChoiceField(choices=Q4, widget=forms.RadioSelect)
     q5_goal = forms.ChoiceField(choices=Q5, widget=forms.RadioSelect)
+
+    class Meta:
+        model = Diagnosis
+        fields = ["q1_status", "q2_time", "q3_strength", "q4_risk", "q5_goal"]
