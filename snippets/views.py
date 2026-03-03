@@ -24,6 +24,9 @@ from .services import judge_result_type
 from django.http import FileResponse, Http404
 import os
 from django.views.decorators.http import require_http_methods
+from django.http import Http404
+from django.shortcuts import get_object_or_404, render, redirect
+from .models import Diagnosis
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 # Stripeの「Price ID」（例: price_***）を環境変数などで管理
@@ -92,7 +95,7 @@ def diagnosis_result(request, pk: int):
         "influence": "今日やる：発信テーマを1つ決めて、自己紹介ポストを下書きする（100字でOK）。",
         "attack": "今日やる：売れている商品を10個リストアップして『なぜ売れてるか』を1行で書く。",
         "build": "今日やる：解決したい悩みを1つ選び、入力→出力が1画面で完結するツール案を1つ書く。",
-    }[d.result_type]
+    }.get(d.result_type, "今日やる：まずは診断をもう一度やり直してください。")
 
     from django.template.response import TemplateResponse
 
@@ -103,6 +106,7 @@ def diagnosis_result(request, pk: int):
     })
     resp.render()
     resp.content += b"\n<!-- DEBUG: diagnosis_result v2026-03-03 -->\n"
+    request.session["last_diagnosis_id"] = d.id
     return resp
 
 @csrf_exempt
