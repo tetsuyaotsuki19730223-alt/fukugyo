@@ -653,32 +653,23 @@ def premium_offer(request):
     return render(request, "snippets/premium_offer.html")
 
 import os
+from django.conf import settings
 from django.http import FileResponse, Http404
 from django.contrib.auth.decorators import login_required
-from django.conf import settings
+from django.shortcuts import redirect
+from .models import Diagnosis
 
 @login_required
 def premium_download(request):
-    # Premiumチェック
-    if not request.user.profile.is_premium:
+    # Premiumでなければ購入ページへ
+    if not hasattr(request.user, "profile") or not request.user.profile.is_premium:
         return redirect("premium_offer")
 
-    # 最新診断からPDFを決める（なければ stable に寄せる）
-    d = Diagnosis.objects.filter(user=request.user).order_by("-id").first()
-    result_type = d.result_type if d else "stable"
-
-    file_map = {
-        "stable": "stable_7day_roadmap.pdf",
-        "influence": "stable_7day_roadmap.pdf",
-        "attack": "stable_7day_roadmap.pdf",
-        "build": "stable_7day_roadmap.pdf",
-    }
-    filename = file_map.get(result_type, "stable_7day_roadmap.pdf")
-
-    # 置き場所（今のあなたの構成に合わせて static/premium を参照）
+    # まずは stable 1本でOK（他タイプは後で増やす）
+    filename = "stable_7day_roadmap.pdf"
     file_path = os.path.join(settings.BASE_DIR, "static", "premium", filename)
+
     if not os.path.exists(file_path):
         raise Http404("PDF not found")
 
-    # attachment=True が「ダウンロード」にするポイント
     return FileResponse(open(file_path, "rb"), as_attachment=True, filename=filename)
