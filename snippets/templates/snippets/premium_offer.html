@@ -1,1 +1,26 @@
-action="{% url 'create_checkout_session' %}"
+{% extends "snippets/base.html" %}
+
+{% block title %}7日ロードマップを解放{% endblock %}
+
+{% block content %}
+<h1>7日ロードマップを解放する</h1>
+
+<p>
+副業を始めたいのに、<br>
+「調べて終わる」「準備で止まる」「自分にできるか不安」<br>
+このループにハマっていませんか？
+</p>
+
+<hr>
+
+<p><strong>月額980円（テスト）</strong> / いつでも解約OK</p>
+
+<form method="post" action="{% url 'create_checkout_session' %}">
+  {% csrf_token %}
+  <button type="submit">今すぐ解放する</button>
+</form>
+
+<p style="margin-top: 16px;">
+※決済後すぐにPremiumが有効になり、ロードマップを閲覧・ダウンロードできます。
+</p>
+{% endblock %}
