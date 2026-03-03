@@ -63,7 +63,7 @@ def diagnosis_start(request):
             return redirect("diagnosis_result", pk=d.pk)
     else:
         form = DiagnosisForm()
-
+    
     return render(request, "snippets/diagnosis_form.html", {"form": form})
 
 from django.contrib.auth.decorators import login_required
@@ -73,12 +73,13 @@ from .models import Diagnosis
 
 from django.http import Http404
 
+
 def diagnosis_result(request, pk: int):
-    # ログイン済みなら本人のだけ見せる
+    # ログイン済みなら「user_id」を使う（request.user を渡さない）
     if request.user.is_authenticated:
-        d = get_object_or_404(Diagnosis, pk=pk, user=request.user)
+        d = get_object_or_404(Diagnosis, pk=pk, user_id=request.user.id)
     else:
-        # 匿名なら「直前に自分が作った結果」だけ見せる
+        # 匿名は「直前に自分が作った結果」だけ
         last_id = request.session.get("last_diagnosis_id")
         if last_id != pk:
             raise Http404("Not found")
@@ -95,7 +96,7 @@ def diagnosis_result(request, pk: int):
         "influence": "今日やる：発信テーマを1つ決めて、自己紹介ポストを下書きする（100字でOK）。",
         "attack": "今日やる：売れている商品を10個リストアップして『なぜ売れてるか』を1行で書く。",
         "build": "今日やる：解決したい悩みを1つ選び、入力→出力が1画面で完結するツール案を1つ書く。",
-    }.get(d.result_type, "今日やる：まずは診断をもう一度やり直してください。")
+    }.get(d.result_type, "今日やる：診断をもう一度やり直してください。")
 
     from django.template.response import TemplateResponse
 
@@ -105,9 +106,9 @@ def diagnosis_result(request, pk: int):
         "free_action": free_action,
     })
     resp.render()
-    resp.content += b"\n<!-- DEBUG: diagnosis_result v2026-03-03 -->\n"
-    request.session["last_diagnosis_id"] = d.id
+    resp.content += b"\n<!-- DEPLOY_CHECK: DR_20260303 -->\n"
     return resp
+
 
 @csrf_exempt
 def stripe_webhook(request):
