@@ -657,15 +657,12 @@ from django.conf import settings
 from django.http import FileResponse, Http404
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
-from .models import Diagnosis
 
 @login_required
 def premium_download(request):
-    # Premiumでなければ購入ページへ
     if not hasattr(request.user, "profile") or not request.user.profile.is_premium:
         return redirect("premium_offer")
 
-    # まずは stable 1本でOK（他タイプは後で増やす）
     filename = "stable_7day_roadmap.pdf"
     file_path = os.path.join(settings.BASE_DIR, "static", "premium", filename)
 
