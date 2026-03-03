@@ -87,11 +87,7 @@
 <form id="checkout-form" method="post" action="{% url 'create_checkout_session' %}">
   {% csrf_token %}
   <div style="text-align:center; margin:40px 0;">
-    <button type="submit"
-      onclick="gtag('event', 'premium_click', {event_category: 'conversion'});"
-      style="background:#ff4d4d;color:white;padding:18px 36px;font-size:20px;font-weight:bold;border-radius:8px;border:none;cursor:pointer;">
-      🔓 今すぐ止まらない構造を手に入れる（月980円）
-    </button>
+    <a class="btn" href="{% url 'premium_download' %}">PDFをダウンロード</a>
   </div>
 </form>
 </div>
