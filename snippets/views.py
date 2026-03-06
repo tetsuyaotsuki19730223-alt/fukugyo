@@ -458,6 +458,16 @@ def coach_dashboard(request):
         "attack": "今日やる：売れている商品を10個リストアップして理由を1行で。",
         "build": "今日やる：入力→出力が1画面で完結するツール案を1つ書く。",
     }
+    today_action_map = {
+        "stable": "クラウドソーシングで案件を3つ見る",
+        "influence": "投稿のネタを1つ書く",
+        "attack": "売れている商品を10個見る",
+        "build": "ツールの画面を1つ作る",
+    }
+
+    result_type = request.session.get("last_result_type", "stable")
+    today_action = today_action_map.get(result_type, "副業のネタを1つメモする")
+
     today_action = action_map.get(result_type, action_map["build"])
 
     today = date.today()
@@ -536,6 +546,7 @@ def coach_dashboard(request):
         "feedback": feedback,
         "special_message": special_message,
         "gap_message": gap_message,
+        "today_action": today_action,
     })
 
 @require_POST
@@ -665,7 +676,7 @@ import os
 @login_required
 def premium_download(request):
 
-    profile = request.user.profile
+    procoach_dashboardfile = request.user.profile
     if not profile.is_premium:
         return redirect("premium_offer")
 
