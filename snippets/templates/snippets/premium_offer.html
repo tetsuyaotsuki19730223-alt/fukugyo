@@ -3,7 +3,19 @@
 {% block title %}7日ロードマップを解放{% endblock %}
 
 {% block content %}
-<h1>7日ロードマップを解放する</h1>
+{% if result_type == "stable" %}
+<h1>安定して月5万を作る7日ロードマップ</h1>
+
+{% elif result_type == "influence" %}
+<h1>発信を収益に変える7日ロードマップ</h1>
+
+{% elif result_type == "attack" %}
+<h1>回転で稼ぐ7日ロードマップ</h1>
+
+{% elif result_type == "build" %}
+<h1>副業ツールを完成させる7日ロードマップ</h1>
+
+{% endif %}
 
 <p>
 副業を始めたいのに、<br>

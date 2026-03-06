@@ -650,8 +650,12 @@ def billing_stats(request):
     })
 
 def premium_offer(request):
-    # ログイン不要の“買うページ”
-    return render(request, "snippets/premium_offer.html")
+
+    result_type = request.session.get("last_result_type", "stable")
+
+    return render(request, "snippets/premium_offer.html", {
+        "result_type": result_type
+    })
 
 from django.http import FileResponse
 from django.conf import settings
