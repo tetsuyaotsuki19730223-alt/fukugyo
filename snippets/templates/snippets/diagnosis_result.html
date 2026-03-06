@@ -335,5 +335,21 @@
 {% endif %}
 
 {% endif %}
+
+<hr>
+
+<h3>診断結果をシェア</h3>
+
+<p>
+あなたのタイプ：<b>{{ d.get_result_type_display }}</b>
+</p>
+
+<a
+href="https://twitter.com/intent/tweet?text=私の副業タイプは『{{ d.get_result_type_display }}』でした。%0A%0A無料診断はこちら👇%0A{{ request.build_absolute_uri }}"
+target="_blank"
+style="background:#1DA1F2;color:white;padding:12px 20px;border-radius:6px;text-decoration:none;display:inline-block;"
+>
+Xでシェアする
+</a>
 <!-- DIAG_TEMPLATE_VERSION: 2026-03-02-02 -->
 {% endblock %}
