@@ -295,10 +295,36 @@
 
 {% if request.user.is_authenticated %}
   {% if is_premium %}
-    <a class="btn" href="{% url 'premium_page' %}">7日ロードマップを見る（Premium）</a>
+  <p>Premiumが有効です ✅</p>
+  <a class="btn" href="{% url 'premium_page' %}">7日ロードマップを見る</a>
   {% else %}
-    <a class="btn" href="{% url 'premium_offer' %}">7日ロードマップを開放する</a>
+
+<div style="text-align:center;margin:40px 0;">
+
+<form method="post" action="{% url 'create_checkout_session' %}">
+  {% csrf_token %}
+  <button style="
+    background:#ff4d4d;
+    color:white;
+    padding:18px 36px;
+    font-size:20px;
+    font-weight:bold;
+    border-radius:8px;
+    border:none;
+    cursor:pointer;
+  ">
+  🔓 今すぐ7日ロードマップを解放（月980円）
+  </button>
+</form>
+
+<p style="font-size:14px;color:#666;margin-top:10px;">
+いつでも解約できます
+</p>
+
+</div>
+
   {% endif %}
+
 {% else %}
   <a class="btn" href="{% url 'login' %}?next={% url 'premium_offer' %}">
     ログインして7日ロードマップを開放する
