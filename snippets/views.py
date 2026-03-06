@@ -652,21 +652,43 @@ def premium_offer(request):
     # ログイン不要の“買うページ”
     return render(request, "snippets/premium_offer.html")
 
-import os
+from django.http import FileResponse
 from django.conf import settings
-from django.http import FileResponse, Http404
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
+import os
 
 @login_required
 def premium_download(request):
-    if not hasattr(request.user, "profile") or not request.user.profile.is_premium:
+
+    profile = request.user.profile
+    if not profile.is_premium:
         return redirect("premium_offer")
 
-    filename = "stable_7day_roadmap.pdf"
+    # 最新の診断結果を取得
+    d = Diagnosis.objects.filter(user=request.user).order_by("-id").first()
+
+    result_type = d.result_type if d else "stable"
+
+    file_map = {
+        "stable": "stable_7day_roadmap.pdf",
+        "influence": "influence_7day_roadmap.pdf",
+        "attack": "attack_7day_roadmap.pdf",
+        "build": "build_7day_roadmap.pdf",
+    }
+
+    filename = file_map.get(result_type, "stable_7day_roadmap.pdf")
+
     file_path = os.path.join(settings.BASE_DIR, "static", "premium", filename)
 
-    if not os.path.exists(file_path):
-        raise Http404("PDF not found")
+    return FileResponse(
+        open(file_path, "rb"),
+        content_type="application/pdf",
+        filename=filename,
+    )
 
-    return FileResponse(open(file_path, "rb"), as_attachment=True, filename=filename)
+def register_japanese_font():
+    font_path = BASE_DIR / "snippets" / "static" / "fonts" / "ipaexg.ttf"
+    if not font_path.exists():
+        raise FileNotFoundError(f"Font not found: {font_path}")
+    pdfmetrics.registerFont(TTFont("IPAexGothic", str(font_path)))
+
