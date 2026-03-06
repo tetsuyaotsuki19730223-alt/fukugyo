@@ -86,15 +86,16 @@ from django.http import Http404
 
 
 def diagnosis_result(request, pk: int):
-    # 匿名は「直前の診断ID」以外は見せない
-    if not request.user.is_authenticated:
+    if request.user.is_authenticated:
+        d = get_object_or_404(Diagnosis, pk=pk, user=request.user)
+    else:
         last_id = request.session.get("last_diagnosis_id")
         if last_id != pk:
             raise Http404("Not found")
         d = get_object_or_404(Diagnosis, pk=pk)
-    else:
-        # ログイン済みは本人の診断だけ
-        d = get_object_or_404(Diagnosis, pk=pk, user_id=request.user.id)
+
+    # ⭐追加
+    request.session["last_result_type"] = d.result_type
 
     is_premium = (
         request.user.is_authenticated
@@ -667,7 +668,7 @@ def premium_download(request):
     # 最新の診断結果を取得
     d = Diagnosis.objects.filter(user=request.user).order_by("-id").first()
 
-    result_type = d.result_type if d else "stable"
+    result_type = request.session.get("last_result_type", "stable")
 
     file_map = {
         "stable": "stable_7day_roadmap.pdf",
