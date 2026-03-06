@@ -14,7 +14,9 @@
 <hr>
 
 <p><strong>月額980円（テスト）</strong> / いつでも解約OK</p>
-
+<p style="background:#fff8e1;padding:12px;border-radius:8px;font-size:14px;">
+  ※ いまはテスト価格（月980円）です。改善が進み次第、値上げ予定です。
+</p>
 <form method="post" action="{% url 'create_checkout_session' %}">
   {% csrf_token %}
   <button type="submit">今すぐ解放する</button>
