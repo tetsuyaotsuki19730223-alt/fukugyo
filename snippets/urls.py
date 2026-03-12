@@ -1,11 +1,13 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
-
+from django.contrib import admin
 
 urlpatterns = [
 
     #path("", views.landing, name="home"),
+    path("admin/", admin.site.urls),
 
+    path("", include("snippets.urls")),
     path("", views.home),
 
     path("signup/", views.signup_view, name="signup"),
