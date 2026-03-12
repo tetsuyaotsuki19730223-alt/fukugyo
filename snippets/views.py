@@ -266,7 +266,7 @@ def ai_roadmap(request):
         3ヶ月目
         """
 
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
                 {"role": "user", "content": prompt}

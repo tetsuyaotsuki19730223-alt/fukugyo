@@ -38,9 +38,10 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    "*",
     "ai-sidejob-coach.net",
     "www.ai-sidejob-coach.net",
+    ".koyeb.app",
+    "localhost",
 ]
 
 

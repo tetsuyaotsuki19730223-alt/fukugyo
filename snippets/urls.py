@@ -13,11 +13,12 @@ urlpatterns = [
     path("ranking/", views.ranking, name="ranking"),
 
     path("diagnosis/", views.diagnosis),
-
     path("history/", views.history),
 
+    path("pricing/", views.pricing, name="pricing"),
+
+    path("premium/", views.premium_page, name="premium_page"),
+
     path("type-diagnosis/", views.type_diagnosis),
-
     path("type-result/", views.type_result, name="type_result"),
-
 ]
