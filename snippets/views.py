@@ -633,11 +633,14 @@ def type_diagnosis(request):
             "AI型": "AIツールを使った副業が向いています。",
             "投資型": "資産運用型の副業が向いています。",
         }
-
+        description = type_text[result]
     return render(
         request,
         "snippets/type_diagnosis.html",
-        {"result": result},
+        {
+            "result": result,
+            "description": description,
+        },
     )
 
 def type_result(request):
@@ -754,14 +757,13 @@ def diagnosis(request):
 def ai_chat(request):
 
     answer = None
+    question = None
 
     if request.method == "POST":
 
         question = request.POST.get("question")
 
         answer = ai_coach(question)
-
-    if request.user.is_authenticated:
 
         AIChat.objects.create(
 
@@ -770,7 +772,7 @@ def ai_chat(request):
             answer=answer
 
         )
-        
+
     return render(
         request,
         "snippets/ai_chat.html",
