@@ -596,6 +596,7 @@ def buy_template(request, template_id):
 def type_diagnosis(request):
 
     result = None
+    description = None
 
     if request.method == "POST":
 
@@ -633,7 +634,9 @@ def type_diagnosis(request):
             "AI型": "AIツールを使った副業が向いています。",
             "投資型": "資産運用型の副業が向いています。",
         }
+
         description = type_text[result]
+
     return render(
         request,
         "snippets/type_diagnosis.html",
