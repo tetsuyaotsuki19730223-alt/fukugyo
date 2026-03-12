@@ -1,95 +1,17 @@
-{% extends "snippets/base.html" %}
+{% extends "base.html" %}
+
 {% block content %}
 
-<h1>あなた専用の7日ロードマップ</h1>
+<div class="card">
 
-<p style="color:#ff4d4d; font-weight:bold;">
-※ 診断結果に基づいた専用設計です
-</p>
+<h2>プレミアム登録ありがとうございます</h2>
 
 <p>
-この7日間でやることは3つだけ。
+
+AI副業コーチ プレミアムが有効になりました。
+
 </p>
 
-<ul>
-  <li>最小で始める</li>
-  <li>迷わない順番で進める</li>
-  <li>公開を後回しにしない</li>
-</ul>
-
-<hr>
-
-<h3>なぜ7日なのか？</h3>
-
-<p>
-副業で止まる人の多くは、
-「考えすぎる」か「やりすぎる」。
-</p>
-
-<p>
-7日間は、<strong>動き続ける感覚を掴むための期間</strong>です。
-</p>
-
-<hr>
-
-<h3>これが手に入ります</h3>
-
-<ul>
-  <li>具体的なToDoリスト</li>
-  <li>迷わない進行順</li>
-  <li>実践テンプレ</li>
-</ul>
-
-<hr>
-
-<p style="text-align:center; font-size:14px; color:#666;">
-月980円（1日あたり約32円）<br>
-いつでも解約できます
-</p>
-
-<hr>
-<h3>正直に言います。</h3>
-
-<p>
-このまま何も変えなければ、
-3ヶ月後も今と同じ悩みを抱えている可能性が高いです。
-</p>
-
-<p>
-行動しないことも、選択です。
-</p>
-
-<hr>
-
-<h3>最後に、ひとつだけ聞かせてください。</h3>
-
-<p>
-あなたは本当に、  
-「変わりたい」と思っていますか？
-</p>
-
-<p>
-もし答えがYESなら、  
-今日がその1日目です。
-</p>
-
-<p>
-1日あたり約32円。  
-コンビニのコーヒーより安い。
-</p>
-
-<p style="font-size:14px;color:#666;text-align:center;">
-※ いつでもワンクリックで解約できます。<br>
-※ テスト決済では実際に課金されません。
-</p>
-
-<div style="text-align:center; margin:40px 0;">
-<form id="checkout-form" method="post" action="{% url 'create_checkout_session' %}">
-  {% csrf_token %}
-  <div style="text-align:center; margin:40px 0;">
-    <a class="btn" href="{% url 'premium_download' %}">PDFをダウンロード</a>
-  </div>
-</form>
 </div>
 
 {% endblock %}

@@ -1,0 +1,137 @@
+{% extends "snippets/base.html" %}
+{% block content %}
+<div style="background:#f5f7ff;padding:20px;border-radius:10px;margin-top:30px;">
+<p style="margin:0;font-size:18px;">
+診断後、<strong>AI副業コーチ</strong>が<br>
+あなた専用の行動プランを作ります。
+</p>
+</div>
+<div style="max-width: 760px; margin: 0 auto; padding: 20px;">
+
+  <section style="text-align: center; padding: 40px 0;">
+    <p style="font-size: 14px; color: #666; margin-bottom: 8px;">
+      3分でわかる
+    </p>
+
+    <h1 style="font-size: 38px; line-height: 1.4; margin-bottom: 20px;">
+      あなたの副業タイプ診断
+    </h1>
+
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 24px;">
+      5つの質問に答えるだけで、<br>
+      <strong>あなたに向いている副業</strong>と<br>
+      <strong>最初の一歩</strong>がわかります。
+    </p>
+
+    <a href="{% url 'diagnosis_start' %}"
+       style="display:inline-block; background:#ff4d4d; color:white; padding:18px 36px; font-size:20px; font-weight:bold; border-radius:10px; text-decoration:none;">
+      無料診断をはじめる
+    </a>
+    <p style="font-size:13px;color:#777;margin-top:10px;">
+    ※登録不要 / 完全無料
+    </p>
+    <p style="margin-top: 16px; color: #666; font-size: 14px;">
+      すでに {{ diagnosis_count }}人 が診断しました
+    </p>
+  </section>
+
+  <hr style="margin: 40px 0;">
+
+  <section style="padding: 10px 0 30px;">
+    <h2 style="font-size: 28px; margin-bottom: 20px;">
+      こんな悩みありませんか？
+    </h2>
+
+    <ul style="line-height: 2; font-size: 17px;">
+      <li>副業を始めたいけど、何をやればいいかわからない</li>
+      <li>情報ばかり増えて、結局動けない</li>
+      <li>始めても続かず、途中で止まってしまう</li>
+    </ul>
+
+    <p style="margin-top: 20px; line-height: 1.9; font-size: 17px;">
+      それは能力不足ではありません。<br>
+      <strong>あなたのタイプに合っていない副業を選んでいるだけです。</strong>
+    </p>
+  </section>
+
+  <hr style="margin: 40px 0;">
+
+  <section style="padding: 10px 0 30px;">
+    <h2 style="font-size: 28px; margin-bottom: 20px;">
+      診断でわかること
+    </h2>
+
+    <ul style="line-height: 2; font-size: 17px;">
+      <li>あなたに向いている副業タイプ</li>
+      <li>今すぐやるべき最初の1アクション</li>
+      <li>7日で動き出すためのロードマップ</li>
+    </ul>
+  </section>
+
+  <hr style="margin: 40px 0;">
+
+  <section style="padding: 10px 0 30px;">
+    <h2 style="font-size: 28px; margin-bottom: 20px;">
+      診断結果の例
+    </h2>
+
+    <div style="background:#f8f8f8; border-radius:12px; padding:20px; margin-bottom:16px;">
+      <p style="margin:0 0 8px;"><strong>安定型</strong></p>
+      <p style="margin:0; color:#555;">クラウドソーシングや堅実な積み上げ副業向き</p>
+    </div>
+
+    <div style="background:#f8f8f8; border-radius:12px; padding:20px; margin-bottom:16px;">
+      <p style="margin:0 0 8px;"><strong>影響力型</strong></p>
+      <p style="margin:0; color:#555;">SNS・コンテンツ発信で収益化しやすいタイプ</p>
+    </div>
+
+    <div style="background:#f8f8f8; border-radius:12px; padding:20px; margin-bottom:16px;">
+      <p style="margin:0 0 8px;"><strong>攻撃型</strong></p>
+      <p style="margin:0; color:#555;">リサーチ・出品・回転で伸ばす副業向き</p>
+    </div>
+
+    <div style="background:#f8f8f8; border-radius:12px; padding:20px;">
+      <p style="margin:0 0 8px;"><strong>構築型</strong></p>
+      <p style="margin:0; color:#555;">ツール・仕組み化・プロダクト型副業向き</p>
+    </div>
+  </section>
+
+  <hr style="margin: 40px 0;">
+
+  <section style="padding: 10px 0 30px;">
+    <h2 style="font-size: 28px; margin-bottom: 20px;">
+      診断だけで終わりません
+    </h2>
+
+    <p style="line-height: 1.9; font-size: 17px;">
+      Premiumでは、あなた専用の<strong>7日ロードマップ</strong>と
+      <strong>AI副業コーチ</strong>が使えます。
+    </p>
+
+    <ul style="line-height: 2; font-size: 17px; margin-top: 16px;">
+      <li>今日やるべき行動がわかる</li>
+      <li>継続ミッションで止まりにくい</li>
+      <li>チェックインで習慣化できる</li>
+    </ul>
+  </section>
+
+  <hr style="margin: 40px 0;">
+
+  <section style="text-align:center; padding: 20px 0 50px;">
+    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+      副業で止まる前に、<br>
+      まずはあなたのタイプを知ってください。
+    </p>
+
+    <a href="{% url 'diagnosis_start' %}"
+       style="display:inline-block; background:#ff4d4d; color:white; padding:18px 36px; font-size:20px; font-weight:bold; border-radius:10px; text-decoration:none;">
+      無料診断をはじめる
+    </a>
+    <p style="font-size:13px;color:#777;margin-top:10px;">
+    ※登録不要 / 完全無料
+    </p>
+  </section>
+
+</div>
+
+{% endblock %}

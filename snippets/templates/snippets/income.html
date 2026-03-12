@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>副業収益シミュレーター</h1>
+
+<form method="post">
+
+{% csrf_token %}
+
+<p>1日何時間作業できますか？</p>
+
+<input name="hours" type="number">
+
+<br><br>
+
+<button type="submit">
+計算
+</button>
+
+</form>
+
+{% if result %}
+
+<hr>
+
+<h2>
+
+予想月収  
+{{ result }} 円
+
+</h2>
+
+{% endif %}
+
+{% endblock %}

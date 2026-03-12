@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>AI副業アイデア生成</h1>
+
+<form method="post">
+
+{% csrf_token %}
+
+<textarea name="skill" rows="5"></textarea>
+
+<br>
+
+<button type="submit">AIに相談</button>
+
+</form>
+
+{% if idea %}
+
+<h2>AI提案</h2>
+
+<pre>{{ idea }}</pre>
+
+{% endif %}
+
+{% endblock %}

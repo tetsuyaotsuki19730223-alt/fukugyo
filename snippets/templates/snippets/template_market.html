@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>副業テンプレートマーケット</h1>
+
+{% for t in templates %}
+
+<div>
+
+<h2>{{ t.title }}</h2>
+
+<p>{{ t.description }}</p>
+
+<p>価格 {{ t.price }}円</p>
+
+<a href="/templates/buy/{{ t.id }}/">
+
+購入
+
+</a>
+
+</div>
+
+{% endfor %}
+
+{% endblock %}

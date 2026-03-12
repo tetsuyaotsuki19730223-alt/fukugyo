@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>AI副業ロードマップ</h1>
+
+<form method="post">
+
+{% csrf_token %}
+
+<p>あなたのスキル</p>
+
+<input type="text" name="skill"
+placeholder="例: プログラミング">
+
+<p>副業に使える時間</p>
+
+<input type="text" name="time"
+placeholder="例: 1日2時間">
+
+<button>
+
+ロードマップ生成
+
+</button>
+
+</form>
+
+{% if roadmap %}
+
+<h2>あなたの副業ロードマップ</h2>
+
+<pre>
+
+{{ roadmap }}
+
+</pre>
+
+<a href="/roadmap/pdf/">
+
+ロードマップPDFダウンロード
+
+</a>
+
+{% endif %}
+
+{% endblock %}

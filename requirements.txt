@@ -1,8 +1,6 @@
-Django==4.2.16
+Django
 gunicorn
+psycopg2-binary
 whitenoise
-stripe
-psycopg[binary]
-dj-database-url
-reportlab
+openai
 python-dotenv

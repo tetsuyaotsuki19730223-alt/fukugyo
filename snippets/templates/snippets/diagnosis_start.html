@@ -1,0 +1,43 @@
+{% extends "snippets/base.html" %}
+{% block content %}
+
+<h1>副業タイプ診断</h1>
+
+<form method="post" action="/diagnosis/result/">
+{% csrf_token %}
+
+<p>
+副業はどちらが好き？
+</p>
+
+<label>
+<input type="radio" name="q1" value="1">
+コツコツ
+</label>
+
+<label>
+<input type="radio" name="q1" value="3">
+挑戦
+</label>
+
+<p>
+AIに興味は？
+</p>
+
+<label>
+<input type="radio" name="q2" value="1">
+普通
+</label>
+
+<label>
+<input type="radio" name="q2" value="3">
+かなりある
+</label>
+
+<button>
+診断する
+</button>
+
+</form>
+
+{% endblock %}

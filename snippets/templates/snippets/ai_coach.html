@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>AI副業コーチ</h1>
+
+<div style="
+max-width:800px;
+margin:auto;
+">
+
+<div style="
+background:#f5f5f5;
+padding:20px;
+border-radius:10px;
+height:400px;
+overflow-y:scroll;
+margin-bottom:20px;
+">
+
+{% for chat in chats %}
+
+<div style="margin-bottom:20px;">
+
+<p style="color:#666;">あなた</p>
+
+<div style="
+background:#ffffff;
+padding:10px;
+border-radius:6px;
+">
+
+{{ chat.question }}
+
+</div>
+
+</div>
+
+<div style="margin-bottom:20px;">
+
+<p style="color:#666;">AIコーチ</p>
+
+<div style="
+background:#e9f5ff;
+padding:10px;
+border-radius:6px;
+">
+
+{{ chat.answer }}
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+
+<form method="post">
+
+{% csrf_token %}
+
+<input type="text"
+name="question"
+placeholder="副業について質問してください"
+style="
+width:80%;
+padding:10px;
+">
+
+<button style="
+padding:10px 20px;
+">
+
+送信
+
+</button>
+
+</form>
+
+</div>
+
+{% endblock %}

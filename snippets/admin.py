@@ -1,4 +1,7 @@
 from django.contrib import admin
-from snippets.models import Snippet
+from .models import Profile, CoachMission, Snippet, Mission
 
+admin.site.register(Profile)
+admin.site.register(CoachMission)
 admin.site.register(Snippet)
+admin.site.register(Mission)

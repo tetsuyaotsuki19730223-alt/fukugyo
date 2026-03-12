@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>AI副業アイデア生成</h1>
+
+<form method="post">
+
+{% csrf_token %}
+
+<p>あなたのスキル</p>
+
+<input type="text" name="skill" placeholder="例: プログラミング">
+
+<p>興味のある分野</p>
+
+<input type="text" name="interest" placeholder="例: AI">
+
+<br><br>
+
+<button>
+
+副業アイデア生成
+
+</button>
+
+</form>
+
+{% if ideas %}
+
+<h2>AIが提案した副業</h2>
+
+<pre>
+
+{{ ideas }}
+
+</pre>
+
+{% endif %}
+
+{% endblock %}

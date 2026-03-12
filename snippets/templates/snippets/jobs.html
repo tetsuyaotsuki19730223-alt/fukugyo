@@ -1,0 +1,22 @@
+{% extends "snippets/base.html" %}
+{% block content %}
+
+<h1>副業案件</h1>
+
+{% for job in jobs %}
+
+<div>
+
+<h3>{{ job.title }}</h3>
+
+<p>{{ job.reward }}</p>
+
+<button>
+応募する
+</button>
+
+</div>
+
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card">
+
+<h2>あなたの副業レベル</h2>
+
+<p>
+🔥 連続ログイン  
+<strong>{{ streak }}日</strong>
+</p>
+
+<p>
+⭐ レベル  
+<strong>{{ request.user.profile.level }}</strong>
+</p>
+
+<p>
+⚡ XP  
+<strong>{{ request.user.profile.xp }}</strong>
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h2>今日のミッション</h2>
+
+<p>
+
+{{ mission.title }}
+
+</p>
+
+<form method="post" action="/mission/complete/">
+
+{% csrf_token %}
+
+<button>
+
+ミッション完了
+
+</button>
+
+</form>
+
+</div>
+
+
+<div class="card">
+
+    <h2>AI副業相談</h2>
+
+    <a href="/diagnosis/">
+
+    <button>
+
+    副業タイプ診断をする
+
+    </button>
+
+    </a>
+
+</div>
+
+<a href="/type-diagnosis/">
+<button>
+副業タイプ診断
+</button>
+</a>
+
+<a href="/ranking/">
+<button>
+ランキング
+</button>
+</a>
+{% endblock %}

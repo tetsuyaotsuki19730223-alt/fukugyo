@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>AI相談履歴</h1>
+
+{% for chat in chats %}
+
+<div style="
+background:#f5f5f5;
+padding:20px;
+margin-bottom:20px;
+border-radius:10px;
+">
+
+<p><strong>質問</strong></p>
+
+<p>
+{{ chat.question }}
+</p>
+
+<p><strong>AI回答</strong></p>
+
+<p>
+{{ chat.answer }}
+</p>
+
+</div>
+
+{% endfor %}
+
+{% endblock %}

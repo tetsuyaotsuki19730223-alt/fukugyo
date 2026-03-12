@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>副業XPランキング</h1>
+
+<table>
+
+<tr>
+<th>順位</th>
+<th>ユーザー</th>
+<th>XP</th>
+</tr>
+
+{% for user in users %}
+
+<tr>
+
+<td>{{ forloop.counter }}</td>
+
+<td>{{ user.username }}</td>
+
+<td>{{ user.profile.xp }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

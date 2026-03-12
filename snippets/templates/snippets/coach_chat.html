@@ -1,0 +1,25 @@
+{% extends "snippets/base.html" %}
+
+{% block content %}
+
+<h1>AI副業コーチ</h1>
+
+<form method="post">
+  {% csrf_token %}
+  <input name="question" placeholder="副業の悩みを書いてください">
+  <button type="submit">相談する</button>
+</form>
+
+<hr>
+
+{% for m in messages %}
+
+<p><b>あなた：</b>{{ m.question }}</p>
+
+<p><b>AI：</b>{{ m.answer }}</p>
+
+<hr>
+
+{% endfor %}
+
+{% endblock %}

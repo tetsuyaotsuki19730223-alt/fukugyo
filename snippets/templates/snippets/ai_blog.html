@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>AIブログ生成</h1>
+
+<form method="post">
+
+{% csrf_token %}
+
+<input
+type="text"
+name="topic"
+placeholder="例: AI副業"
+style="width:400px;"
+>
+
+<button>
+
+記事生成
+
+</button>
+
+</form>
+
+{% if article %}
+
+<h2>生成記事</h2>
+
+<pre>
+
+{{ article }}
+
+</pre>
+
+{% endif %}
+
+{% endblock %}

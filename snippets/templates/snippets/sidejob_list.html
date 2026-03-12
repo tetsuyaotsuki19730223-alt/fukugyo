@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>副業案件</h1>
+
+{% for job in jobs %}
+
+<div>
+
+<h2>{{ job.title }}</h2>
+
+<p>{{ job.description }}</p>
+
+<p>報酬 {{ job.reward }}円</p>
+
+<a href="/sidejobs/apply/{{ job.id }}/">
+
+応募
+
+</a>
+
+</div>
+
+{% endfor %}
+
+{% endblock %}

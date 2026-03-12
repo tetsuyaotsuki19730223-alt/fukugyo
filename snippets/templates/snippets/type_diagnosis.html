@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>副業タイプ診断</h1>
+
+<form method="post">
+
+{% csrf_token %}
+
+<p>新しいことを試すのは好き？</p>
+
+<input type="radio" name="q1" value="yes"> YES  
+<input type="radio" name="q1" value="no"> NO  
+
+
+<p>AIに興味ある？</p>
+
+<input type="radio" name="q2" value="yes"> YES  
+<input type="radio" name="q2" value="no"> NO  
+
+<br><br>
+
+<button type="submit">
+
+診断する
+
+</button>
+
+</form>
+
+
+{% if result %}
+
+<hr>
+
+<h2>あなたの副業タイプ</h2>
+
+<h3>{{ result }}</h3>
+
+<p>{{ description }}</p>
+
+<a href="/diagnosis/">
+
+AI副業ロードマップ作成
+
+</a>
+
+{% endif %}
+
+{% endblock %}

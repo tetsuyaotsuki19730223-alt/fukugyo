@@ -2,6 +2,64 @@
 {% block content %}
 
 <h1>AI副業コーチ</h1>
+<div style="background:#f5f5f5;padding:20px;border-radius:10px;margin-bottom:20px;">
+
+<h2>今日の進捗</h2>
+
+<p style="font-size:18px;">
+🔥 連続日数  
+<strong>{{ streak }} 日</strong>
+</p>
+
+<p style="font-size:18px;">
+⭐ レベル  
+<strong>{{ request.user.profile.level }}</strong>
+</p>
+
+<p style="font-size:18px;">
+⚡ XP  
+<strong>{{ request.user.profile.xp }}</strong>
+</p>
+
+</div>
+<div style="background:#fff7e6;padding:20px;border-radius:10px;margin-bottom:20px;">
+
+<h2>今日のミッション</h2>
+
+<p style="font-size:18px;">
+{{ mission.title }}
+</p>
+
+</div>
+
+<div style="text-align:center;margin-top:20px;">
+
+<form method="post" action="{% url 'coach_checkin' %}">
+{% csrf_token %}
+
+<button style="
+background:#ff4d4d;
+color:white;
+padding:16px 32px;
+font-size:18px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+">
+今日のミッションを完了する
+</button>
+
+</form>
+
+</div>
+
+{% if checked_today %}
+
+<p style="color:green;font-weight:bold;">
+✅ 今日のミッション完了！
+</p>
+
+{% endif %}
 
 {% if gap_message %}
   <p style="background:#ffecec;padding:12px;border-radius:8px;">
@@ -10,18 +68,6 @@
   </p>
 {% endif %}
 
-<p>あなたのタイプ：<b>{{ result_type }}</b></p>
-<p>連続日数：<b>{{ streak_days }}</b> 日</p>
-{% if special_message %}
-  <p style="background:#fff7e6;padding:12px;border-radius:8px;">
-    <b>コーチメモ：</b><br>
-    {{ special_message }}
-  </p>
-{% endif %}
-<hr>
-
-<h2>今日やる1アクション</h2>
-<p style="font-size:18px;"><b>{{ today_action }}</b></p>
 
 {% if today_completed %}
   <p style="color:green;"><b>✅ 今日は完了しました</b></p>
@@ -58,5 +104,130 @@
     </p>
   {% endif %}
 {% endif %}
+<hr>
+
+<h2>AI副業コーチ</h2>
+
+<div style="
+max-width:700px;
+margin:20px auto;
+background:#f5f5f5;
+padding:20px;
+border-radius:12px;
+">
+
+{% for m in messages %}
+
+  {% if m.question %}
+    <div style="text-align:right; margin-bottom:12px;">
+      <span style="background:#4CAF50;color:white;padding:10px 14px;border-radius:12px;display:inline-block;">
+        {{ m.question }}
+      </span>
+    </div>
+  {% endif %}
+
+  {% if m.answer %}
+    <div style="text-align:left; margin-bottom:12px;">
+      <span style="background:white;padding:10px 14px;border-radius:12px;display:inline-block;border:1px solid #ddd;">
+        🤖 {{ m.answer }}
+      </span>
+    </div>
+  {% endif %}
+
+{% endfor %}
+
+</div>
+<form method="post">
+
+{% csrf_token %}
+
+<input
+name="message"
+placeholder="コーチに質問..."
+style="
+width:80%;
+padding:12px;
+border-radius:8px;
+border:1px solid #ccc;
+"
+>
+
+<button
+style="
+padding:12px 20px;
+background:#ff4d4d;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+"
+>
+送信
+</button>
+
+</form>
+
+
+
+
+
+
+
+
+<h3>紹介リンク</h3>
+
+<p>
+このリンクから登録するとあなたにボーナスが入ります。
+</p>
+
+<input
+  type="text"
+  id="referral-link"
+  value="{{ request.scheme }}://{{ request.get_host }}/?ref={{ request.user.profile.referral_code }}"
+  readonly
+  style="width:100%; padding:10px; margin-bottom:10px;"
+>
+
+<button
+  type="button"
+  onclick="copyReferralLink()"
+  style="padding:10px 16px; border:none; border-radius:6px; background:#333; color:white; cursor:pointer;"
+>
+  紹介リンクをコピー
+</button>
+
+<p style="margin-top:15px;">
+  紹介人数：{{ request.user.profile.referrals.count }}人
+</p>
+<p>
+  紹介特典日数：{{ request.user.profile.premium_bonus_days }}日
+</p>
+
+<script>
+function copyReferralLink() {
+  const input = document.getElementById("referral-link");
+  input.select();
+  input.setSelectionRange(0, 99999);
+  navigator.clipboard.writeText(input.value);
+  alert("紹介リンクをコピーしました！");
+}
+</script>
+
+<form method="post" action="{% url 'coach_checkin' %}">
+{% csrf_token %}
+
+<button style="
+background:#ff4d4d;
+color:white;
+padding:16px 32px;
+font-size:18px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+">
+今日のミッションを完了する
+</button>
+
+</form>
 
 {% endblock %}

@@ -1,0 +1,23 @@
+{% extends "snippets/base.html" %}
+
+{% block content %}
+
+<h1>AI副業ロードマップ</h1>
+
+<form method="post">
+
+{% csrf_token %}
+
+<p>
+副業の目標は？
+</p>
+
+<input type="text" name="goal">
+
+<button>
+AIロードマップ生成
+</button>
+
+</form>
+
+{% endblock %}

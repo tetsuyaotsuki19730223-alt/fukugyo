@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>AI副業コミュニティ</h1>
+
+<form method="post">
+
+{% csrf_token %}
+
+<textarea name="content" placeholder="投稿を書く"></textarea>
+
+<br>
+
+<button>
+
+投稿
+
+</button>
+
+</form>
+
+<hr>
+
+{% for post in posts %}
+
+<div style="
+background:#f5f5f5;
+padding:20px;
+margin-bottom:20px;
+border-radius:10px;
+">
+
+<p>
+
+<strong>{{ post.user.username }}</strong>
+
+</p>
+
+<p>
+
+{{ post.content }}
+
+</p>
+
+</div>
+
+{% endfor %}
+
+{% endblock %}

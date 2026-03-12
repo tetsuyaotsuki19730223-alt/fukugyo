@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>AI相談履歴</h1>
+
+{% for chat in chats %}
+
+<hr>
+
+<h3>質問</h3>
+
+<pre>{{ chat.question }}</pre>
+
+<h3>AI回答</h3>
+
+<pre>{{ chat.answer }}</pre>
+
+<small>{{ chat.created_at }}</small>
+
+{% endfor %}
+
+{% endblock %}

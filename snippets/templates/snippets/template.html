@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>副業テンプレート生成</h1>
+
+<form method="post">
+
+{% csrf_token %}
+
+<input name="topic">
+
+<button type="submit">
+生成
+</button>
+
+</form>
+
+
+{% if result %}
+
+<pre>{{ result }}</pre>
+
+{% endif %}
+
+{% endblock %}

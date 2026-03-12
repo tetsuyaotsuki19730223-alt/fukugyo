@@ -1,0 +1,109 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #f6f7fb;
+    margin: 0;
+}
+
+.container {
+    max-width: 700px;
+    margin: auto;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.button {
+    background: #4CAF50;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.button:hover {
+    opacity: 0.9;
+}
+
+.menu a {
+    display: block;
+    padding: 10px 0;
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+}
+
+.menu a:hover {
+    color: #4CAF50;
+}
+
+.container{
+max-width:700px;
+margin:auto;
+padding:20px;
+}
+
+.title{
+text-align:center;
+margin-bottom:20px;
+}
+
+.card{
+background:white;
+border-radius:12px;
+padding:20px;
+margin-bottom:20px;
+box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+
+.status{
+display:flex;
+justify-content:space-around;
+text-align:center;
+}
+
+.status-item span{
+font-size:22px;
+font-weight:bold;
+}
+
+.btn-primary{
+background:#4CAF50;
+color:white;
+border:none;
+padding:10px 16px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.tool-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+margin-top:10px;
+}
+
+.tool{
+text-align:center;
+background:#f5f5f5;
+padding:15px;
+border-radius:10px;
+text-decoration:none;
+color:#333;
+font-weight:500;
+}
+
+.tool:hover{
+background:#e8f5e9;
+}

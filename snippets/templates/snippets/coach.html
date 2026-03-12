@@ -1,3 +1,7 @@
+{% extends "snippets/base.html" %}
+
+{% block content %}
+
 <h2>今日の1アクション</h2>
 
 <div style="background:#f4f7ff;padding:20px;border-radius:10px;margin:20px 0;">
@@ -11,3 +15,112 @@
 </p>
 
 </div>
+
+<h2>📅 今日のミッション</h2>
+
+{% if mission %}
+
+<h3>Day{{ day }}：{{ mission.title }}</h3>
+
+<p>
+{{ mission.description }}
+</p>
+
+{% endif %}
+
+<p>🔥 連続チェックイン: {{ streak }}日</p>
+
+<form method="post" action="{% url 'coach_checkin' %}">
+  {% csrf_token %}
+  <button type="submit">今日チェックインする</button>
+</form>
+
+{% if bonus_unlocked %}
+<hr>
+
+<h3>🎁 3日連続ボーナス</h3>
+
+<p>
+継続できているあなたに特典です。
+</p>
+
+<a href="/static/premium/stable_7day_roadmap.pdf">
+📥 ボーナスPDFをダウンロード
+</a>
+
+{% else %}
+
+<p>
+あと {{ 3|add:"-streak" }} 日でボーナスPDFが解放されます
+</p>
+
+<a href="{% url 'coach_chat' %}">
+🤖 AI副業コーチに相談
+</a>
+
+<p>進捗：Day {{ day }} / 7</p>
+
+<div style="background:#eee;width:300px;height:20px;border-radius:10px;">
+  <div style="
+      background:#4CAF50;
+      width:{{ day|floatformat:0 }}0%;
+      height:20px;
+      border-radius:10px;
+  ">
+  </div>
+</div>
+
+<h3>あなたの紹介リンク</h3>
+
+<input
+value="{{ request.build_absolute_uri }}?ref={{ request.user.profile.referral_code }}"
+readonly
+style="width:100%"
+>
+<button onclick="copyRef()">リンクをコピー</button>
+
+<script>
+function copyRef() {
+  navigator.clipboard.writeText(
+    "{{ request.build_absolute_uri }}?ref={{ request.user.profile.referral_code }}"
+  );
+  alert("コピーしました！");
+}
+</script>
+
+<h3>🏆 副業ランキング</h3>
+
+<ol>
+
+{% for r in ranking_list %}
+
+<li>
+ユーザー {{ r.user }}  
+{{ r.total_points }} pt
+</li>
+
+{% endfor %}
+
+</ol>
+
+<h3>副業レベル</h3>
+
+<p>
+Lv {{ request.user.profile.level }}
+</p>
+
+<p>
+XP {{ request.user.profile.xp }} / {{ request.user.profile.level|add:"0"|floatformat:0 }}50
+</p>
+
+<div style="background:#eee;width:300px;height:20px;border-radius:10px;">
+  <div style="
+      background:#4CAF50;
+      width:{{ request.user.profile.xp }}%;
+      height:20px;
+      border-radius:10px;
+  ">
+  </div>
+</div>
+{% endif %}
+{% endblock %}
