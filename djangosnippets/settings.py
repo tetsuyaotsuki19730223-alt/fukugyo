@@ -38,8 +38,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = os.environ.get("DEBUG", "False") == "True"
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False") == "True"
+#DEBUG = True
 ALLOWED_HOSTS = [
     "ai-sidejob-coach.net",
     "www.ai-sidejob-coach.net",
@@ -123,8 +123,8 @@ else:
     # 本番: Postgres (Neonなど)
     DATABASES = {
         "default": dj_database_url.config(
-            conn_max_age=600,
-            ssl_require=True
+            default="sqlite:///db.sqlite3",
+            conn_max_age=600
         )
     }
 
@@ -168,7 +168,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
