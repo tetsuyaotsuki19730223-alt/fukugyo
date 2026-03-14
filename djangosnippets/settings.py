@@ -176,7 +176,8 @@ STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET", "")
 STRIPE_PRICE_ID = os.environ.get("STRIPE_PRICE_ID", "").strip()
 
 # 開発時のURL（本番はドメインに）
-SITE_URL = os.environ.get("SITE_URL", "").strip()
+#SITE_URL = os.environ.get("SITE_URL", "").strip()
+SITE_URL = os.getenv("SITE_URL")
 
 CSRF_TRUSTED_ORIGINS = [
     "https://www.ai-sidejob-coach.net",

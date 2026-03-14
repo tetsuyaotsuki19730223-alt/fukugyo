@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>AI副業ランキング</h1>
+
+{% for job in jobs %}
+
+<h2>
+{{ forloop.counter }}位 {{ job.title }}
+</h2>
+
+<p>{{ job.description }}</p>
+
+<p>
+収益目安
+{{ job.income_min }}〜{{ job.income_max }}円
+</p>
+
+<hr>
+
+{% endfor %}
+
+{% endblock %}

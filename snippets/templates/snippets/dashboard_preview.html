@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>AI副業ダッシュボード</h1>
+
+<h2>あなたの副業レベル</h2>
+
+<p>Lv {{ level }}</p>
+<p>XP {{ xp }}</p>
+
+<h2>🔥 {{ streak }}日連続ログイン</h2>
+
+<hr>
+
+<h2>今日のミッション</h2>
+
+<p>AI副業アイデアを1つ作る</p>
+
+<p>+20 XP</p>
+
+<hr>
+
+<a href="/signup/">
+
+<button>
+
+無料で始める
+
+</button>
+
+</a>
+
+{% endblock %}

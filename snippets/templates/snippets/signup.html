@@ -1,20 +1,29 @@
-{% extends "snippets/base.html" %}
+{% extends "base.html" %}
 
 {% block content %}
-<h1>新規登録</h1>
+
+<h1>AI副業大学 アカウント登録</h1>
 
 <form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">登録する</button>
+
+{% csrf_token %}
+
+{{ form.as_p }}
+
+<button type="submit">
+登録
+</button>
+
 </form>
-<input
-type="text"
-name="referral_code"
-placeholder="紹介コード（任意）"
->
+
 <p>
-  すでにアカウントがある方は
-  <a href="{% url 'login' %}">ログイン</a>
+
+すでにアカウントをお持ちですか？
+
+<a href="/accounts/login/">
+ログイン
+</a>
+
 </p>
+
 {% endblock %}

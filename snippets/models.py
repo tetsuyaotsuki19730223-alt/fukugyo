@@ -134,7 +134,9 @@ class SideJob(models.Model):
 
     description = models.TextField()
 
-    reward = models.IntegerField()
+    income_min = models.IntegerField(default=0)
+    income_max = models.IntegerField(default=0)
+    difficulty = models.IntegerField()
 
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -184,3 +186,25 @@ class Mission(models.Model):
 
     def __str__(self):
         return self.title
+    
+class AISearch(models.Model):
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    query = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class SuccessStory(models.Model):
+
+    name = models.CharField(max_length=100)
+
+    job = models.CharField(max_length=100)
+
+    sidejob = models.CharField(max_length=200)
+
+    income = models.IntegerField()
+
+    story = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>AI副業検索</h1>
+
+<form method="post">
+{% csrf_token %}
+
+<input type="text" name="query" style="width:60%;">
+
+<button type="submit">
+検索
+</button>
+
+</form>
+
+{% if result %}
+
+<hr>
+
+<pre>{{ result }}</pre>
+
+{% endif %}
+
+{% endblock %}

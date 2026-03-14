@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>AI副業診断</h1>
+
+<form method="post">
+
+{% csrf_token %}
+
+<p>あなたのスキル</p>
+
+<input type="text" name="skill">
+
+<p>興味のあること</p>
+
+<input type="text" name="interest">
+
+<p>副業に使える時間（週）</p>
+
+<input type="text" name="time">
+
+<br><br>
+
+<button type="submit">
+
+AI診断する
+
+</button>
+
+</form>
+
+{% if result %}
+
+<hr>
+
+<h2>診断結果</h2>
+
+<pre>{{ result }}</pre>
+
+{% endif %}
+
+{% endblock %}

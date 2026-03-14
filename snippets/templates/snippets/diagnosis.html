@@ -8,11 +8,24 @@
 
 {% csrf_token %}
 
-<textarea name="question" rows="5" style="width:100%;"></textarea>
+<textarea
+name="question"
+rows="5"
+style="width:100%;font-size:18px;"
+></textarea>
 
 <br><br>
 
-<button type="submit">AIに相談</button>
+<button type="submit" style="font-size:18px;padding:10px 20px">AIに相談</button>
+
+{% if not user.is_authenticated %}
+
+<p>
+無料AI診断<br>
+残り {{ free_remaining }} 回 / 3回
+</p>
+
+{% endif %}
 
 </form>
 
@@ -24,6 +37,41 @@
 <h2>AI回答</h2>
 
 <pre>{{ answer }}</pre>
+
+<a href="https://twitter.com/intent/tweet?text=AI副業ロードマップ作ってみた%0A無料AI診断👇%0Ahttps://www.ai-sidejob-coach.net/diagnosis/" target="_blank">
+
+<button style="font-size:18px;padding:10px 20px">
+
+このAI副業診断をシェア
+
+</button>
+
+</a>
+
+
+{% endif %}
+
+
+{% if not user.is_authenticated %}
+
+<hr>
+
+<h3>
+
+続きのAI副業ロードマップを見るには
+無料登録してください
+
+</h3>
+
+<a href="/signup/">
+
+<button style="font-size:20px;padding:15px">
+
+無料登録する
+
+</button>
+
+</a>
 
 {% endif %}
 

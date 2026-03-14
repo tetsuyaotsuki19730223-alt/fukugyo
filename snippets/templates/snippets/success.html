@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>副業成功事例</h1>
+
+{% for story in stories %}
+
+<h2>{{ story.name }}</h2>
+
+<p>職業：{{ story.job }}</p>
+
+<p>副業：{{ story.sidejob }}</p>
+
+<p>副業収入：{{ story.income }}円</p>
+
+<p>{{ story.story }}</p>
+
+<hr>
+
+{% endfor %}
+
+{% endblock %}

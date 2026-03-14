@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>{{ job.title }}</h1>
+
+<p>{{ job.description }}</p>
+
+<p>収益目安：{{ job.income_min }}〜{{ job.income_max }}円</p>
+
+{% endblock %}

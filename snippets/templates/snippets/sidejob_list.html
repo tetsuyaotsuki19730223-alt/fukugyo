@@ -1,25 +1,31 @@
 {% extends "base.html" %}
+
 {% block content %}
 
-<h1>副業案件</h1>
+<h1>AI副業おすすめ一覧</h1>
+
+<p>
+AIを使った副業をまとめました。<br>
+初心者でも始められる副業を紹介します。
+</p>
+
+<hr>
 
 {% for job in jobs %}
 
-<div>
-
-<h2>{{ job.title }}</h2>
+<h2>{{ forloop.counter }}. {{ job.title }}</h2>
 
 <p>{{ job.description }}</p>
 
-<p>報酬 {{ job.reward }}円</p>
+<p>
+収益目安：{{ job.income_min }}〜{{ job.income_max }}円
+</p>
 
-<a href="/sidejobs/apply/{{ job.id }}/">
+<p>
+難易度：{{ job.difficulty }}
+</p>
 
-応募
-
-</a>
-
-</div>
+<hr>
 
 {% endfor %}
 

@@ -25,15 +25,26 @@ from .services.ai_service import generate_roadmap
 from .models import Diagnosis
 from .services.ai_service import ai_coach
 from django.contrib.auth.models import AnonymousUser
+import json
+from .models import SideJob
+from PIL import Image, ImageDraw, ImageFont
+import os
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
+
+def calculate_level(xp):
+
+    return xp // 100 + 1
 
 def landing(request):
 
     if request.user.is_authenticated:
 
-        profile = Profile.objects.get(user=request.user)
+        profile = request.user.profile
+        profile.xp += 10
+        profile.level = calculate_level(profile.xp)
+        profile.save()
 
         mission = CoachMission.objects.order_by("?").first()
 
@@ -164,9 +175,6 @@ def today_mission(request):
 
     )
 
-def calculate_level(xp):
-
-    return xp // 100 + 1
 
 @login_required
 def mission_complete(request):
@@ -187,7 +195,7 @@ def mission_complete(request):
 
 def ranking(request):
 
-    users = Profile.objects.order_by("-xp")[:20]
+    users = Profile.objects.order_by("-xp")[:50]
 
     return render(
         request,
@@ -318,7 +326,7 @@ def ai_coach(request):
 
         question = request.POST.get("question")
 
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
 
             model="gpt-4o-mini",
 
@@ -353,22 +361,23 @@ def ai_coach(request):
     )
 
 
-@login_required
 def dashboard(request):
 
     profile = request.user.profile
 
-    mission = Mission.objects.first()
+    referral = Referral.objects.get(user=request.user)
 
-    context = {
-        "profile": profile,
-        "mission": mission,
-    }
+    referral_link = request.build_absolute_uri(
+        "/signup/?ref=" + referral.code
+    )
 
     return render(
         request,
         "snippets/dashboard.html",
-        context
+        {
+            "profile": profile,
+            "referral_link": referral_link
+        }
     )
 
 @login_required
@@ -398,11 +407,11 @@ def ai_sidejob_ideas(request):
 収益化方法
 """
 
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
-                {"role": "user", "content": prompt}
-            ]
+                {"role": "user", "content": question}
+            ],
         )
 
         ideas = response.choices[0].message.content
@@ -457,15 +466,20 @@ def download_roadmap_pdf(request):
 
     return response
 
+from PIL import Image, ImageDraw
+from django.http import HttpResponse
+
+
 def diagnosis_share_image(request):
 
-    result = request.GET.get("result")
+    result = request.GET.get("result", "副業タイプ")
 
+    # 画像作成
     img = Image.new("RGB", (800, 400), color=(255, 255, 255))
 
     draw = ImageDraw.Draw(img)
 
-    text = f"あなたの副業タイプ\n{result}"
+    text = f"あなたの副業タイプ\n\n{result}\n\nAI副業大学"
 
     draw.text((100, 150), text, fill=(0, 0, 0))
 
@@ -477,7 +491,7 @@ def diagnosis_share_image(request):
 
 def sidejob_list(request):
 
-    jobs = SideJob.objects.all()
+    jobs = SideJob.objects.all().order_by("-income_max")
 
     return render(
         request,
@@ -522,14 +536,11 @@ def ai_blog_generator(request):
 まとめ
 """
 
-        response = openai.ChatCompletion.create(
-
+        response = client.chat.completions.create(
             model="gpt-4o-mini",
-
             messages=[
-                {"role": "user", "content": prompt}
-            ]
-
+                {"role": "user", "content": question}
+            ],
         )
 
         article = response.choices[0].message.content
@@ -683,26 +694,22 @@ def type_result(request):
 
 def create_checkout(request):
 
-    checkout_session = stripe.checkout.Session.create(
+    session = stripe.checkout.Session.create(
 
         payment_method_types=["card"],
 
-        line_items=[
-            {
-                "price": settings.STRIPE_PRICE_ID,
-                "quantity": 1,
-            }
-        ],
+        line_items=[{
+            "price": settings.STRIPE_PRICE_ID,
+            "quantity": 1,
+        }],
 
         mode="subscription",
 
-        success_url="http://localhost:8000/premium/",
-
-        cancel_url="http://localhost:8000/pricing/",
-
+        success_url=settings.SITE_URL + "/premium/",
+        cancel_url=settings.SITE_URL + "/pricing/",
     )
 
-    return redirect(checkout_session.url)
+    return redirect(session.url)
 
 def pricing(request):
 
@@ -717,43 +724,59 @@ def diagnosis(request):
 
     answer = None
 
+    # 無料回数
+    free_remaining = None
+
+    if not request.user.is_authenticated:
+
+        count = request.session.get("free_ai_count", 0)
+
+        free_remaining = max(0, 3 - count)
+
     if request.method == "POST":
 
         question = request.POST.get("question")
 
-        if not request.user.is_authenticated:
+        if question:
 
-            count = request.session.get("free_ai_count", 0)
+            if not request.user.is_authenticated:
 
-            print("現在の回数:", count)  # ←確認用
+                count = request.session.get("free_ai_count", 0)
 
-            if count >= 3:
+                if count >= 3:
 
-                answer = "無料利用は3回までです。ログインすると続きが利用できます。"
+                    answer = "無料利用は3回までです。ログインすると続きが利用できます。"
 
-                return render(
-                    request,
-                    "snippets/diagnosis.html",
-                    {"answer": answer},
+                    return render(
+                        request,
+                        "snippets/diagnosis.html",
+                        {
+                            "answer": answer,
+                            "free_remaining": 0
+                        },
+                    )
+
+                request.session["free_ai_count"] = count + 1
+
+                free_remaining = 3 - (count + 1)
+
+            answer = generate_roadmap(question)
+
+            if request.user.is_authenticated:
+
+                AIChat.objects.create(
+                    user=request.user,
+                    question=question,
+                    answer=answer
                 )
-
-            request.session["free_ai_count"] = count + 1
-            request.session.modified = True
-
-        answer = generate_roadmap(question)
-
-        if request.user.is_authenticated:
-
-            AIChat.objects.create(
-                user=request.user,
-                question=question,
-                answer=answer
-            )
 
     return render(
         request,
         "snippets/diagnosis.html",
-        {"answer": answer},
+        {
+            "answer": answer,
+            "free_remaining": free_remaining
+        },
     )
 
 @login_required
@@ -818,11 +841,15 @@ def income_simulator(request):
         {"result": result}
     )
 
+
 def home(request):
+
+    user_count = User.objects.count()
 
     return render(
         request,
-        "snippets/home.html"
+        "snippets/home.html",
+        {"user_count": user_count}
     )
 
 @login_required
@@ -853,6 +880,10 @@ def idea(request):
 
 この人におすすめの副業アイデアを
 5つ提案してください。
+
+最後に以下の注意書きを必ず入れてください。
+
+※副業の成果は個人差があります。
 """
 
         idea = generate_roadmap(prompt)
@@ -862,3 +893,229 @@ def idea(request):
         "snippets/idea.html",
         {"idea": idea},
     )
+
+def stripe_webhook(request):
+
+    payload = request.body
+
+    event = None
+
+    try:
+
+        event = stripe.Event.construct_from(
+            json.loads(payload), stripe.api_key
+        )
+
+    except ValueError:
+
+        return HttpResponse(status=400)
+
+    if event["type"] == "checkout.session.completed":
+
+        session = event["data"]["object"]
+
+        email = session["customer_details"]["email"]
+
+        from django.contrib.auth.models import User
+
+        user = User.objects.get(email=email)
+
+        profile = user.profile
+
+        profile.is_premium = True
+
+        profile.save()
+
+    return HttpResponse(status=200)
+
+def stripe_webhook(request):
+    return HttpResponse(status=200)
+
+
+def ai_search(request):
+
+    result = None
+
+    if request.method == "POST":
+
+        query = request.POST.get("query")
+
+        prompt = f"""
+ユーザー検索
+
+{query}
+
+この人におすすめの副業を
+5つ提案してください。
+
+形式
+
+副業名
+理由
+収益目安
+"""
+
+        result = ai_coach(prompt)
+
+    return render(
+        request,
+        "snippets/ai_search.html",
+        {"result": result},
+    )
+
+def success_list(request):
+
+    stories = SuccessStory.objects.all()
+
+    return render(
+        request,
+        "snippets/success.html",
+        {"stories": stories}
+    )
+
+
+def sidejob_detail(request, id):
+
+    job = SideJob.objects.get(id=id)
+
+    return render(
+        request,
+        "snippets/sidejob_detail.html",
+        {"job": job}
+    )
+
+def sidejob_ranking(request):
+
+    jobs = SideJob.objects.order_by("-income_max")[:20]
+
+    return render(
+        request,
+        "snippets/sidejob_ranking.html",
+        {"jobs": jobs}
+    )
+
+def start_page(request):
+
+    return render(
+        request,
+        "snippets/start.html"
+    )
+
+def dashboard_preview(request):
+
+    context = {
+        "level": 3,
+        "xp": 230,
+        "streak": 5
+    }
+
+    return render(
+        request,
+        "snippets/dashboard_preview.html",
+        context
+    )
+
+def ai_diagnosis(request):
+
+    result = None
+
+    if request.method == "POST":
+
+        skill = request.POST.get("skill")
+        interest = request.POST.get("interest")
+        time = request.POST.get("time")
+
+        prompt = f"""
+ユーザーの副業適性を診断してください。
+
+スキル
+{skill}
+
+興味
+{interest}
+
+副業に使える時間
+{time}
+
+以下の形式で回答してください。
+
+おすすめ副業
+理由
+最初のステップ
+
+最後に以下の注意書きを必ず入れてください。
+
+※副業の成果は個人差があります。
+"""
+
+        result = generate_roadmap(prompt)
+
+    return render(
+        request,
+        "snippets/ai_diagnosis.html",
+        {"result": result}
+    )
+
+
+def diagnosis_share_image(request):
+
+    result = request.GET.get("result", "副業タイプ")
+
+    # 画像サイズ
+    width = 800
+    height = 450
+
+    # 背景
+    img = Image.new("RGB", (width, height), color=(30, 30, 30))
+
+    draw = ImageDraw.Draw(img)
+
+    font_path = os.path.join(
+        "fonts",
+        "NotoSansJP-Bold.ttf"
+    )
+
+    title_font = ImageFont.truetype(font_path, 40)
+    result_font = ImageFont.truetype(font_path, 60)
+    site_font = ImageFont.truetype(font_path, 30)
+
+    # タイトル
+    draw.text(
+        (200, 80),
+        "あなたの副業タイプ",
+        fill=(255, 255, 255),
+        font=title_font
+    )
+
+    # 結果
+    draw.text(
+        (200, 200),
+        result,
+        fill=(255, 200, 0),
+        font=result_font
+    )
+
+    # サイト名
+    draw.text(
+        (220, 340),
+        "AI副業大学",
+        fill=(255, 255, 255),
+        font=site_font
+    )
+
+    response = HttpResponse(content_type="image/png")
+
+    img.save(response, "PNG")
+
+    return response
+
+def privacy(request):
+    return render(request, "snippets/privacy.html")
+
+
+def terms(request):
+    return render(request, "snippets/terms.html")
+
+
+def legal(request):
+    return render(request, "snippets/legal.html")
