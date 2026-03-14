@@ -4,3 +4,4 @@ psycopg2-binary
 whitenoise
 openai
 python-dotenv
+dj-database-url
