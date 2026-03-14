@@ -19,10 +19,13 @@ try:
 except ModuleNotFoundError:
     pass
 import stripe
+from django.conf import settings
 
-STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
-STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY")
-STRIPE_PRICE_ID = os.getenv("STRIPE_PRICE_ID")
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
+STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY", "")
+STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET", "")
+#STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY", "")
+STRIPE_PRICE_ID = os.getenv("STRIPE_PRICE_ID", "")
 stripe.api_key = STRIPE_SECRET_KEY
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -35,8 +38,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", "False") == "True"
-
+#DEBUG = os.environ.get("DEBUG", "False") == "True"
+DEBUG = True
 ALLOWED_HOSTS = [
     "ai-sidejob-coach.net",
     "www.ai-sidejob-coach.net",
@@ -175,10 +178,6 @@ LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
-STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "").strip()
-STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY", "")
-STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET", "")
-STRIPE_PRICE_ID = os.environ.get("STRIPE_PRICE_ID", "").strip()
 
 # 開発時のURL（本番はドメインに）
 #SITE_URL = os.environ.get("SITE_URL", "").strip()

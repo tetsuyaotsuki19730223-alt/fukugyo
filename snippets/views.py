@@ -29,6 +29,7 @@ import json
 from .models import SideJob
 from PIL import Image, ImageDraw, ImageFont
 import os
+from django.views.decorators.csrf import csrf_exempt
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
@@ -64,46 +65,29 @@ def landing(request):
         },
     )
 
+
 def signup_view(request):
 
-    ref_code = request.GET.get("ref")
-
-    if ref_code:
-
-        try:
-
-            ref = Referral.objects.get(code=ref_code)
-
-            ref.invited_count += 1
-            ref.save()
-
-            profile = Profile.objects.get(user=ref.user)
-
-            profile.xp += 50
-            profile.save()
-
-        except Referral.DoesNotExist:
-
-            pass
-
     if request.method == "POST":
-
         form = SignupForm(request.POST)
 
         if form.is_valid():
 
-            user = form.save()
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password1"]
 
-            Referral.objects.create(user=user)
+            User.objects.create_user(
+                username=form.cleaned_data["username"],
+                email=form.cleaned_data["email"],
+                password=form.cleaned_data["password1"]
+            )
 
-            return redirect("login")
+            return redirect("/accounts/login/")
 
     else:
-
         form = SignupForm()
 
-    return render(request, "snippets/signup.html", {"form": form})
-
+    return render(request, "signup.html", {"form": form})
 
 @login_required
 def today_mission(request):
@@ -692,9 +676,13 @@ def type_result(request):
     )
 
 
+from django.contrib.auth.decorators import login_required
+
+
+@login_required
 def create_checkout(request):
 
-    session = stripe.checkout.Session.create(
+    checkout_session = stripe.checkout.Session.create(
 
         payment_method_types=["card"],
 
@@ -705,20 +693,32 @@ def create_checkout(request):
 
         mode="subscription",
 
-        success_url=settings.SITE_URL + "/premium/",
-        cancel_url=settings.SITE_URL + "/pricing/",
+        customer = stripe.Customer.create(
+            email=request.user.email
+        ),
+
+        success_url=request.build_absolute_uri("/premium/"),
+        cancel_url=request.build_absolute_uri("/pricing/"),
+
     )
 
-    return redirect(session.url)
+    return redirect(checkout_session.url)
+
 
 def pricing(request):
 
     return render(request, "snippets/pricing.html")
 
 
+
+@login_required
 def premium_page(request):
 
-    return render(request, "snippets/premium.html")
+    if not request.user.profile.is_premium:
+        return redirect("/pricing/")
+
+    return render(request, "premium.html")
+
 
 def diagnosis(request):
 
@@ -894,41 +894,38 @@ def idea(request):
         {"idea": idea},
     )
 
+
+@csrf_exempt
 def stripe_webhook(request):
 
     payload = request.body
-
-    event = None
+    sig_header = request.META["HTTP_STRIPE_SIGNATURE"]
 
     try:
-
-        event = stripe.Event.construct_from(
-            json.loads(payload), stripe.api_key
+        event = stripe.Webhook.construct_event(
+            payload,
+            sig_header,
+            settings.STRIPE_WEBHOOK_SECRET
         )
-
-    except ValueError:
-
+    except Exception:
         return HttpResponse(status=400)
 
+    # 決済成功
     if event["type"] == "checkout.session.completed":
 
         session = event["data"]["object"]
 
-        email = session["customer_details"]["email"]
+        customer_email = session["customer_details"]["email"]
 
         from django.contrib.auth.models import User
+        from snippets.models import Profile
 
-        user = User.objects.get(email=email)
+        user = User.objects.get(email=customer_email)
 
-        profile = user.profile
-
+        profile = Profile.objects.get(user=user)
         profile.is_premium = True
-
         profile.save()
 
-    return HttpResponse(status=200)
-
-def stripe_webhook(request):
     return HttpResponse(status=200)
 
 
@@ -1119,3 +1116,16 @@ def terms(request):
 
 def legal(request):
     return render(request, "snippets/legal.html")
+
+
+def customer_portal(request):
+
+    session = stripe.billing_portal.Session.create(
+
+        customer=request.user.profile.stripe_customer_id,
+
+        return_url=request.build_absolute_uri("/dashboard/"),
+
+    )
+
+    return redirect(session.url)

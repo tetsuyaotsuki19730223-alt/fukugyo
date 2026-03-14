@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card">
+
+<h1>AI副業大学</h1>
+
+<p style="text-align:center">
+無料アカウント登録
+</p>
+
+<form method="post">
+
+{% csrf_token %}
+
+<label>ユーザー名</label>
+{{ form.username }}
+
+<label>パスワード</label>
+{{ form.password1 }}
+
+<label>パスワード確認</label>
+{{ form.password2 }}
+
+<label>メールアドレス</label>
+{{ form.email }}
+
+<button type="submit">
+登録する
+</button>
+
+</form>
+
+</div>
+
+<p style="text-align:center">
+すでにアカウントがありますか？
+
+<a href="/accounts/login/">ログイン</a>
+</p>
+
+{% endblock %}

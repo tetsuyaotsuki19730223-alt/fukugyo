@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
+from django import forms
 
 class Profile(models.Model):
 
@@ -208,3 +209,14 @@ class SuccessStory(models.Model):
     story = models.TextField()
 
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class SignupForm(forms.Form):
+
+    username = forms.CharField()
+
+    email = forms.EmailField()
+
+    password1 = forms.CharField(widget=forms.PasswordInput)
+
+    password2 = forms.CharField(widget=forms.PasswordInput)
