@@ -1,7 +1,10 @@
-Django
+Django>=4.2
 gunicorn
-psycopg2-binary
 whitenoise
-openai
-python-dotenv
 dj-database-url
+psycopg2-binary
+python-dotenv
+stripe
+openai
+pillow
+reportlab

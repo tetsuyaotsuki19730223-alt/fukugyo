@@ -35,7 +35,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = [
     "ai-sidejob-coach.net",
@@ -119,7 +119,10 @@ elif DATABASE_URL.startswith("sqlite"):
 else:
     # 本番: Postgres (Neonなど)
     DATABASES = {
-        "default": dj_database_url.parse(DATABASE_URL, conn_max_age=0, ssl_require=True)
+        "default": dj_database_url.config(
+            conn_max_age=600,
+            ssl_require=True
+        )
     }
 
 CONN_HEALTH_CHECKS = True
