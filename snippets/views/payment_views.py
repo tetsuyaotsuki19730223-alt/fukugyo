@@ -3,7 +3,8 @@ import stripe
 from django.conf import settings
 
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
+stripe.api_key = settings.STRIPE_SECRET_KEY or ""
+
 
 
 def checkout(request):
