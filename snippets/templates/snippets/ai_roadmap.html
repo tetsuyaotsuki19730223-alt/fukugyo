@@ -2,22 +2,17 @@
 
 {% block content %}
 
-<h1>AI副業ロードマップ</h1>
+<h1>あなたの副業ロードマップ</h1>
 
-<form method="post">
+<ul>
 
-{% csrf_token %}
+{% for step in roadmap %}
 
-<p>
-副業の目標は？
-</p>
+<li>{{ step }}</li>
 
-<input type="text" name="goal">
+{% endfor %}
 
-<button>
-AIロードマップ生成
-</button>
+</ul>
 
-</form>
 
 {% endblock %}

@@ -2,16 +2,37 @@ from django.db import models
 from django.contrib.auth.models import User
 import uuid
 from django import forms
+from django.utils import timezone
+
+class CommunityPost(models.Model):
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    content = models.TextField()
+
+    created_at = models.DateTimeField(default=timezone.now)
+
+def generate_ref_code():
+    return uuid.uuid4().hex[:10]
 
 class Profile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
+    referral_code = models.CharField(
+        max_length=20, 
+        default=generate_ref_code,
+        unique=True
+    )
+    referred_by = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True
+    )
     xp = models.IntegerField(default=0)
 
     level = models.IntegerField(default=1)
 
-    streak = models.IntegerField(default=0)
+    streak = models.IntegerField(default=1)
 
     last_login_date = models.DateField(null=True, blank=True)
     
@@ -82,9 +103,11 @@ class Referral(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    code = models.CharField(max_length=50, unique=True)
+    code = models.CharField(max_length=20, unique=True)
 
     invited_count = models.IntegerField(default=0)
+
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
 
@@ -149,13 +172,6 @@ class SideJobApply(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
-class CommunityPost(models.Model):
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    content = models.TextField()
-
-    created_at = models.DateTimeField(auto_now_add=True)
 
 class Template(models.Model):
 
@@ -185,8 +201,7 @@ class Mission(models.Model):
 
     xp = models.IntegerField(default=10)
 
-    def __str__(self):
-        return self.title
+    created_at = models.DateTimeField(default=timezone.now)
     
 class AISearch(models.Model):
 
@@ -220,3 +235,21 @@ class SignupForm(forms.Form):
     password1 = forms.CharField(widget=forms.PasswordInput)
 
     password2 = forms.CharField(widget=forms.PasswordInput)
+
+class BlogPost(models.Model):
+
+    title = models.CharField(max_length=200)
+
+    slug = models.SlugField(unique=True)
+
+    content = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class UserMission(models.Model):
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    mission = models.ForeignKey(Mission, on_delete=models.CASCADE)
+
+    completed = models.BooleanField(default=False)

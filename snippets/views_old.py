@@ -30,6 +30,8 @@ from .models import SideJob
 from PIL import Image, ImageDraw, ImageFont
 import os
 from django.views.decorators.csrf import csrf_exempt
+import openai
+from snippets.services.ai_service import generate_roadmap
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
@@ -232,53 +234,17 @@ def diagnosis_result(request):
     return redirect("diagnosis_result")
 
 
+from snippets.services.ai_service import generate_roadmap
+
+
 def ai_roadmap(request):
 
-    roadmap = None
+    prompt = "AI副業ロードマップを作成"
 
-    if request.method == "POST":
+    result = generate_roadmap(prompt)
 
-        skill = request.POST.get("skill")
-        time = request.POST.get("time")
+    return render(request, "roadmap.html", {"result": result})
 
-        prompt = f"""
-        あなたは副業コーチです。
-
-        ユーザー条件
-
-        スキル: {skill}
-        副業時間: {time}
-
-        副業ロードマップを作ってください。
-
-        出力形式
-
-        1ヶ月目
-        2ヶ月目
-        3ヶ月目
-        """
-
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "user", "content": prompt}
-            ]
-        )
-
-        roadmap = response.choices[0].message.content
-
-        Roadmap.objects.create(
-
-            user=request.user,
-            content=roadmap
-
-        )
-
-    return render(
-        request,
-        "snippets/roadmap.html",
-        {"roadmap": roadmap}
-    )
 
 def create_checkout_session(request):
 
@@ -1129,3 +1095,13 @@ def customer_portal(request):
     )
 
     return redirect(session.url)
+
+
+def generate_roadmap(user_id):
+
+    result = openai.chat.completions.create(...)
+
+    Roadmap.objects.create(
+        user_id=user_id,
+        content=result
+    )

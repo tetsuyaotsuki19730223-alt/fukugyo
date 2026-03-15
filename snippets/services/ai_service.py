@@ -25,28 +25,41 @@ def ask_ai(question):
 
     return response.choices[0].message.content
 
-def generate_roadmap(question):
+def generate_roadmap(user_type):
 
-    prompt = f"""
-あなたは副業コーチです。
-初心者でもできる副業ロードマップを作ってください。
+    if user_type == "creator":
 
-質問:
-{question}
-"""
+        return [
+            "SNSアカウント作成",
+            "AIで記事作成",
+            "ブログ公開",
+            "広告収益開始"
+        ]
 
-    response = client.chat.completions.create(
+    if user_type == "builder":
 
-        model="gpt-4o-mini",
+        return [
+            "副業テーマ決定",
+            "Webサービス作成",
+            "LP公開",
+            "ユーザー獲得"
+        ]
 
-        messages=[
-            #{"role": "system", "content": "あなたは優秀な副業コーチです"},
-            {"role": "user", "content": prompt},
-        ],
+    if user_type == "seller":
 
-    )
+        return [
+            "商品ジャンル決定",
+            "SNS発信開始",
+            "EC販売開始",
+            "広告運用"
+        ]
 
-    return response.choices[0].message.content
+    return [
+        "副業リサーチ",
+        "AI活用",
+        "小さくスタート"
+    ]
+
 
 def ai_coach(question):
 

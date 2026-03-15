@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>あなたの副業タイプ</h1>
+
+<h2>{{ result.type }}</h2>
+
+<p>{{ result.description }}</p>
+
+<hr>
+
+<a href="https://twitter.com/intent/tweet?text=私の副業タイプは{{ result.type }}でした！&url=https://www.ai-sidejob-coach.net/">
+Xでシェア
+</a>
+
+<hr>
+
+<a href="/ai-report/">
+AI副業レポートを見る
+</a>
+
+{% endblock %}

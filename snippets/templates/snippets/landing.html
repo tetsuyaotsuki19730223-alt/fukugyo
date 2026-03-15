@@ -2,78 +2,35 @@
 
 {% block content %}
 
-<div class="card">
+<h1>AI副業コーチ</h1>
 
-<h2>あなたの副業レベル</h2>
+<h2>あなたに合う副業をAIが診断</h2>
 
-<p>
-🔥 連続ログイン  
-<strong>{{ streak }}日</strong>
-</p>
-
-<p>
-⭐ レベル  
-<strong>{{ request.user.profile.level }}</strong>
-</p>
-
-<p>
-⚡ XP  
-<strong>{{ request.user.profile.xp }}</strong>
-</p>
-
-</div>
-
-
-<div class="card">
-
-<h2>今日のミッション</h2>
-
-<p>
-
-{{ mission.title }}
-
-</p>
-
-<form method="post" action="/mission/complete/">
-
-{% csrf_token %}
-
-<button>
-
-ミッション完了
-
-</button>
-
-</form>
-
-</div>
-
-
-<div class="card">
-
-    <h2>AI副業相談</h2>
-
-    <a href="/diagnosis/">
-
-    <button>
-
-    副業タイプ診断をする
-
-    </button>
-
-    </a>
-
-</div>
+<p>副業タイプ＋ロードマップを作成</p>
 
 <a href="/type-diagnosis/">
-<button>
-副業タイプ診断
-</button>
+<button>無料で副業診断</button>
 </a>
 
-<a href="/ranking/">
-<button>
-ランキング
-</button>
+<hr>
+
+<h2>AI副業コーチでできること</h2>
+
+<ul>
+<li>副業タイプ診断</li>
+<li>AIロードマップ</li>
+<li>AI副業コーチ</li>
+<li>毎日の副業ミッション</li>
+</ul>
+
+<hr>
+
+<h2>副業を始める第一歩</h2>
+
+<a href="/type-diagnosis/">
+<button>今すぐ診断</button>
 </a>
+
+
+
 {% endblock %}

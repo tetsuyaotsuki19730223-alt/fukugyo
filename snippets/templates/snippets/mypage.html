@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>マイページ</h1>
+
+<p>ユーザー: {{ user.username }}</p>
+
+<hr>
+
+<p>紹介リンク</p>
+
+<input value="{{ ref_link }}" style="width:400px">
+
+<hr>
+
+<p>🔥 streak {{ profile.streak }}</p>
+<p>⭐ level {{ profile.level }}</p>
+<p>⚡ xp {{ profile.xp }}</p>
+
+
+{% endblock %}

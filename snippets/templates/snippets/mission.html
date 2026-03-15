@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>今日の副業ミッション</h1>
+
+{% for mission in missions %}
+
+<p>
+{{ mission.title }}
+(+{{ mission.xp }} XP)
+</p>
+
+<button>完了</button>
+
+<hr>
+
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>あなたの副業レポート</h1>
+
+<h2>副業タイプ</h2>
+<p>{{ report.type }}</p>
+
+<hr>
+
+<h2>おすすめ副業</h2>
+
+<ul>
+{% for job in report.jobs %}
+<li>{{ job }}</li>
+{% endfor %}
+</ul>
+
+<hr>
+
+<h2>ロードマップ</h2>
+
+<ul>
+{% for step in report.roadmap %}
+<li>{{ step }}</li>
+{% endfor %}
+</ul>
+
+{% endblock %}

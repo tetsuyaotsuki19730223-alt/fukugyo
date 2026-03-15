@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>あなたの副業ロードマップ</h1>
+
+<hr>
+
+{% for step in roadmap %}
+
+<p>{{ step }}</p>
+
+{% endfor %}
+
+<hr>
+
+<a href="/community/">コミュニティを見る</a>
+
+{% endblock %}

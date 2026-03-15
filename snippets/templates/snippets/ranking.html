@@ -2,28 +2,14 @@
 
 {% block content %}
 
-<h1>AI副業ランキング</h1>
+<h1>副業ランキング</h1>
 
-<table>
+{% for user in ranking %}
 
-<tr>
-<th>順位</th>
-<th>ユーザー</th>
-<th>レベル</th>
-<th>XP</th>
-</tr>
-
-{% for user in users %}
-
-<tr>
-<td>{{ forloop.counter }}</td>
-<td>{{ user.user.username }}</td>
-<td>{{ user.level }}</td>
-<td>{{ user.xp }}</td>
-</tr>
+<p>
+{{ user.name }} - XP {{ user.xp }}
+</p>
 
 {% endfor %}
-
-</table>
 
 {% endblock %}

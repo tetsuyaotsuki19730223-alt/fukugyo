@@ -5,30 +5,19 @@
 <h1>AI副業コーチ</h1>
 
 <form method="post">
-
 {% csrf_token %}
 
-<textarea name="question" rows="5" style="width:100%;"></textarea>
-
-<br><br>
+<input name="question">
 
 <button type="submit">
-
-AIに相談
-
+質問
 </button>
 
 </form>
 
-
-{% if answer %}
-
 <hr>
 
-<h2>AIコーチ回答</h2>
+<p>{{ answer }}</p>
 
-<pre>{{ answer }}</pre>
-
-{% endif %}
 
 {% endblock %}

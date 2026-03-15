@@ -21,10 +21,10 @@ except ModuleNotFoundError:
 import stripe
 from django.conf import settings
 
-STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
-STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY", "")
+STRIPE_SECRET_KEY = "sk_test_51StPOUBsXWS49O2Cvh1hednIN6DPZmtAnYoxQ5UvRX2GXlC1FSW18Y7FA4ctevOsXPrydpfjymYfQ9UOGSzqGERb00VDRhSru9"
+#STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY", "")
 STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET", "")
-#STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY", "")
+STRIPE_PUBLIC_KEY = "pk_test_51StPOUBsXWS49O2C7wpStT7ZTxj0uG88Ke1JEvIz5j6FSzAzv5bXy9YDWnMPAxW1tuGECMOYDlJ652PKtGmfaCmN00XnuDQw1I"
 STRIPE_PRICE_ID = os.getenv("STRIPE_PRICE_ID", "")
 stripe.api_key = STRIPE_SECRET_KEY
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -77,7 +77,7 @@ ROOT_URLCONF = 'djangosnippets.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -166,7 +166,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    BASE_DIR / "snippets/static"
 ]
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # Default primary key field type
@@ -191,3 +191,15 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = "smtp.gmail.com"
+
+EMAIL_PORT = 587
+
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = "tetsuyaotsuki19730223@gmail.com"
+
+EMAIL_HOST_PASSWORD = "uwin ymql docz eoiy"

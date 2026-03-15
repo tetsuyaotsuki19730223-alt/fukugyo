@@ -26,3 +26,13 @@ class SignupForm(forms.Form):
             raise forms.ValidationError("パスワードが一致しません")
 
         return cleaned_data
+    
+
+class ContactForm(forms.Form):
+
+    email = forms.EmailField(label="メール")
+
+    message = forms.CharField(
+        label="お問い合わせ内容",
+        widget=forms.Textarea
+    )
