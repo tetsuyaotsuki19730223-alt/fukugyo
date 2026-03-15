@@ -96,7 +96,7 @@ WSGI_APPLICATION = 'djangosnippets.wsgi.application'
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 if not DATABASE_URL:
     # ローカル: SQLite 固定
@@ -106,21 +106,10 @@ if not DATABASE_URL:
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
-elif DATABASE_URL.startswith("sqlite"):
-    # sqlite URL が入ってきても Postgres用オプションを渡さない
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
 else:
     # 本番: Postgres (Neonなど)
     DATABASES = {
-        "default": dj_database_url.config(
-            default="sqlite:///db.sqlite3",
-            conn_max_age=600
-        )
+        "default": dj_database_url.config(conn_max_age=600)
     }
 
 CONN_HEALTH_CHECKS = True

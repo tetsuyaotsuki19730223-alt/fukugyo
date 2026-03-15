@@ -8,7 +8,7 @@ from snippets.views.diagnosis_views import type_diagnosis
 from snippets.views.mission_views import mission
 from snippets.views.payment_views import pricing, checkout
 from snippets.views.legal_views import privacy, terms, legal, contact
-
+from snippets.views.auth_views import signup
 
 urlpatterns = [
 
@@ -16,7 +16,7 @@ urlpatterns = [
 
     path("dashboard/", dashboard, name="dashboard"),
 
-    path("signup/", signup_view, name="signup"),
+    path("signup/", signup, name="signup"),
 
     path("type-diagnosis/", type_diagnosis, name="type_diagnosis"),
 

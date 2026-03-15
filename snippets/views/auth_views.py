@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from snippets.forms import SignupForm
 from snippets.models import Profile
+from django.contrib.auth import login
 
 def signup_view(request):
 
@@ -27,5 +28,23 @@ def signup_view(request):
             profile.save()
 
         return redirect("login")
+
+    return render(request, "snippets/signup.html")
+
+
+def signup(request):
+
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+
+        user = User.objects.create_user(
+            username=username,
+            password=password
+        )
+
+        login(request, user)
+
+        return redirect("/")
 
     return render(request, "snippets/signup.html")

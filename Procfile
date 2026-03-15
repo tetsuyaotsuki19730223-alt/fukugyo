@@ -1,1 +1,1 @@
-web: gunicorn djangosnippets.wsgi:application
+web: gunicorn djangosnippets.wsgi:application --bind 0.0.0.0:$PORT
