@@ -20,8 +20,10 @@ except ModuleNotFoundError:
     pass
 import stripe
 from django.conf import settings
+from dotenv import load_dotenv
+load_dotenv()
 
-STRIPE_SECRET_KEY = "sk_test_51StPOUBsXWS49O2Cvh1hednIN6DPZmtAnYoxQ5UvRX2GXlC1FSW18Y7FA4ctevOsXPrydpfjymYfQ9UOGSzqGERb00VDRhSru9"
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
 #STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY", "")
 STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET", "")
 STRIPE_PUBLIC_KEY = "pk_test_51StPOUBsXWS49O2C7wpStT7ZTxj0uG88Ke1JEvIz5j6FSzAzv5bXy9YDWnMPAxW1tuGECMOYDlJ652PKtGmfaCmN00XnuDQw1I"
