@@ -1,7 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import stripe
 from django.conf import settings
-from django.shortcuts import redirect
 
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -24,13 +23,12 @@ def checkout(request):
 
         mode="subscription",
 
-        success_url="http://localhost:8000/dashboard/",
+        success_url="https://ai-sidejob-coach.net/dashboard/",
 
-        cancel_url="http://localhost:8000/pricing/",
+        cancel_url="https://ai-sidejob-coach.net/pricing/",
     )
 
     return redirect(session.url)
-
 
 def pricing(request):
     return render(request, "snippets/pricing.html")
