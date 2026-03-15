@@ -3,12 +3,16 @@ from django.urls import path
 from snippets.views.landing_views import landing
 from snippets.views.dashboard_views import dashboard
 from snippets.views.ai_views import ai_chat, ai_roadmap
-from snippets.views.auth_views import signup_view
+from snippets.views.auth_views import signup
 from snippets.views.diagnosis_views import type_diagnosis
 from snippets.views.mission_views import mission
 from snippets.views.payment_views import pricing, checkout
 from snippets.views.legal_views import privacy, terms, legal, contact
-from snippets.views.auth_views import signup
+
+# 追加
+from snippets.views.community_views import community
+from snippets.views.mypage_views import my_page
+from snippets.views.ranking_views import ranking
 
 urlpatterns = [
 
@@ -29,6 +33,11 @@ urlpatterns = [
     path("pricing/", pricing, name="pricing"),
 
     path("checkout/", checkout, name="checkout"),
+
+    # 追加
+    path("community/", community, name="community"),
+    path("my-page/", my_page, name="my_page"),
+    path("ranking/", ranking, name="ranking"),
 
     path("privacy/", privacy, name="privacy"),
     path("terms/", terms, name="terms"),

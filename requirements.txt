@@ -6,3 +6,4 @@ python-dotenv
 stripe
 dj-database-url
 openai
+sentry-sdk

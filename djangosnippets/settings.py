@@ -22,7 +22,14 @@ import stripe
 from django.conf import settings
 from dotenv import load_dotenv
 load_dotenv()
+#import sentry_sdk
+#from sentry_sdk.integrations.django import DjangoIntegration
 
+#sentry_sdk.init(
+#    dsn="SENTRY_DSN",
+#    integrations=[DjangoIntegration()],
+#    traces_sample_rate=1.0,
+#)
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
 #STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY", "")
 STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET", "")
