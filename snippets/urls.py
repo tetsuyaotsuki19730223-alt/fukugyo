@@ -13,7 +13,8 @@ from snippets.views.legal_views import privacy, terms, legal, contact
 from snippets.views.community_views import community
 from snippets.views.mypage_views import my_page
 from snippets.views.ranking_views import ranking
-
+from snippets.views.payment_views import success
+from snippets.views.diagnosis_views import diagnosis, history, ai_report, roadmap_result
 urlpatterns = [
 
     path("", landing, name="landing"),
@@ -44,4 +45,10 @@ urlpatterns = [
     path("legal/", legal, name="legal"),
     path("contact/", contact, name="contact"),
 
+    path("success/", success, name="success"),
+
+    path("diagnosis/", diagnosis, name="diagnosis"),
+    path("history/", history, name="history"),
+    path("ai-report/", ai_report, name="ai_report"),
+    path("roadmap-result/", roadmap_result, name="roadmap_result"),
 ]

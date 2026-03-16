@@ -46,3 +46,10 @@ def type_diagnosis(request):
 
 def history(request):
     return render(request, "snippets/history.html")
+
+def ai_report(request):
+    return render(request, "snippets/ai_report.html")
+
+
+def roadmap_result(request):
+    return render(request, "snippets/roadmap_result.html")

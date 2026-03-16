@@ -29,7 +29,7 @@ class Profile(models.Model):
         null=True
     )
     xp = models.IntegerField(default=0)
-
+    ai_count = models.IntegerField(default=0)
     level = models.IntegerField(default=1)
 
     streak = models.IntegerField(default=1)
@@ -253,3 +253,13 @@ class UserMission(models.Model):
     mission = models.ForeignKey(Mission, on_delete=models.CASCADE)
 
     completed = models.BooleanField(default=False)
+
+class AIChatLog(models.Model):
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    question = models.TextField()
+
+    answer = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)

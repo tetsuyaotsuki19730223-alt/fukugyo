@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 import stripe
 from django.conf import settings
-
+from django.contrib.auth.decorators import login_required
 
 stripe.api_key = settings.STRIPE_SECRET_KEY or ""
 
@@ -24,9 +24,9 @@ def checkout(request):
 
         mode="subscription",
 
-        success_url="https://ai-sidejob-coach.net/dashboard/",
+        success_url="https://www.ai-sidejob-coach.net/success/",
 
-        cancel_url="https://ai-sidejob-coach.net/pricing/",
+        cancel_url="https://www.ai-sidejob-coach.net/pricing/",
     )
 
     return redirect(session.url)
@@ -41,3 +41,12 @@ def create_checkout(request):
 
 def premium_page(request):
     return render(request, "snippets/premium.html")
+
+@login_required
+def success(request):
+
+    profile = request.user.profile
+    profile.is_premium = True
+    profile.save()
+
+    return redirect("dashboard")

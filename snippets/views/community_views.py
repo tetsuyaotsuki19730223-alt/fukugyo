@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from snippets.models import CommunityPost
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def community(request):
-
+    
     if request.method == "POST":
 
         content = request.POST.get("content")

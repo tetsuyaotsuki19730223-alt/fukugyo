@@ -16,3 +16,6 @@ def mypage(request):
     }
 
     return render(request, "snippets/mypage.html", context)
+
+def my_page(request):
+    return render(request, "snippets/my_page.html")
