@@ -38,11 +38,7 @@ def ai_chat(request):
 
                 answer = "AIエラー: " + str(e)
 
-    return render(
-        request,
-        "snippets/ai_chat.html",
-        {"answer": answer}
-    )
+    return render(request, "snippets/ai_chat.html", {"answer": answer})
 
 def ai_blog_generator(request):
     return render(request, "snippets/ai_blog.html")
