@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 
 client = OpenAI(api_key=settings.OPENAI_API_KEY or "")
 
+
 @login_required
 def ai_chat(request):
 
@@ -12,7 +13,7 @@ def ai_chat(request):
 
     if request.method == "POST":
 
-        question = request.POST.get("question")
+        question = request.POST.get("question", "").strip()
 
         if not question:
             answer = "質問を入力してください"
@@ -30,9 +31,13 @@ def ai_chat(request):
                 answer = response.choices[0].message.content
 
             except Exception as e:
-                answer = "AIエラー: " + str(e)
+                answer = f"AIエラー: {str(e)}"
 
-    return render(request, "snippets/ai_chat.html", {"answer": answer})
+    return render(
+        request,
+        "snippets/ai_chat.html",
+        {"answer": answer}
+    )
 
 def ai_blog_generator(request):
     return render(request, "snippets/ai_blog.html")
@@ -74,16 +79,20 @@ def ai_report(request):
 
     report = {
         "type": "Influencer型",
+
         "jobs": [
             "AIブログ",
             "SNS発信",
             "note販売"
         ],
+
+        "income": "月5〜30万円",
+
         "roadmap": [
             "Week1 ジャンル決定",
             "Week2 SNS開始",
             "Week3 AI記事投稿",
-            "Week4 案件応募"
+            "Week4 初案件応募"
         ]
     }
 
