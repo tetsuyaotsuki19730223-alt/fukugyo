@@ -9,28 +9,12 @@ client = OpenAI(api_key=settings.OPENAI_API_KEY or "")
 @login_required
 def ai_chat(request):
 
-    answer = ""
-
-    if request.method == "POST":
-
-        question = request.POST.get("question")
-
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "あなたは副業のプロコーチです"},
-                {"role": "user", "content": question}
-            ]
-        )
-
-        answer = response.choices[0].message.content
+    answer = "現在AIチャットはメンテナンス中です。"
 
     return render(
         request,
         "snippets/ai_chat.html",
-        {
-            "answer": answer
-        }
+        {"answer": answer}
     )
 
 
