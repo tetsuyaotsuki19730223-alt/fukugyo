@@ -1,0 +1,29 @@
+{% extends "snippets/base.html" %}
+
+{% block content %}
+
+<h1>副業成功事例</h1>
+
+{% for s in stories %}
+
+<div style="border:1px solid #ddd;padding:20px;margin:20px 0;">
+
+<h2>{{ s.name }}</h2>
+
+<p>職業: {{ s.job }}</p>
+
+<p>副業: {{ s.sidejob }}</p>
+
+<p><b>収入: {{ s.income }}</b></p>
+
+<p>{{ s.story }}</p>
+
+</div>
+
+{% endfor %}
+
+<a href="/type-diagnosis/">
+AI副業診断をする →
+</a>
+
+{% endblock %}
