@@ -2,22 +2,22 @@
 
 {% block content %}
 
-<h1>AI副業コーチ</h1>
+<h2>AI副業コーチ</h2>
 
 <form method="post">
 {% csrf_token %}
 
-<input name="question">
+<input name="question" placeholder="副業について質問してください">
 
-<button type="submit">
-質問
-</button>
+<button type="submit">質問する</button>
 
 </form>
 
-<hr>
+{% if answer %}
 
+<h3>AI回答</h3>
 <p>{{ answer }}</p>
 
+{% endif %}
 
 {% endblock %}

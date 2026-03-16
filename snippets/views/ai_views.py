@@ -1,15 +1,37 @@
-import openai
+from openai import OpenAI
 from django.conf import settings
-from django.shortcuts import render, redirect
-from snippets.services.ai_service import generate_roadmap
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+
+client = OpenAI(api_key=settings.OPENAI_API_KEY)
+
 
 @login_required
 def ai_chat(request):
 
-    profile = request.user.profile
+    answer = ""
 
-    return render(request, "snippets/ai_chat.html")
+    if request.method == "POST":
+
+        question = request.POST.get("question")
+
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "あなたは副業のプロコーチです"},
+                {"role": "user", "content": question}
+            ]
+        )
+
+        answer = response.choices[0].message.content
+
+    return render(
+        request,
+        "snippets/ai_chat.html",
+        {
+            "answer": answer
+        }
+    )
 
 
 def ai_blog_generator(request):
