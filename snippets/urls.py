@@ -17,6 +17,7 @@ from snippets.views.payment_views import success
 from snippets.views.diagnosis_views import diagnosis, history, ai_report, roadmap_result
 from django.contrib.auth import views as auth_views
 from snippets.views.simulator_views import simulator
+from snippets.views.landing_views import diagnosis_lp
 
 urlpatterns = [
 
@@ -78,4 +79,6 @@ urlpatterns = [
     path("sidejob-ranking/", ranking, name="sidejob_ranking"),
 
     path("simulator/", simulator, name="simulator"),
+
+    path("ai-sidejob-diagnosis/", diagnosis_lp, name="diagnosis_lp"),
 ]
