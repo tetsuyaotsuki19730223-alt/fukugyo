@@ -47,8 +47,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = os.environ.get("DEBUG", "False") == "True"
-DEBUG = False
+DEBUG = os.environ.get("DEBUG", "False") == "True"
+#DEBUG = False
 ALLOWED_HOSTS = ["*"]
 
 
@@ -181,16 +181,27 @@ CSRF_TRUSTED_ORIGINS = [
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
 
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-
 EMAIL_HOST = "smtp.gmail.com"
-
 EMAIL_PORT = 587
-
 EMAIL_USE_TLS = True
-
 EMAIL_HOST_USER = "tetsuyaotsuki19730223@gmail.com"
-
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+
+    "root": {
+        "handlers": ["console"],
+        "level": "ERROR",
+    },
+}
