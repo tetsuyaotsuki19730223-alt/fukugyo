@@ -21,6 +21,7 @@ from snippets.views.landing_views import diagnosis_lp
 from snippets.views.template_views import templates
 from snippets.views.roadmap_views import ai_roadmap_generator
 from snippets.views.success_views import success_stories
+from snippets.views.ai_sidejob_views import ai_sidejobs
 
 urlpatterns = [
 
@@ -90,4 +91,6 @@ urlpatterns = [
     path("ai-roadmap-generator/", ai_roadmap_generator, name="ai_roadmap_generator"),
 
     path("success-stories/", success_stories, name="success_stories"),
+
+    path("ai-sidejobs/", ai_sidejobs, name="ai_sidejobs"),
 ]

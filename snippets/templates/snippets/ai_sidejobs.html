@@ -1,0 +1,31 @@
+{% extends "snippets/base.html" %}
+
+{% block content %}
+
+<h1>AI副業おすすめランキング</h1>
+
+<p>
+AIを使ったおすすめ副業を紹介します。
+</p>
+
+{% for job in jobs %}
+
+<div style="border:1px solid #ddd;padding:20px;margin:20px 0;">
+
+<h2>{{ forloop.counter }}位 {{ job.name }}</h2>
+
+<p><b>収入目安</b> {{ job.income }}</p>
+
+<p><b>難易度</b> {{ job.difficulty }}</p>
+
+</div>
+
+{% endfor %}
+
+<br>
+
+<a href="/type-diagnosis/">
+AI副業診断をする →
+</a>
+
+{% endblock %}

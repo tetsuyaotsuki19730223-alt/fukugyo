@@ -2,6 +2,7 @@ from openai import OpenAI
 from django.conf import settings
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from datetime import date
 
 client = OpenAI(api_key=settings.OPENAI_API_KEY or "")
 
@@ -9,39 +10,38 @@ client = OpenAI(api_key=settings.OPENAI_API_KEY or "")
 @login_required
 def ai_chat(request):
 
-    answer = ""
+    profile = request.user.profile
+
+    today = date.today()
+
+    if profile.ai_last_used != today:
+        profile.ai_last_used = today
+        profile.ai_count = 0
+        profile.save()
+
+    if not profile.is_premium and profile.ai_count >= 3:
+
+        return render(
+            request,
+            "snippets/ai_limit.html"
+        )
 
     if request.method == "POST":
 
-        try:
+        question = request.POST.get("question")
 
-            question = request.POST.get("question", "").strip()
+        answer = "AI回答サンプル"
 
-            if not question:
-                answer = "質問を入力してください"
+        profile.ai_count += 1
+        profile.save()
 
-            else:
+        return render(
+            request,
+            "snippets/ai_chat.html",
+            {"answer": answer}
+        )
 
-                response = client.chat.completions.create(
-                    model="gpt-4o-mini",
-                    messages=[
-                        {"role": "system", "content": "あなたは副業コーチです"},
-                        {"role": "user", "content": question}
-                    ],
-                    max_tokens=500
-                )
-
-                answer = response.choices[0].message.content
-
-        except Exception as e:
-
-            answer = "AIエラー: " + str(e)
-
-    return render(
-        request,
-        "snippets/ai_chat.html",
-        {"answer": answer}
-    )
+    return render(request, "snippets/ai_chat.html")
 
 def ai_blog_generator(request):
     return render(request, "snippets/ai_blog.html")
