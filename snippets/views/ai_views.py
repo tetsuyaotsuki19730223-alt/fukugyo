@@ -16,6 +16,7 @@ def ai_chat(request):
         question = request.POST.get("question")
 
         try:
+
             response = client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[
@@ -27,6 +28,7 @@ def ai_chat(request):
             answer = response.choices[0].message.content
 
         except Exception as e:
+
             answer = "AIエラー: " + str(e)
 
     return render(
