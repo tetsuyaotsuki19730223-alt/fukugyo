@@ -4,26 +4,24 @@
 
 <h2>AI副業コーチ</h2>
 
-<form method="POST">
-{% csrf_token %}
-
-<textarea name="question"></textarea>
-
-<button type="submit">
-質問する
-</button>
-
-</form>
-
 <p>
 AI残り回数<br>  
 {{ request.user.profile.ai_count }}/3
 </p>
 
+<form method="POST">
+{% csrf_token %}
+
+<textarea name="question" rows="5" cols="50"></textarea>
+
+<button type="submit">
+AIに質問する
+</button>
+
+</form>
 
 <div style="white-space: pre-line;">
 {{ answer }}
 </div>
-
 
 {% endblock %}
