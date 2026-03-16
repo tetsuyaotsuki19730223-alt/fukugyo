@@ -15,10 +15,15 @@
 
 </form>
 
+<p>
+AI残り回数<br>  
+{{ request.user.profile.ai_count }}/3
+</p>
+
+
 <div style="white-space: pre-line;">
 {{ answer }}
 </div>
 
-{% endif %}
 
 {% endblock %}
