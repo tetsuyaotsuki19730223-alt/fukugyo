@@ -74,4 +74,5 @@ urlpatterns = [
         name="logout",
     ),
 
+    path("sidejob-ranking/", ranking, name="sidejob_ranking"),
 ]

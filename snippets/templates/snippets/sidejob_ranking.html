@@ -1,24 +1,31 @@
-{% extends "base.html" %}
+{% extends "snippets/base.html" %}
 
 {% block content %}
 
-<h1>AI副業ランキング</h1>
+<h1>AI副業ランキング2026</h1>
+
+<p>
+AIを使ったおすすめ副業ランキングです。
+</p>
 
 {% for job in jobs %}
 
-<h2>
-{{ forloop.counter }}位 {{ job.title }}
-</h2>
+<div style="border:1px solid #ddd;padding:20px;margin:20px 0;">
+
+<h2>{{ forloop.counter }}位 {{ job.name }}</h2>
+
+<p><b>収益目安</b> {{ job.income }}</p>
+
+<p><b>難易度</b> {{ job.difficulty }}</p>
 
 <p>{{ job.description }}</p>
 
-<p>
-収益目安
-{{ job.income_min }}〜{{ job.income_max }}円
-</p>
-
-<hr>
+</div>
 
 {% endfor %}
+
+<a href="/type-diagnosis/">
+AI副業診断をする →
+</a>
 
 {% endblock %}
