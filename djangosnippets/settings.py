@@ -33,7 +33,7 @@ load_dotenv()
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
 #STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY", "")
 STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET", "")
-STRIPE_PUBLIC_KEY = "pk_test_51StPOUBsXWS49O2C7wpStT7ZTxj0uG88Ke1JEvIz5j6FSzAzv5bXy9YDWnMPAxW1tuGECMOYDlJ652PKtGmfaCmN00XnuDQw1I"
+STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY")
 STRIPE_PRICE_ID = os.getenv("STRIPE_PRICE_ID", "")
 stripe.api_key = STRIPE_SECRET_KEY
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -48,7 +48,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = os.environ.get("DEBUG", "False") == "True"
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = ["*"]
 
 
@@ -193,4 +193,4 @@ EMAIL_USE_TLS = True
 
 EMAIL_HOST_USER = "tetsuyaotsuki19730223@gmail.com"
 
-EMAIL_HOST_PASSWORD = "uwin ymql docz eoiy"
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
