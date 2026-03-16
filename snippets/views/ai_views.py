@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 
 client = OpenAI(api_key=settings.OPENAI_API_KEY or "")
 
+
 @login_required
 def ai_chat(request):
 
@@ -12,14 +13,14 @@ def ai_chat(request):
 
     if request.method == "POST":
 
-        question = request.POST.get("question", "").strip()
+        try:
 
-        if not question:
-            answer = "質問を入力してください"
+            question = request.POST.get("question", "").strip()
 
-        else:
+            if not question:
+                answer = "質問を入力してください"
 
-            try:
+            else:
 
                 response = client.chat.completions.create(
                     model="gpt-4o-mini",
@@ -27,17 +28,20 @@ def ai_chat(request):
                         {"role": "system", "content": "あなたは副業コーチです"},
                         {"role": "user", "content": question}
                     ],
-                    max_tokens=500,
-                    timeout=15
+                    max_tokens=500
                 )
 
                 answer = response.choices[0].message.content
 
-            except Exception as e:
+        except Exception as e:
 
-                answer = "AIエラー: " + str(e)
+            answer = "AIエラー: " + str(e)
 
-    return render(request, "snippets/ai_chat.html", {"answer": answer})
+    return render(
+        request,
+        "snippets/ai_chat.html",
+        {"answer": answer}
+    )
 
 def ai_blog_generator(request):
     return render(request, "snippets/ai_blog.html")
