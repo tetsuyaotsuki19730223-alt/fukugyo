@@ -1,0 +1,25 @@
+{% extends "snippets/base.html" %}
+
+{% block content %}
+
+<h1>副業テンプレショップ</h1>
+
+{% for t in templates %}
+
+<div style="border:1px solid #ddd;padding:20px;margin:20px 0;">
+
+<h2>{{ t.title }}</h2>
+
+<p>{{ t.description }}</p>
+
+<p><b>{{ t.price }}円</b></p>
+
+<button>
+購入する
+</button>
+
+</div>
+
+{% endfor %}
+
+{% endblock %}
