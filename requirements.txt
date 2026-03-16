@@ -4,4 +4,4 @@ whitenoise
 psycopg2-binary
 python-dotenv
 stripe
-openai>=1.0.0
+openai==1.30.1
