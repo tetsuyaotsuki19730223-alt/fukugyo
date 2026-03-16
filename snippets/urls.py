@@ -15,6 +15,8 @@ from snippets.views.mypage_views import my_page
 from snippets.views.ranking_views import ranking
 from snippets.views.payment_views import success
 from snippets.views.diagnosis_views import diagnosis, history, ai_report, roadmap_result
+from django.contrib.auth import views as auth_views
+
 urlpatterns = [
 
     path("", landing, name="landing"),
@@ -51,4 +53,10 @@ urlpatterns = [
     path("history/", history, name="history"),
     path("ai-report/", ai_report, name="ai_report"),
     path("roadmap-result/", roadmap_result, name="roadmap_result"),
+
+    path("login/", auth_views.LoginView.as_view(
+        template_name="snippets/login.html"
+    ), name="login"),
+
+    path("logout/", auth_views.LogoutView.as_view(), name="logout"),
 ]

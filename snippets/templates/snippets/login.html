@@ -2,12 +2,14 @@
 
 {% block content %}
 
-<h1>ログイン</h1>
+<h2>ログイン</h2>
 
 <form method="post">
 {% csrf_token %}
 
-{{ form.as_p }}
+<input name="username" placeholder="ユーザー名">
+
+<input name="password" type="password" placeholder="パスワード">
 
 <button type="submit">ログイン</button>
 

@@ -1,10 +1,9 @@
-from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from snippets.forms import SignupForm
-from snippets.models import Profile
 from django.contrib.auth import login
+from django.shortcuts import render, redirect
 
-def signup_view(request):
+
+def signup(request):
 
     if request.method == "POST":
 
@@ -12,39 +11,29 @@ def signup_view(request):
         email = request.POST.get("email")
         password = request.POST.get("password")
 
+        if not username:
+            return render(
+                request,
+                "snippets/signup.html",
+                {"error": "ユーザー名を入力してください"}
+            )
+
+        if User.objects.filter(username=username).exists():
+            return render(
+                request,
+                "snippets/signup.html",
+                {"error": "このユーザー名は既に使われています"}
+            )
+
         user = User.objects.create_user(
             username=username,
             email=email,
             password=password
         )
 
-        profile = Profile.objects.create(user=user)
-
-        # 紹介コード取得
-        ref = request.GET.get("ref")
-
-        if ref:
-            profile.referred_by = ref
-            profile.save()
-
-        return redirect("login")
-
-    return render(request, "snippets/signup.html")
-
-
-def signup(request):
-
-    if request.method == "POST":
-        username = request.POST["username"]
-        password = request.POST["password"]
-
-        user = User.objects.create_user(
-            username=username,
-            password=password
-        )
-
+        # ここが重要
         login(request, user)
 
-        return redirect("/")
+        return redirect("dashboard")
 
     return render(request, "snippets/signup.html")
