@@ -103,7 +103,7 @@ WSGI_APPLICATION = 'djangosnippets.wsgi.application'
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
 if not DATABASE_URL:
     # ローカル: SQLite 固定
@@ -116,7 +116,7 @@ if not DATABASE_URL:
 else:
     # 本番: Postgres (Neonなど)
     DATABASES = {
-        "default": dj_database_url.config(conn_max_age=600)
+        "default": dj_database_url.parse(DATABASE_URL)
     }
 
 CONN_HEALTH_CHECKS = True
@@ -181,7 +181,7 @@ CSRF_TRUSTED_ORIGINS = [
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
 
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
