@@ -19,19 +19,24 @@ def ai_chat(request):
             answer = "質問を入力してください"
 
         else:
+
             try:
+
                 response = client.chat.completions.create(
                     model="gpt-4o-mini",
                     messages=[
                         {"role": "system", "content": "あなたは副業コーチです"},
                         {"role": "user", "content": question}
-                    ]
+                    ],
+                    max_tokens=500,
+                    timeout=15
                 )
 
                 answer = response.choices[0].message.content
 
             except Exception as e:
-                answer = f"AIエラー: {str(e)}"
+
+                answer = "AIエラー: " + str(e)
 
     return render(
         request,
