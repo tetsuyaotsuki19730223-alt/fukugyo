@@ -4,18 +4,16 @@
 
 <h2>AI副業コーチ</h2>
 
-<form method="post">
+<form method="POST">
 {% csrf_token %}
 
-<input name="question" placeholder="副業について質問してください">
+<textarea name="question"></textarea>
 
-<button type="submit">質問する</button>
+<button type="submit">
+質問する
+</button>
 
 </form>
-
-{% if answer %}
-
-<h3>AI回答</h3>
 
 <div style="white-space: pre-line;">
 {{ answer }}

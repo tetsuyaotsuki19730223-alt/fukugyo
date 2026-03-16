@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
-from django.contrib.auth import login
 from django.shortcuts import render, redirect
+from django.contrib.auth import login
 
 
 def signup(request):
@@ -12,16 +12,12 @@ def signup(request):
         password = request.POST.get("password")
 
         if not username:
-            return render(
-                request,
-                "snippets/signup.html",
+            return render(request, "snippets/signup.html",
                 {"error": "ユーザー名を入力してください"}
             )
 
         if User.objects.filter(username=username).exists():
-            return render(
-                request,
-                "snippets/signup.html",
+            return render(request, "snippets/signup.html",
                 {"error": "このユーザー名は既に使われています"}
             )
 
@@ -31,7 +27,7 @@ def signup(request):
             password=password
         )
 
-        # ここが重要
+        # 自動ログイン
         login(request, user)
 
         return redirect("dashboard")

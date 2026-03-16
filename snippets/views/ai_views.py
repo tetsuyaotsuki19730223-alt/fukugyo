@@ -15,6 +15,11 @@ def ai_chat(request):
 
         question = request.POST.get("question")
 
+        if not question:
+            return render(request, "snippets/ai_chat.html", {
+                "answer": "質問を入力してください"
+            })
+
         try:
 
             response = client.chat.completions.create(
@@ -29,7 +34,7 @@ def ai_chat(request):
 
         except Exception as e:
 
-            answer = "AIエラー: " + str(e)
+            answer = f"AIエラー: {str(e)}"
 
     return render(
         request,
