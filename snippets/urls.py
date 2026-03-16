@@ -19,6 +19,7 @@ from django.contrib.auth import views as auth_views
 from snippets.views.simulator_views import simulator
 from snippets.views.landing_views import diagnosis_lp
 from snippets.views.template_views import templates
+from snippets.views.roadmap_views import ai_roadmap_generator
 
 urlpatterns = [
 
@@ -84,4 +85,6 @@ urlpatterns = [
     path("ai-sidejob-diagnosis/", diagnosis_lp, name="diagnosis_lp"),
 
     path("templates/", templates, name="templates"),
+
+    path("ai-roadmap-generator/", ai_roadmap_generator, name="ai_roadmap_generator"),
 ]

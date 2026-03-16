@@ -1,0 +1,36 @@
+{% extends "snippets/base.html" %}
+
+{% block content %}
+
+<h1>AI副業ロードマップ生成</h1>
+
+<form method="post">
+{% csrf_token %}
+
+<select name="job">
+
+<option value="AIブログ">AIブログ</option>
+<option value="SNS運用">SNS運用</option>
+<option value="AIライター">AIライター</option>
+
+</select>
+
+<br><br>
+
+<button type="submit">
+ロードマップ生成
+</button>
+
+</form>
+
+{% if roadmap %}
+
+<h2>副業ロードマップ</h2>
+
+<div style="white-space: pre-line;">
+{{ roadmap }}
+</div>
+
+{% endif %}
+
+{% endblock %}
