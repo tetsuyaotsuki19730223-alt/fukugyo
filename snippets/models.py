@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-import uuid
-from django import forms
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils import timezone
 
 class CommunityPost(models.Model):
@@ -18,29 +18,18 @@ def generate_ref_code():
 class Profile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    referral_code = models.CharField(
-        max_length=20, 
-        default=generate_ref_code,
-        unique=True
-    )
-    referred_by = models.CharField(
-        max_length=20,
-        blank=True,
-        null=True
-    )
-    xp = models.IntegerField(default=0)
-    ai_count = models.IntegerField(default=0)
-    level = models.IntegerField(default=1)
 
-    streak = models.IntegerField(default=1)
-
-    last_login_date = models.DateField(null=True, blank=True)
-    
     is_premium = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username
 
+
+@receiver(post_save, sender=User)
+def create_profile(sender, instance, created, **kwargs):
+
+    if created:
+        Profile.objects.create(user=instance)
 
 class Snippet(models.Model):
 
@@ -226,16 +215,6 @@ class SuccessStory(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 
-class SignupForm(forms.Form):
-
-    username = forms.CharField()
-
-    email = forms.EmailField()
-
-    password1 = forms.CharField(widget=forms.PasswordInput)
-
-    password2 = forms.CharField(widget=forms.PasswordInput)
-
 class BlogPost(models.Model):
 
     title = models.CharField(max_length=200)
@@ -263,3 +242,4 @@ class AIChatLog(models.Model):
     answer = models.TextField()
 
     created_at = models.DateTimeField(auto_now_add=True)
+
