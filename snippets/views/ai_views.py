@@ -5,7 +5,6 @@ from django.contrib.auth.decorators import login_required
 
 client = OpenAI(api_key=settings.OPENAI_API_KEY or "")
 
-
 @login_required
 def ai_chat(request):
 
