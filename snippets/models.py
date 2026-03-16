@@ -24,7 +24,6 @@ class Profile(models.Model):
 
     ai_count = models.IntegerField(default=0)
 
-    ai_count = models.IntegerField(default=0)
     ai_last_used = models.DateField(null=True, blank=True)
 
 
