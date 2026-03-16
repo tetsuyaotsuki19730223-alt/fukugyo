@@ -1,0 +1,47 @@
+{% extends "snippets/base.html" %}
+
+{% block content %}
+
+<h1>副業収入シミュレーター</h1>
+
+<form method="post">
+{% csrf_token %}
+
+<p>1日何時間できますか？</p>
+
+<select name="hours">
+<option value="1">1時間</option>
+<option value="2">2時間</option>
+<option value="3">3時間</option>
+<option value="5">5時間</option>
+</select>
+
+<p>スキルレベル</p>
+
+<select name="skill">
+<option value="beginner">初心者</option>
+<option value="normal">普通</option>
+<option value="pro">上級者</option>
+</select>
+
+<br><br>
+
+<button type="submit">
+収入を計算
+</button>
+
+</form>
+
+{% if income %}
+
+<h2>予想収入</h2>
+
+<h1>{{ income }} 円 / 月</h1>
+
+<a href="/type-diagnosis/">
+AI副業診断をする →
+</a>
+
+{% endif %}
+
+{% endblock %}
