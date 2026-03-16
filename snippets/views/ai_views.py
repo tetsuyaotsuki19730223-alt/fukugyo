@@ -1,18 +1,35 @@
+from openai import OpenAI
+from django.conf import settings
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+
+client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 
 @login_required
 def ai_chat(request):
 
-    answer = "AIチャットは現在メンテナンス中です。"
+    answer = ""
+
+    if request.method == "POST":
+
+        question = request.POST.get("question")
+
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "あなたは副業コーチです"},
+                {"role": "user", "content": question}
+            ]
+        )
+
+        answer = response.choices[0].message.content
 
     return render(
         request,
         "snippets/ai_chat.html",
         {"answer": answer}
     )
-
 
 def ai_blog_generator(request):
     return render(request, "snippets/ai_blog.html")
