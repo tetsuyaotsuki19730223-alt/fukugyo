@@ -1,0 +1,58 @@
+{% extends "snippets/base.html" %}
+
+{% block content %}
+
+<h1>AI副業パーソナル診断</h1>
+
+<form method="post">
+{% csrf_token %}
+
+<p>スキルレベル</p>
+
+<select name="skill">
+
+<option>初心者</option>
+<option>普通</option>
+<option>上級者</option>
+
+</select>
+
+<p>副業できる時間</p>
+
+<select name="time">
+
+<option>1時間</option>
+<option>2時間</option>
+<option>3時間以上</option>
+
+</select>
+
+<p>副業目標</p>
+
+<select name="goal">
+
+<option>月3万円</option>
+<option>月5万円</option>
+<option>月10万円</option>
+
+</select>
+
+<br><br>
+
+<button type="submit">
+AI診断する
+</button>
+
+</form>
+
+{% if result %}
+
+<h2>診断結果</h2>
+
+<div style="white-space: pre-line; line-height:1.8;">
+{{ result }}
+</div>
+
+{% endif %}
+
+{% endblock %}
