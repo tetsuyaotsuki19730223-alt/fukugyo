@@ -11,27 +11,28 @@ def mission(request):
 
     missions = Mission.objects.all()
 
-    if not profile.is_premium and user_mission.completed:
-        return redirect("dashboard")
-
-    if profile.is_premium:
-        add_xp(profile, mission.xp * 2)
-
     if not missions.exists():
         return render(request, "snippets/mission.html", {
             "mission": None
         })
 
-    # ✅ 必ずここで定義
+    # ===================================
+    # 🔥 ① missionを必ず先に作る
+    # ===================================
     today = datetime.date.today().toordinal()
     mission = missions[today % missions.count()]
 
+    # ===================================
+    # 🔥 ② user_missionも先に作る（超重要）
+    # ===================================
     user_mission, _ = UserMission.objects.get_or_create(
         user=request.user,
         mission=mission
     )
 
-    # 🔥 POST処理
+    # ===================================
+    # 🔥 ③ POST処理（ここで使う）
+    # ===================================
     if request.method == "POST":
 
         if not user_mission.completed:
@@ -40,7 +41,10 @@ def mission(request):
             user_mission.save()
 
             # XP付与
-            add_xp(profile, mission.xp)
+            if profile.is_premium:
+                add_xp(profile, mission.xp * 2)
+            else:
+                add_xp(profile, mission.xp)
 
         return redirect("mission")
 
