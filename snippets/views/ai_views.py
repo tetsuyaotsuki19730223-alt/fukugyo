@@ -1,13 +1,3 @@
-from openai import OpenAI
-from django.conf import settings
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from snippets.models import Profile
-from datetime import date
-
-client = OpenAI(api_key=settings.OPENAI_API_KEY)
-
-
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from openai import OpenAI
@@ -21,30 +11,48 @@ def ai_chat(request):
 
     profile = request.user.profile
 
+    limit = 3
+
+    # ===================================
+    # 🔥 ① 制限チェック（ここが最重要）
+    # ===================================
+    if not profile.is_premium:
+        if profile.ai_count >= limit:
+            return redirect("pricing")
+
     answer = ""
     question = ""
 
-    # 🔥 GETでも落ちないように初期化しておく
-    # ↑これが今回のエラー対策の本質
-
+    # ===================================
+    # 🔥 ② POST処理（AI実行）
+    # ===================================
     if request.method == "POST":
 
         question = request.POST.get("question", "")
 
-        if question:  # 空送信対策
+        if question:
+
             try:
+                # 🔥 プレミアムで性能差
+                if profile.is_premium:
+                    max_tokens = 800
+                else:
+                    max_tokens = 200
+
                 response = client.chat.completions.create(
                     model="gpt-4o-mini",
                     messages=[
                         {"role": "user", "content": question}
                     ],
-                    max_tokens=500,
+                    max_tokens=max_tokens,
                     timeout=15
                 )
 
                 answer = response.choices[0].message.content
 
-                # ✅ 回数カウント（無料ユーザーのみ）
+                # ===================================
+                # 🔥 ③ 回数カウント（無料のみ）
+                # ===================================
                 if not profile.is_premium:
                     profile.ai_count += 1
                     profile.save()
@@ -52,9 +60,18 @@ def ai_chat(request):
             except Exception as e:
                 answer = f"AIエラー: {e}"
 
+        else:
+            answer = "質問を入力してください"
+
+    # ===================================
+    # 🔥 ④ 残り回数表示
+    # ===================================
+    remaining = max(0, limit - profile.ai_count)
+
     return render(request, "snippets/ai_chat.html", {
         "answer": answer,
-        "question": question
+        "question": question,
+        "remaining": remaining
     })
 
 def ai_blog_generator(request):
