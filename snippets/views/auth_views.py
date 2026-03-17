@@ -5,7 +5,7 @@ from snippets.models import Referral
 
 def signup(request):
 
-    # GET時に紹介コード保存
+    # 紹介コード保存
     if "ref" in request.GET:
         request.session["ref"] = request.GET.get("ref")
 
@@ -35,16 +35,23 @@ def signup(request):
             password=password
         )
 
-        # sessionから紹介コード取得
+        # 紹介処理
         ref = request.session.get("ref")
 
         if ref:
             try:
                 r = Referral.objects.get(code=ref)
-                r.invited_count += 1
-                r.save()
+
+                # 自分自身紹介防止
+                if r.user != user:
+                    r.invited_count += 1
+                    r.save()
+
             except Referral.DoesNotExist:
                 pass
+
+            # session削除（重要）
+            del request.session["ref"]
 
         return redirect("login")
 
