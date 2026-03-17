@@ -2,10 +2,10 @@ from openai import OpenAI
 from django.conf import settings
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from datetime import date
 from snippets.models import Profile
+from datetime import date
 
-client = OpenAI(api_key=settings.OPENAI_API_KEY or "")
+client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 
 @login_required
@@ -13,36 +13,61 @@ def ai_chat(request):
 
     profile, created = Profile.objects.get_or_create(user=request.user)
 
-    today = date.today()
-
-    if profile.ai_last_used != today:
-        profile.ai_last_used = today
-        profile.ai_count = 0
-        profile.save()
-
-    if not profile.is_premium and profile.ai_count >= 3:
-
-        return render(
-            request,
-            "snippets/ai_limit.html"
-        )
+    answer = None
 
     if request.method == "POST":
 
         question = request.POST.get("question")
 
-        answer = "AI回答サンプル"
+        try:
 
-        profile.ai_count += 1
-        profile.save()
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
 
-        return render(
-            request,
-            "snippets/ai_chat.html",
-            {"answer": answer}
-        )
+                    {
+                        "role": "system",
+                        "content": """
+            あなたは副業コーチです。
 
-    return render(request, "snippets/ai_chat.html")
+            目的
+            ユーザーが副業で稼げるようサポートする。
+
+            回答ルール
+            ・初心者にもわかりやすく
+            ・副業アイデアを提案
+            ・収益目安を書く
+            ・最初の行動を提示
+
+            回答形式
+
+            おすすめ副業
+            収益目安
+            始め方
+            """
+                    },
+
+                    {
+                        "role": "user",
+                        "content": question
+                    }
+
+                ],
+                max_tokens=800,
+                temperature=0.7
+            )
+
+            answer = response.choices[0].message.content
+
+        except Exception as e:
+
+            answer = f"AIエラー: {e}"
+
+    return render(
+        request,
+        "snippets/ai_chat.html",
+        {"answer": answer}
+    )
 
 def ai_blog_generator(request):
     return render(request, "snippets/ai_blog.html")

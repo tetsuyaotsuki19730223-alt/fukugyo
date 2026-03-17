@@ -11,30 +11,39 @@ AI残り回数<br>
 
 <h3>AI副業コーチに相談</h3>
 
-<p>よくある質問</p>
+<h3>よくある質問</h3>
 
 <button onclick="setQuestion('初心者におすすめの副業は？')">
-初心者におすすめの副業
+初心者副業
 </button>
 
 <button onclick="setQuestion('AIを使った副業は？')">
 AI副業
 </button>
 
-<button onclick="setQuestion('月5万円稼ぐ副業は？')">
-月5万円副業
+<button onclick="setQuestion('月5万円稼げる副業は？')">
+月5万副業
+</button>
+
+<button onclick="setQuestion('在宅でできる副業は？')">
+在宅副業
 </button>
 
 <form method="POST">
 {% csrf_token %}
 
-<textarea id="question" name="question"></textarea>
+<input
+id="question"
+name="question"
+placeholder="AI副業コーチに質問..."
+style="width:100%;padding:10px;"
+>
 
 <button type="submit">
 AIに質問
 </button>
 
-<div style="white-space: pre-line;">
+<div style="white-space: pre-line; line-height:1.8;">
 {{ answer }}
 </div>
 
