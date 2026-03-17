@@ -3,6 +3,7 @@ from django.conf import settings
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from datetime import date
+from snippets.models import Profile
 
 client = OpenAI(api_key=settings.OPENAI_API_KEY or "")
 
@@ -10,7 +11,7 @@ client = OpenAI(api_key=settings.OPENAI_API_KEY or "")
 @login_required
 def ai_chat(request):
 
-    profile = request.user.profile
+    profile, created = Profile.objects.get_or_create(user=request.user)
 
     today = date.today()
 
