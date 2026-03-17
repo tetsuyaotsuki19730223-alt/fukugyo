@@ -33,6 +33,12 @@ class Profile(models.Model):
     xp = models.IntegerField(default=0)
     level = models.IntegerField(default=1)
 
+    # 🔥 追加
+    streak = models.IntegerField(default=0)
+    last_login_date = models.DateField(null=True, blank=True)
+
+    streak_freeze = models.BooleanField(default=False)
+
 class Snippet(models.Model):
 
     title = models.CharField(max_length=200)

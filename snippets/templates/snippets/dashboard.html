@@ -4,7 +4,29 @@
 
 <h1>AI副業コーチ ダッシュボード</h1>
 
+<p>🎁 今日のログインボーナス獲得！</p>
+
 <p>今日も副業を進めましょう</p>
+
+<h2>🔥 {{ streak }}日連続ログイン</h2>
+<p style="color:red;">
+⚠️ 今日ログインしないと streak がリセットされます
+</p>
+{% if not request.user.profile.is_premium %}
+<p>
+<a href="/pricing/" style="color:red;">
+        👑 streakを守る（プレミアム）
+</a>
+</p>
+{% endif %}
+
+{% if streak >= 3 %}
+    <p style="color:orange;">🔥 継続中！すごい！</p>
+{% endif %}
+
+{% if streak >= 7 %}
+    <p style="color:red;">🔥🔥 ガチ勢レベル</p>
+{% endif %}
 
 <a href="/mission/">今日のミッション</a><br>
 <a href="/ai-chat/">AIコーチ</a><br>
