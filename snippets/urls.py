@@ -25,6 +25,7 @@ from snippets.views.ai_sidejob_views import ai_sidejobs
 from snippets.views.ai_diagnosis_views import ai_personal_diagnosis
 from snippets.views.referral_views import referral_page
 from snippets.views.ai_score_views import ai_sidejob_score
+from snippets.views.guide_views import sidejob_guide
 
 urlpatterns = [
 
@@ -102,4 +103,6 @@ urlpatterns = [
     path("referral/", referral_page, name="referral"),
 
     path("ai-score/", ai_sidejob_score, name="ai_sidejob_score"),
+
+    path("sidejob-guide/", sidejob_guide, name="sidejob_guide"),
 ]

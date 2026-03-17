@@ -1,0 +1,31 @@
+{% extends "snippets/base.html" %}
+
+{% block content %}
+
+<h1>副業スタートガイド</h1>
+
+<p>
+初心者でもできる副業の始め方を解説します。
+</p>
+
+{% for step in steps %}
+
+<div style="border:1px solid #ddd;padding:20px;margin:20px 0;">
+
+<h2>{{ forloop.counter }}. {{ step.title }}</h2>
+
+<p>{{ step.text }}</p>
+
+</div>
+
+{% endfor %}
+
+<br>
+
+<h2>あなたに合う副業をAIが診断</h2>
+
+<a href="/type-diagnosis/">
+AI副業診断をする →
+</a>
+
+{% endblock %}
