@@ -1,15 +1,77 @@
-{% extends "base.html" %}
+{% extends "snippets/base.html" %}
 
 {% block content %}
 
-<h1>副業ランキング</h1>
-
-{% for user in ranking %}
+<h1>AI副業おすすめランキング</h1>
 
 <p>
-{{ user.name }} - XP {{ user.xp }}
+AIを使ってできる副業をランキング形式で紹介します。
 </p>
 
-{% endfor %}
+<hr>
+
+<h2>1位 AIブログ</h2>
+
+<p>
+難易度：★★☆☆☆
+</p>
+
+<p>
+収益目安：月5万〜30万
+</p>
+
+<p>
+ChatGPTで記事を書いて広告収益を得る副業です。
+</p>
+
+<hr>
+
+<h2>2位 AIライター</h2>
+
+<p>
+難易度：★★☆☆☆
+</p>
+
+<p>
+収益目安：月3万〜20万
+</p>
+
+<p>
+AIで記事を書いて案件を受注します。
+</p>
+
+<hr>
+
+<h2>3位 SNS運用</h2>
+
+<p>
+難易度：★★★☆☆
+</p>
+
+<p>
+収益目安：月5万〜50万
+</p>
+
+<p>
+企業のSNSをAIで運用します。
+</p>
+
+<h2>副業収入シミュレーター</h2>
+
+<a href="/simulator/">
+副業収入を計算する
+</a>
+
+<hr>
+
+<h2>AI副業診断</h2>
+
+<p>
+あなたに合う副業をAIが診断します。
+</p>
+
+<a href="/type-diagnosis/">
+AI副業診断をする →
+</a>
 
 {% endblock %}
