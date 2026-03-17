@@ -26,6 +26,15 @@ AI副業で収益化したい方向け
 あと一歩で収益化できます
 </p>
 
+{% if not request.user.profile.is_premium %}
+    <p>残り {{ remaining }} 回</p>
+
+    {% if remaining == 1 %}
+        <p style="color:red;">
+            ⚠️ あと1回で終了 → プレミアムで無制限
+        </p>
+    {% endif %}
+{% endif %}
 
 <a href="https://note.com/dtmer_tetsu/n/n7b156f4e7aa1">
 <button>今すぐ購入</button>

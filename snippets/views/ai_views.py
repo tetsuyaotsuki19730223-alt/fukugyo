@@ -21,41 +21,40 @@ def ai_chat(request):
 
     profile = request.user.profile
 
-    limit = 3
-
-    # ✅ 無料ユーザーだけ制限
-    if not profile.is_premium:
-        if profile.ai_count >= limit:
-            return redirect("pricing")
-
     answer = ""
+    question = ""
+
+    # 🔥 GETでも落ちないように初期化しておく
+    # ↑これが今回のエラー対策の本質
 
     if request.method == "POST":
 
-        question = request.POST.get("question")
+        question = request.POST.get("question", "")
 
-        try:
-            response = client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {"role": "user", "content": question}
-                ],
-                max_tokens=500,
-                timeout=15
-            )
+        if question:  # 空送信対策
+            try:
+                response = client.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=[
+                        {"role": "user", "content": question}
+                    ],
+                    max_tokens=500,
+                    timeout=15
+                )
 
-            answer = response.choices[0].message.content
+                answer = response.choices[0].message.content
 
-            # ✅ 無料ユーザーだけカウント
-            if not profile.is_premium:
-                profile.ai_count += 1
-                profile.save()
+                # ✅ 回数カウント（無料ユーザーのみ）
+                if not profile.is_premium:
+                    profile.ai_count += 1
+                    profile.save()
 
-        except Exception as e:
-            answer = f"AIエラー: {e}"
+            except Exception as e:
+                answer = f"AIエラー: {e}"
 
     return render(request, "snippets/ai_chat.html", {
-        "answer": answer
+        "answer": answer,
+        "question": question
     })
 
 def ai_blog_generator(request):

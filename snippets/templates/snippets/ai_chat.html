@@ -15,6 +15,16 @@
 </p>
 {% endif %}
 
+{% if not request.user.profile.is_premium %}
+    <p>残り {{ remaining }} 回</p>
+
+    {% if remaining == 1 %}
+        <p style="color:red;">
+            ⚠️ あと1回で終了 → プレミアムで無制限
+        </p>
+    {% endif %}
+{% endif %}
+
 <h3>AI副業コーチに相談</h3>
 
 <h3>よくある質問</h3>
@@ -48,6 +58,12 @@ style="width:100%;padding:10px;"
 <button type="submit">
 AIに質問
 </button>
+
+{% if request.user.profile.is_premium %}
+    <p style="color:gold;">👑 プレミアム回答（詳細版）</p>
+{% else %}
+    <p style="color:red;">無料版（簡易回答）</p>
+{% endif %}
 
 <div style="white-space: pre-line; line-height:1.8;">
 {{ answer }}
