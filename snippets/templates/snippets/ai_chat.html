@@ -4,10 +4,16 @@
 
 <h2>AI副業コーチ</h2>
 
-<p>
-AI残り回数<br>  
-{{ request.user.profile.ai_count }}/3
+
+{% if request.user.profile.ai_count >= 3 %}
+<p>制限到達</p>
+{% endif %}
+
+{% if request.user.profile.ai_count == 2 %}
+<p style="color:red;">
+次で無料終了です
 </p>
+{% endif %}
 
 <h3>AI副業コーチに相談</h3>
 

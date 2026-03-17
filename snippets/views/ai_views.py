@@ -1,6 +1,6 @@
 from openai import OpenAI
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from snippets.models import Profile
 from datetime import date
@@ -8,66 +8,55 @@ from datetime import date
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from openai import OpenAI
+from django.conf import settings
+
+client = OpenAI(api_key=settings.OPENAI_API_KEY or "")
+
+
 @login_required
 def ai_chat(request):
 
-    profile, created = Profile.objects.get_or_create(user=request.user)
+    profile = request.user.profile
 
-    answer = None
+    limit = 3
+
+    # ✅ 無料ユーザーだけ制限
+    if not profile.is_premium:
+        if profile.ai_count >= limit:
+            return redirect("pricing")
+
+    answer = ""
 
     if request.method == "POST":
 
         question = request.POST.get("question")
 
         try:
-
             response = client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[
-
-                    {
-                        "role": "system",
-                        "content": """
-            あなたは副業コーチです。
-
-            目的
-            ユーザーが副業で稼げるようサポートする。
-
-            回答ルール
-            ・初心者にもわかりやすく
-            ・副業アイデアを提案
-            ・収益目安を書く
-            ・最初の行動を提示
-
-            回答形式
-
-            おすすめ副業
-            収益目安
-            始め方
-            """
-                    },
-
-                    {
-                        "role": "user",
-                        "content": question
-                    }
-
+                    {"role": "user", "content": question}
                 ],
-                max_tokens=800,
-                temperature=0.7
+                max_tokens=500,
+                timeout=15
             )
 
             answer = response.choices[0].message.content
 
-        except Exception as e:
+            # ✅ 無料ユーザーだけカウント
+            if not profile.is_premium:
+                profile.ai_count += 1
+                profile.save()
 
+        except Exception as e:
             answer = f"AIエラー: {e}"
 
-    return render(
-        request,
-        "snippets/ai_chat.html",
-        {"answer": answer}
-    )
+    return render(request, "snippets/ai_chat.html", {
+        "answer": answer
+    })
 
 def ai_blog_generator(request):
     return render(request, "snippets/ai_blog.html")

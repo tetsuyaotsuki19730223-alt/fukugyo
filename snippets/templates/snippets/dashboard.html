@@ -10,5 +10,27 @@
 <a href="/ai-chat/">AIコーチ</a><br>
 <a href="/ai-roadmap/">副業ロードマップ</a>
 
+<p>レベル: {{ request.user.profile.level }}</p>
+<p>XP: {{ request.user.profile.xp }}</p>
+
+<div style="background:#ddd;height:20px;border-radius:10px;">
+    <div style="
+        width: {{ request.user.profile.xp|divisibleby:100 }}%;
+        background:#4caf50;
+        height:20px;
+        border-radius:10px;
+    ">
+    </div>
+</div>
+
+<div style="background:#ddd;height:20px;">
+    <div style="width: {{ progress }}%; background:green; height:20px;"></div>
+</div>
+
+{% if request.user.profile.is_premium %}
+    <p style="color:gold;">👑 PREMIUM会員</p>
+{% else %}
+    <a href="/pricing/">プレミアムにアップグレード</a>
+{% endif %}
 
 {% endblock %}

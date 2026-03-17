@@ -99,14 +99,44 @@ content="AIがあなたに最適な副業を診断し、稼ぐロードマップ
 
 {% block content %}
 {% endblock %}
-{% if user.is_authenticated %}
 
+{% if user.is_authenticated %}
 <p>
 ログイン中：{{ user.username }}
 <a href="/accounts/logout/">ログアウト</a>
 </p>
-
 {% endif %}
+
+<div style="position:fixed;top:10px;right:20px;z-index:999;">
+
+    {% if request.user.is_authenticated %}
+
+        {% if request.user.profile.is_premium %}
+            <span style="
+                background:gold;
+                color:black;
+                padding:8px 12px;
+                border-radius:20px;
+                font-weight:bold;
+            ">
+                👑 PREMIUM
+            </span>
+        {% else %}
+            <a href="/pricing/" style="
+                background:#ff4d4d;
+                color:white;
+                padding:8px 12px;
+                border-radius:20px;
+                text-decoration:none;
+            ">
+                🚀 アップグレード
+            </a>
+        {% endif %}
+
+    {% endif %}
+
+</div>
+
 
 <footer>
 

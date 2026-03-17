@@ -1,3 +1,6 @@
+from django.utils import timezone
+from datetime import timedelta
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 
@@ -36,3 +39,13 @@ def success_stories(request):
         "snippets/success_stories.html",
         {"stories": stories}
     )
+
+
+@login_required
+def success(request):
+
+    profile = request.user.profile
+    profile.is_premium = True
+    profile.save()
+
+    return render(request, "snippets/success.html")

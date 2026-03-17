@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 import stripe
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+import uuid
 
 stripe.api_key = settings.STRIPE_SECRET_KEY or ""
 
@@ -35,9 +36,20 @@ def pricing(request):
     return render(request, "snippets/pricing.html")
 
 
+@login_required
 def create_checkout(request):
-    return render(request, "snippets/checkout.html")
 
+    profile = request.user.profile
+
+    # トークン生成
+    token = str(uuid.uuid4())
+    profile.payment_token = token
+    profile.save()
+
+    # Lemon SqueezyのURL
+    checkout_url = f"https://your-store.lemonsqueezy.com/checkout/buy/xxxx?token={token}"
+
+    return redirect(checkout_url)
 
 def premium_page(request):
     return render(request, "snippets/premium.html")

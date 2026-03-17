@@ -26,6 +26,12 @@ class Profile(models.Model):
 
     ai_last_used = models.DateField(null=True, blank=True)
 
+    payment_token = models.CharField(max_length=100, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    xp = models.IntegerField(default=0)
+    level = models.IntegerField(default=1)
 
 class Snippet(models.Model):
 

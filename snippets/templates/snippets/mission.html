@@ -1,19 +1,24 @@
-{% extends "base.html" %}
+{% extends "snippets/base.html" %}
+
 {% block content %}
 
-<h1>今日の副業ミッション</h1>
+<h1>🔥 今日の副業ミッション</h1>
 
-{% for mission in missions %}
+<div style="background:#fff7e6;padding:20px;border-radius:10px;">
 
-<p>
-{{ mission.title }}
-(+{{ mission.xp }} XP)
-</p>
+    <h2>{{ mission.title }}</h2>
+    <p>{{ mission.description }}</p>
+    <p>⭐ XP: {{ mission.xp }}</p>
 
-<button>完了</button>
+    {% if user_mission.completed %}
+        <p style="color:green;">✅ 完了済み</p>
+    {% else %}
+        <form method="post">
+            {% csrf_token %}
+            <button>ミッション完了</button>
+        </form>
+    {% endif %}
 
-<hr>
-
-{% endfor %}
+</div>
 
 {% endblock %}

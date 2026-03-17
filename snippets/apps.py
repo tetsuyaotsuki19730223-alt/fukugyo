@@ -9,4 +9,4 @@ class SnippetsConfig(AppConfig):
 
     def ready(self):
 
-        import snippets.signals
+        import snippets.models 

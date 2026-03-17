@@ -28,6 +28,9 @@ from snippets.views.ai_score_views import ai_sidejob_score
 from snippets.views.guide_views import sidejob_guide
 from snippets.views.blog_views import blog_ai_sidejob
 from snippets.views.landing_views import diagnosis_lp
+from snippets.views.payment_views import create_checkout
+from snippets.views.blog_views import generate_blog
+from snippets.views.mission_views import mission
 
 urlpatterns = [
 
@@ -111,4 +114,10 @@ urlpatterns = [
     path("blog/ai-sidejob/", blog_ai_sidejob, name="blog_ai_sidejob"),
 
     path("diagnosis-lp/", diagnosis_lp, name="diagnosis_lp"),
+
+    path("checkout/", create_checkout, name="checkout"),
+
+    path("generate-blog/", generate_blog),
+
+    path("mission/", mission, name="mission"),
 ]
