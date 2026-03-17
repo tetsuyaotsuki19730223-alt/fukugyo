@@ -23,6 +23,7 @@ from snippets.views.roadmap_views import ai_roadmap_generator
 from snippets.views.success_views import success_stories
 from snippets.views.ai_sidejob_views import ai_sidejobs
 from snippets.views.ai_diagnosis_views import ai_personal_diagnosis
+from snippets.views.referral_views import referral_page
 
 urlpatterns = [
 
@@ -96,4 +97,6 @@ urlpatterns = [
     path("ai-sidejobs/", ai_sidejobs, name="ai_sidejobs"),
 
     path("ai-personal-diagnosis/", ai_personal_diagnosis, name="ai_personal_diagnosis"),
+
+    path("referral/", referral_page, name="referral"),
 ]
