@@ -31,3 +31,6 @@ def generate_result_image(result, score):
     image.save(output_path)
 
     return output_path
+
+def calculate_level(xp):
+    return xp // 100 + 1

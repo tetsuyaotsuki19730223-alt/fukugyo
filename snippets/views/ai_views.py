@@ -13,6 +13,11 @@ def ai_chat(request):
 
     limit = 3
 
+    if not profile.is_premium and profile.level < 3:
+        return render(request, "snippets/ai_chat.html", {
+            "answer": "レベル3で解放されます🔥"
+        })
+
     # ===================================
     # 🔥 ① 制限チェック（ここが最重要）
     # ===================================
@@ -75,10 +80,19 @@ def ai_chat(request):
     })
 
 def ai_blog_generator(request):
-    return render(request, "snippets/ai_blog.html")
+    if profile.level < 7:
+        return render(request, "snippets/ai_blog.html", {
+            "error": "レベル7で解放🔥"
+        })
 
 
 def ai_roadmap(request):
+
+    if profile.level < 5:
+        return render(request, "snippets/ai_roadmap.html", {
+            "roadmap": "レベル5で解放🔥"
+        })
+
 
     roadmap = [
         "Week1 市場リサーチ",

@@ -4,12 +4,22 @@
 
 <h1>🏆 ランキング</h1>
 
-{% for user in users %}
-    <p>
-        {{ forloop.counter }}位
-        {{ user.username }}
-        - XP: {{ user.profile.xp }}
-    </p>
-{% endfor %}
+<table border="1" style="width:100%;text-align:center;">
+    <tr>
+        <th>順位</th>
+        <th>ユーザー</th>
+        <th>XP</th>
+        <th>連続ログイン</th>
+    </tr>
+
+    {% for user in users %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ user.user.username }}</td>
+        <td>{{ user.xp }}</td>
+        <td>{{ user.streak }}日</td>
+    </tr>
+    {% endfor %}
+</table>
 
 {% endblock %}

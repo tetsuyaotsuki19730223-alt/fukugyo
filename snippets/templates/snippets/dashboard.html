@@ -2,57 +2,38 @@
 
 {% block content %}
 
-<h1>AI副業コーチ ダッシュボード</h1>
+<h1>AI副業コーチ</h1>
 
-<p>🎁 今日のログインボーナス獲得！</p>
+<div style="background:#f5f5f5;padding:20px;border-radius:10px;">
 
-<p>今日も副業を進めましょう</p>
+    <p>🔥 連続ログイン: {{ streak }}日</p>
 
-<h2>🔥 {{ streak }}日連続ログイン</h2>
-<p style="color:red;">
-⚠️ 今日ログインしないと streak がリセットされます
-</p>
-{% if not request.user.profile.is_premium %}
-<p>
-<a href="/pricing/" style="color:red;">
-        👑 streakを守る（プレミアム）
-</a>
-</p>
-{% endif %}
+    <p>🏆 レベル: {{ level }}</p>
 
-{% if streak >= 3 %}
-    <p style="color:orange;">🔥 継続中！すごい！</p>
-{% endif %}
+    <p>⭐ XP: {{ xp }}</p>
 
-{% if streak >= 7 %}
-    <p style="color:red;">🔥🔥 ガチ勢レベル</p>
-{% endif %}
-
-<a href="/mission/">今日のミッション</a><br>
-<a href="/ai-chat/">AIコーチ</a><br>
-<a href="/ai-roadmap/">副業ロードマップ</a>
-
-<p>レベル: {{ request.user.profile.level }}</p>
-<p>XP: {{ request.user.profile.xp }}</p>
-
-<div style="background:#ddd;height:20px;border-radius:10px;">
-    <div style="
-        width: {{ request.user.profile.xp|divisibleby:100 }}%;
-        background:#4caf50;
-        height:20px;
-        border-radius:10px;
-    ">
+    <!-- XPバー -->
+    <div style="background:#ddd;height:20px;">
+        <div style="width:{{ progress }}%;background:orange;height:20px;"></div>
     </div>
+
+    <p>次のレベルまであと {{ next_level_xp }} XP</p>
+
+    {% if is_premium %}
+        <p style="color:gold;">👑 プレミアム</p>
+    {% else %}
+        <p>無料ユーザー</p>
+    {% endif %}
+
 </div>
 
-<div style="background:#ddd;height:20px;">
-    <div style="width: {{ progress }}%; background:green; height:20px;"></div>
-</div>
+<hr>
 
-{% if request.user.profile.is_premium %}
-    <p style="color:gold;">👑 PREMIUM会員</p>
-{% else %}
-    <a href="/pricing/">プレミアムにアップグレード</a>
-{% endif %}
+<h2>🔓 解放機能</h2>
+<ul>
+    <li>Lv3: AIチャット</li>
+    <li>Lv5: ロードマップ</li>
+    <li>Lv7: ブログ生成</li>
+</ul>
 
 {% endblock %}

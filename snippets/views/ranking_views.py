@@ -1,42 +1,17 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from snippets.models import Profile
 
 
+@login_required
 def ranking(request):
 
-    jobs = [
+    # XPランキング
+    users = Profile.objects.all().order_by("-xp", "-is_premium")[:50]
 
-        {
-            "name": "AIブログ",
-            "income": "月5万〜30万",
-            "difficulty": "低",
-            "description": "ChatGPTで記事作成して広告収益"
-        },
+    all_users = Profile.objects.all().order_by("-xp")
+    rank = list(all_users).index(request.user.profile) + 1
 
-        {
-            "name": "AIライター",
-            "income": "月3万〜20万",
-            "difficulty": "低",
-            "description": "AIで記事作成して案件受注"
-        },
-
-        {
-            "name": "SNS運用",
-            "income": "月1万〜50万",
-            "difficulty": "中",
-            "description": "InstagramやXを育てて収益化"
-        },
-
-        {
-            "name": "AI画像販売",
-            "income": "月1万〜15万",
-            "difficulty": "低",
-            "description": "AI画像を販売"
-        },
-
-    ]
-
-    return render(
-        request,
-        "snippets/sidejob_ranking.html",
-        {"jobs": jobs}
-    )
+    return render(request, "snippets/ranking.html", {
+        "users": users
+    })
