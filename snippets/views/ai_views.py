@@ -9,7 +9,7 @@ client = OpenAI(api_key=settings.OPENAI_API_KEY or "")
 @login_required
 def ai_chat(request):
 
-    profile = request.user.profile
+    profile, _ = Profile.objects.get_or_create(user=request.user)
 
     limit = 3
 
