@@ -1,39 +1,29 @@
-{% extends "base.html" %}
+{% extends "snippets/base.html" %}
 
 {% block content %}
 
 <h1>AI副業コーチ</h1>
 
-<div style="background:#f5f5f5;padding:20px;border-radius:10px;">
+<div style="background:#f5f5f5;padding:20px;border-radius:10px;margin-bottom:20px;">
+    <h2>📊 あなたのステータス</h2>
 
     <p>🔥 連続ログイン: {{ streak }}日</p>
-
     <p>🏆 レベル: {{ level }}</p>
-
     <p>⭐ XP: {{ xp }}</p>
 
-    <!-- XPバー -->
-    <div style="background:#ddd;height:20px;">
-        <div style="width:{{ progress }}%;background:orange;height:20px;"></div>
+    <div style="background:#ddd;height:20px;border-radius:10px;">
+        <div style="width:{{ progress }}%;background:orange;height:20px;border-radius:10px;"></div>
     </div>
 
     <p>次のレベルまであと {{ next_level_xp }} XP</p>
 
     {% if is_premium %}
-        <p style="color:gold;">👑 プレミアム</p>
+        <p style="color:gold;">👑 プレミアム会員</p>
     {% else %}
-        <p>無料ユーザー</p>
+        <p style="color:gray;">無料プラン</p>
     {% endif %}
-
 </div>
 
-<hr>
-
-<h2>🔓 解放機能</h2>
-<ul>
-    <li>Lv3: AIチャット</li>
-    <li>Lv5: ロードマップ</li>
-    <li>Lv7: ブログ生成</li>
-</ul>
+<a href="/mission/">今日の副業ミッションを見る</a>
 
 {% endblock %}
