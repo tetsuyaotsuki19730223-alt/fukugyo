@@ -1,60 +1,75 @@
-{% extends "base.html" %}
+{% extends "snippets/base.html" %}
 
 {% block content %}
 
-<div class="card">
+<div style="max-width:700px;margin:40px auto;padding:20px;">
 
-<h2>診断結果</h2>
+    <h1 style="text-align:center;margin-bottom:30px;">診断結果</h1>
 
-<h3>
+    <div style="background:#f9f9f9;padding:30px;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,0.08);margin-bottom:24px;">
 
-あなたの副業タイプ
+        <p style="font-size:14px;color:#666;margin-bottom:8px;">あなたの副業タイプ</p>
 
-</h3>
+        <h2 style="font-size:32px;margin:0 0 16px 0;color:#222;">
+            {{ result.type }}
+        </h2>
 
-<h1>
+        <p style="font-size:18px;line-height:1.8;color:#444;margin:0;">
+            {{ result.description }}
+        </p>
 
-{{ result }}
+    </div>
 
-</h1>
+    <div style="background:#fff;padding:24px;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,0.06);margin-bottom:24px;">
+        <h3 style="margin-top:0;margin-bottom:16px;">おすすめ副業</h3>
 
-<p>
+        <ul style="margin:0;padding-left:20px;line-height:2;">
+            {% for job in result.jobs %}
+                <li>{{ job }}</li>
+            {% endfor %}
+        </ul>
+    </div>
 
-{{ advice }}
+    <div style="background:#fff7e6;padding:20px;border-radius:12px;margin-bottom:24px;">
+        <h3 style="margin-top:0;">最初の一歩</h3>
+        <p style="margin:0;line-height:1.8;">
+            {{ result.first_action }}
+        </p>
+    </div>
 
-</p>
-<p>
-※副業の成果は個人差があります。
-</p>
-<a href="/diagnosis/">
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;">
 
-<button style="font-size:18px;padding:10px 20px">
+        <a
+            href="https://twitter.com/intent/tweet?text=AI副業診断をやってみた！私のタイプは『{{ result.type }}』でした。あなたも診断してみる？ https://www.ai-sidejob-coach.net/type-diagnosis/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="display:inline-block;background:#111;color:#fff;padding:14px 20px;border-radius:10px;text-decoration:none;font-weight:bold;"
+        >
+            Xでシェアする
+        </a>
 
-AI副業ロードマップを作る
+        <a
+            href="/ai-report/?type={{ answer }}"
+            style="display:inline-block;background:#4CAF50;color:#fff;padding:14px 20px;border-radius:10px;text-decoration:none;font-weight:bold;"
+        >
+            詳しいAIレポートを見る
+        </a>
 
-</button>
+        <a
+            href="/ai-chat/"
+            style="display:inline-block;background:#2d7ff9;color:#fff;padding:14px 20px;border-radius:10px;text-decoration:none;font-weight:bold;"
+        >
+            AI副業コーチに相談する
+        </a>
 
-</a>
+    </div>
+
+    <div style="text-align:center;">
+        <a href="/type-diagnosis/" style="color:#555;text-decoration:none;">
+            もう一度診断する
+        </a>
+    </div>
 
 </div>
 
-<a href="https://twitter.com/intent/tweet?text=私の副業タイプは『{{ result }}』でした！%0A無料診断はこちら👇%0Ahttps://www.ai-sidejob-coach.net/type-diagnosis/" target="_blank">
-
-<button style="font-size:18px;padding:10px 20px">
-
-Xでシェアする
-
-</button>
-
-</a>
-
-<a href="/diagnosis/share-image/?result={{ result }}" target="_blank">
-
-<button style="font-size:18px;padding:10px 20px">
-
-診断結果画像を作る
-
-</button>
-
-</a>
 {% endblock %}

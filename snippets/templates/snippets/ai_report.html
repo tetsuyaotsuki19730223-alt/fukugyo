@@ -1,40 +1,84 @@
-{% extends "base.html" %}
+{% extends "snippets/base.html" %}
+
 {% block content %}
 
-<h1>あなたの副業レポート</h1>
+<div style="max-width:800px;margin:40px auto;padding:20px;">
 
-<h2>副業タイプ</h2>
-<p>{{ report.type }}</p>
+    <h1 style="text-align:center;margin-bottom:30px;">AIレポート</h1>
 
-<hr>
+    <div style="background:#f9f9f9;padding:30px;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,0.08);margin-bottom:24px;">
+        <p style="font-size:14px;color:#666;margin-bottom:8px;">あなたのタイプ</p>
+        <h2 style="font-size:32px;margin:0 0 16px 0;color:#222;">
+            {{ report.type }}
+        </h2>
+    </div>
 
-<h2>おすすめ副業</h2>
+    {% if report.type == "未診断" %}
+        <div style="background:#fff7e6;padding:20px;border-radius:12px;">
+            <p style="margin:0 0 16px 0;">まだ診断結果がありません。</p>
+            <a
+                href="/type-diagnosis/"
+                style="display:inline-block;background:#4CAF50;color:#fff;padding:12px 18px;border-radius:10px;text-decoration:none;font-weight:bold;"
+            >
+                副業タイプ診断をする
+            </a>
+        </div>
+    {% else %}
 
-<ul>
-{% for job in report.jobs %}
-<li>{{ job }}</li>
-{% endfor %}
-</ul>
+        <div style="background:#fff;padding:24px;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,0.06);margin-bottom:24px;">
+            <h3 style="margin-top:0;margin-bottom:16px;">おすすめ副業</h3>
 
-<hr>
+            <ul style="margin:0;padding-left:20px;line-height:2;">
+                {% for job in report.jobs %}
+                    <li>{{ job }}</li>
+                {% endfor %}
+            </ul>
+        </div>
 
-<h2>ロードマップ</h2>
+        <div style="background:#fff;padding:24px;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,0.06);margin-bottom:24px;">
+            <h3 style="margin-top:0;margin-bottom:16px;">4週間ロードマップ</h3>
 
-<ul>
-{% for step in report.roadmap %}
-<li>{{ step }}</li>
-{% endfor %}
-</ul>
+            <ol style="margin:0;padding-left:20px;line-height:2;">
+                {% for item in report.roadmap %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ol>
+        </div>
 
-<h3>あなた専用AIコーチ</h3>
+        <div style="background:#fff7e6;padding:20px;border-radius:12px;margin-bottom:24px;">
+            <h3 style="margin-top:0;">今すぐやること</h3>
+            <p style="margin:0;line-height:1.8;">
+                まずはおすすめ副業の中から1つ選んで、今週やる最初の行動を決めましょう。
+            </p>
+        </div>
 
-<p>
-副業ロードマップをさらに詳しく知りたい場合は  
-AI副業コーチに相談できます
-</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;">
 
-<a href="/ai-chat/">
-AIコーチに相談する
-</a>
+            <a
+                href="/ai-chat/"
+                style="display:inline-block;background:#2d7ff9;color:#fff;padding:14px 20px;border-radius:10px;text-decoration:none;font-weight:bold;"
+            >
+                AI副業コーチに相談する
+            </a>
+
+            <a
+                href="/ai-roadmap/?type={{ user_type }}"
+                style="display:inline-block;background:#4CAF50;color:#fff;padding:14px 20px;border-radius:10px;text-decoration:none;font-weight:bold;"
+            >
+                詳細ロードマップを見る
+            </a>
+
+            <a
+                href="/pricing/"
+                style="display:inline-block;background:#111;color:#fff;padding:14px 20px;border-radius:10px;text-decoration:none;font-weight:bold;"
+            >
+                プレミアムを見る
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
 
 {% endblock %}

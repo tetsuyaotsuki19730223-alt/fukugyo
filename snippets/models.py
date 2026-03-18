@@ -30,6 +30,21 @@ class Profile(models.Model):
 
     ai_count = models.IntegerField(default=0)
 
+    def __str__(self):
+        return self.user.username
+
+@receiver(post_save, sender=User)
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.get_or_create(user=instance)
+
+
+def add_xp(profile, xp):
+    profile.xp += xp
+    profile.level = profile.xp // 100 + 1
+    profile.save()
+
+
 class Snippet(models.Model):
 
     title = models.CharField(max_length=200)
@@ -124,13 +139,6 @@ class AIChat(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
-def add_xp(profile, xp):
-
-    profile.xp += xp
-
-    profile.level = profile.xp // 100 + 1
-
-    profile.save()
 
 class DailyMission(models.Model):
 

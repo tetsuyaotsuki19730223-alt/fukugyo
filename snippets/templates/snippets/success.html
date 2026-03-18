@@ -1,23 +1,49 @@
-{% extends "base.html" %}
+{% extends "snippets/base.html" %}
 
 {% block content %}
 
-<h1>副業成功事例</h1>
+<div style="max-width:720px;margin:40px auto;padding:20px;">
 
-{% for story in stories %}
+    <div style="background:#f4fff4;padding:30px;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,0.08);text-align:center;margin-bottom:24px;">
+        <h1 style="margin-top:0;color:#2e7d32;">登録完了</h1>
+        <p style="font-size:18px;line-height:1.8;color:#444;margin-bottom:0;">
+            プレミアム会員として利用できる状態になりました。
+        </p>
+    </div>
 
-<h2>{{ story.name }}</h2>
+    <div style="background:#fff;padding:24px;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,0.06);margin-bottom:24px;">
+        <h2 style="margin-top:0;">使えるようになった機能</h2>
+        <ul style="line-height:2;padding-left:20px;margin-bottom:0;">
+            <li>AIチャット無制限</li>
+            <li>詳細なAI回答</li>
+            <li>継続的な副業相談</li>
+            <li>プレミアム向け成長機能</li>
+        </ul>
+    </div>
 
-<p>職業：{{ story.job }}</p>
+    <div style="background:#fff7e6;padding:24px;border-radius:16px;margin-bottom:24px;">
+        <h2 style="margin-top:0;">次にやること</h2>
+        <p style="line-height:1.8;margin-bottom:0;">
+            まずはAIチャットで「自分に合う副業の進め方」を質問してみてください。
+        </p>
+    </div>
 
-<p>副業：{{ story.sidejob }}</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+        <a
+            href="/ai-chat/"
+            style="display:inline-block;background:#2d7ff9;color:#fff;padding:14px 20px;border-radius:10px;text-decoration:none;font-weight:bold;"
+        >
+            AIチャットを使う
+        </a>
 
-<p>副業収入：{{ story.income }}円</p>
+        <a
+            href="/dashboard/"
+            style="display:inline-block;background:#111;color:#fff;padding:14px 20px;border-radius:10px;text-decoration:none;font-weight:bold;"
+        >
+            ダッシュボードへ
+        </a>
+    </div>
 
-<p>{{ story.story }}</p>
-
-<hr>
-
-{% endfor %}
+</div>
 
 {% endblock %}

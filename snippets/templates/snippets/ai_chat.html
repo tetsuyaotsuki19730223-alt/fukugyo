@@ -5,22 +5,44 @@
 <h1>AI副業コーチ</h1>
 
 {% if is_premium %}
-    <p style="color:gold;">👑 プレミアム会員</p>
+    <p style="color:gold;font-weight:bold;">👑 プレミアム会員</p>
 {% else %}
+    <p>無料プラン</p>
     <p>残り {{ remaining }} 回</p>
 {% endif %}
 
+<p style="color:red;font-weight:bold;">
+無料利用終了 → プレミアムで無制限
+</p>
+
 <form method="post">
     {% csrf_token %}
-    <textarea name="question" id="question" style="width:100%;height:120px;">{{ question }}</textarea>
+
+    <p>よくある質問</p>
+    <button type="button" onclick="setQuestion('初心者におすすめの副業は？')">初心者副業</button>
+    <button type="button" onclick="setQuestion('AIを使った副業は？')">AI副業</button>
+    <button type="button" onclick="setQuestion('月5万円稼ぐには？')">月5万円</button>
+    <button type="button" onclick="setQuestion('在宅でできる副業は？')">在宅副業</button>
+
     <br><br>
+
+    <textarea id="question" name="question" style="width:100%;height:120px;">{{ question }}</textarea>
+
+    <br><br>
+
     <button type="submit">AIに質問する</button>
 </form>
 
 {% if answer %}
-    <div style="margin-top:20px; white-space: pre-line; line-height:1.8;">
+    <div style="margin-top:20px; white-space: pre-line; line-height:1.8; background:#f9f9f9; padding:20px; border-radius:10px;">
         {{ answer }}
     </div>
 {% endif %}
+
+<script>
+function setQuestion(text) {
+    document.getElementById("question").value = text;
+}
+</script>
 
 {% endblock %}
