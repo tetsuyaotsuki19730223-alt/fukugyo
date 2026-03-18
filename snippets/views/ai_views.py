@@ -98,7 +98,6 @@ def roadmap_result(request):
         "Week3 AIブログ作成",
         "Week4 初案件応募",
     ]
-
     return render(request, "snippets/roadmap_result.html", {"roadmap": roadmap})
 
 
@@ -113,5 +112,4 @@ def ai_report(request):
             "Week4 案件応募",
         ],
     }
-
     return render(request, "snippets/ai_report.html", {"report": report})

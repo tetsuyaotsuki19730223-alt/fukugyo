@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+
 from snippets.models import Profile
 from snippets.utils import calculate_level
 
@@ -8,7 +9,6 @@ from snippets.utils import calculate_level
 @login_required
 def dashboard(request):
     profile, _ = Profile.objects.get_or_create(user=request.user)
-
     today = timezone.now().date()
 
     if profile.last_login_date != today:
