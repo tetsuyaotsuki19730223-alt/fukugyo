@@ -1,80 +1,26 @@
-{% extends "base.html" %}
+{% extends "snippets/base.html" %}
 
 {% block content %}
 
-<h2>AI副業コーチ</h2>
+<h1>AI副業コーチ</h1>
 
-
-{% if request.user.profile.ai_count >= 3 %}
-<p>制限到達</p>
-{% endif %}
-
-{% if request.user.profile.ai_count == 2 %}
-<p style="color:red;">
-次で無料終了です
-</p>
-{% endif %}
-
-{% if not request.user.profile.is_premium %}
-    <p>残り {{ remaining }} 回</p>
-
-    {% if remaining == 1 %}
-        <p style="color:red;">
-            ⚠️ あと1回で終了 → プレミアムで無制限
-        </p>
-    {% endif %}
-{% endif %}
-
-<h3>AI副業コーチに相談</h3>
-
-<h3>よくある質問</h3>
-
-<button onclick="setQuestion('初心者におすすめの副業は？')">
-初心者副業
-</button>
-
-<button onclick="setQuestion('AIを使った副業は？')">
-AI副業
-</button>
-
-<button onclick="setQuestion('月5万円稼げる副業は？')">
-月5万副業
-</button>
-
-<button onclick="setQuestion('在宅でできる副業は？')">
-在宅副業
-</button>
-
-<form method="POST">
-{% csrf_token %}
-
-<input
-id="question"
-name="question"
-placeholder="AI副業コーチに質問..."
-style="width:100%;padding:10px;"
->
-
-<button type="submit">
-AIに質問
-</button>
-
-{% if request.user.profile.is_premium %}
-    <p style="color:gold;">👑 プレミアム回答（詳細版）</p>
+{% if is_premium %}
+    <p style="color:gold;">👑 プレミアム会員</p>
 {% else %}
-    <p style="color:red;">無料版（簡易回答）</p>
+    <p>残り {{ remaining }} 回</p>
 {% endif %}
 
-<div style="white-space: pre-line; line-height:1.8;">
-{{ answer }}
-</div>
-
+<form method="post">
+    {% csrf_token %}
+    <textarea name="question" id="question" style="width:100%;height:120px;">{{ question }}</textarea>
+    <br><br>
+    <button type="submit">AIに質問する</button>
 </form>
 
-<script>
-function setQuestion(text){
-    document.getElementById("question").value = text;
-}
-</script>
+{% if answer %}
+    <div style="margin-top:20px; white-space: pre-line; line-height:1.8;">
+        {{ answer }}
+    </div>
+{% endif %}
 
 {% endblock %}
