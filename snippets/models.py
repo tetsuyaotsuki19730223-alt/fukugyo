@@ -13,6 +13,8 @@ class CommunityPost(models.Model):
 
     created_at = models.DateTimeField(default=timezone.now)
 
+    updated_at = models.DateTimeField(auto_now=True)
+    
 def generate_ref_code():
     return uuid.uuid4().hex[:10]
 

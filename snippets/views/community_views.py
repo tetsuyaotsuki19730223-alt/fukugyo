@@ -4,15 +4,14 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def community(request):
-    
     if request.method == "POST":
+        content = request.POST.get("content", "").strip()
 
-        content = request.POST.get("content")
-
-        CommunityPost.objects.create(
-            user=request.user,
-            content=content
-        )
+        if content:
+            CommunityPost.objects.create(
+                user=request.user,
+                content=content
+            )
 
         return redirect("community")
 
