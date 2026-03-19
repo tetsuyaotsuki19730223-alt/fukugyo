@@ -13,14 +13,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except ModuleNotFoundError:
-    pass
-import stripe
-from django.conf import settings
 from dotenv import load_dotenv
+import stripe
+
 load_dotenv()
 #import sentry_sdk
 #from sentry_sdk.integrations.django import DjangoIntegration
@@ -53,7 +48,6 @@ ALLOWED_HOSTS = os.getenv(
     "DJANGO_ALLOWED_HOSTS",
     "localhost,127.0.0.1,[::1]"
 ).split(",")
-
 
 # Application definition
 
@@ -104,22 +98,19 @@ WSGI_APPLICATION = 'djangosnippets.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent
 
-DATABASE_URL = os.environ.get("DATABASE_URL")
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-if not DATABASE_URL:
-    # ローカル: SQLite 固定
+if DATABASE_URL:
+    DATABASES = {
+        "default": dj_database_url.parse(DATABASE_URL)
+    }
+else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
         }
-    }
-else:
-    # 本番: Postgres (Neonなど)
-    DATABASES = {
-        "default": dj_database_url.parse(DATABASE_URL)
     }
 
 CONN_HEALTH_CHECKS = True
@@ -179,6 +170,7 @@ SITE_URL = os.getenv("SITE_URL")
 
 CSRF_TRUSTED_ORIGINS = [
     "https://www.ai-sidejob-coach.net",
+    "https://ai-sidejob-coach.net",
 ]
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
