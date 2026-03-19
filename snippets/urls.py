@@ -3,7 +3,7 @@ from django.contrib.auth import views as auth_views
 
 from snippets.views.landing_views import landing, diagnosis_lp
 from snippets.views.dashboard_views import dashboard
-from snippets.views.ai_views import ai_chat, ai_roadmap, ai_report
+from snippets.views.ai_views import ai_chat, ai_report
 from snippets.views.auth_views import signup
 from snippets.views.diagnosis_views import type_diagnosis, diagnosis, history, roadmap_result
 from snippets.views.mission_views import mission
@@ -38,7 +38,6 @@ urlpatterns = [
     path("roadmap-result/", roadmap_result, name="roadmap_result"),
 
     path("ai-chat/", ai_chat, name="ai_chat"),
-    path("ai-roadmap/", ai_roadmap, name="ai_roadmap"),
     path("ai-roadmap-generator/", ai_roadmap_generator, name="ai_roadmap_generator"),
 
     path("mission/", mission, name="mission"),
