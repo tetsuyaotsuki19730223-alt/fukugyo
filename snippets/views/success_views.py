@@ -44,8 +44,8 @@ def success_stories(request):
 @login_required
 def success(request):
 
-    profile = request.user.profile
-    profile.is_premium = True
-    profile.save()
+    #profile = request.user.profile
+    #profile.is_premium = True
+    #profile.save()
 
     return render(request, "snippets/success.html")
