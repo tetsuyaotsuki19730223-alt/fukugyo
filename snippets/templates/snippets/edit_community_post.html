@@ -1,0 +1,38 @@
+{% extends "snippets/base.html" %}
+
+{% block content %}
+
+<div style="max-width: 800px; margin: 0 auto; padding: 24px;">
+
+  <h1 style="margin-bottom: 20px;">投稿を編集</h1>
+
+  <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
+    <form method="post">
+      {% csrf_token %}
+      <textarea
+        name="content"
+        rows="6"
+        style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 10px; font-size: 16px; box-sizing: border-box;"
+      >{{ post.content }}</textarea>
+
+      <div style="margin-top: 12px; display: flex; gap: 10px;">
+        <button
+          type="submit"
+          style="background: #2563eb; color: white; border: none; padding: 10px 18px; border-radius: 10px; cursor: pointer;"
+        >
+          保存する
+        </button>
+
+        <a
+          href="{% url 'community' %}"
+          style="display: inline-block; background: #6b7280; color: white; text-decoration: none; padding: 10px 18px; border-radius: 10px;"
+        >
+          戻る
+        </a>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+{% endblock %}

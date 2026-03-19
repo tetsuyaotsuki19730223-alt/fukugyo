@@ -1,10 +1,14 @@
-{% extends "base.html" %}
+{% extends "snippets/base.html" %}
+{% load humanize %}
 
 {% block content %}
 
 <div style="max-width: 800px; margin: 0 auto; padding: 24px;">
 
-  <h1 style="margin-bottom: 20px;">AI副業コミュニティ</h1>
+  <h1 style="margin-bottom: 8px;">AI副業コミュニティ</h1>
+  <p style="color: #6b7280; margin-bottom: 20px;">
+    投稿件数：{{ post_count }}件
+  </p>
 
   <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 24px;">
     <form method="post">
@@ -28,21 +32,46 @@
   </div>
 
   {% for post in posts %}
-    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 18px; margin-bottom: 16px;">
-      
+    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 18px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 12px; flex-wrap: wrap;">
         <div>
           <strong style="font-size: 16px;">{{ post.user.username }}</strong>
         </div>
 
         <div style="color: #6b7280; font-size: 14px;">
-          {{ post.created_at|date:"Y/m/d H:i" }}
+        {{ post.created_at|naturaltime }}
+        {% if post.updated_at > post.created_at %}
+            <span style="margin-left: 8px; color: #f59e0b;">編集済み</span>
+        {% endif %}
         </div>
       </div>
 
-      <div style="line-height: 1.8; font-size: 15px; color: #111827;">
+      <div style="line-height: 1.8; font-size: 15px; color: #111827; margin-bottom: 12px;">
         {{ post.content|linebreaksbr }}
       </div>
+
+      {% if request.user == post.user %}
+        <div style="display: flex; gap: 8px;">
+          <a
+            href="{% url 'edit_community_post' post.id %}"
+            style="display: inline-block; background: #f59e0b; color: white; text-decoration: none; padding: 8px 14px; border-radius: 8px;"
+          >
+            編集
+          </a>
+
+          <form method="post" action="{% url 'delete_community_post' post.id %}">
+            {% csrf_token %}
+            <button
+              type="submit"
+              onclick="return confirm('この投稿を削除しますか？');"
+              style="background: #ef4444; color: white; border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer;"
+            >
+              削除
+            </button>
+          </form>
+        </div>
+      {% endif %}
 
     </div>
   {% empty %}
