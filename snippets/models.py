@@ -15,6 +15,11 @@ class CommunityPost(models.Model):
 
     updated_at = models.DateTimeField(auto_now=True)
     
+    is_edited = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user.username}: {self.content[:20]}"
+    
 def generate_ref_code():
     return uuid.uuid4().hex[:10]
 

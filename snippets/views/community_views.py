@@ -32,8 +32,9 @@ def edit_community_post(request, post_id):
     if request.method == "POST":
         content = request.POST.get("content", "").strip()
 
-        if content:
+        if content and content != post.content:
             post.content = content
+            post.is_edited = True
             post.save()
 
         return redirect("community")
