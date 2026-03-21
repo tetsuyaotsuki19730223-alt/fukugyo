@@ -22,8 +22,11 @@ from snippets.views.referral_views import referral_page
 from snippets.views.ai_score_views import ai_sidejob_score
 from snippets.views.guide_views import sidejob_guide
 from snippets.views.blog_views import blog_ai_sidejob, generate_blog
-from snippets.views.history_views import ai_chat_history, ai_chat_history_detail
-
+from snippets.views.history_views import (
+    ai_chat_history,
+    ai_chat_history_detail,
+    delete_ai_chat_history,
+)
 urlpatterns = [
     path("", landing, name="landing"),
 
@@ -75,5 +78,5 @@ urlpatterns = [
     path("community/delete/<int:post_id>/", delete_community_post, name="delete_community_post"),
     path("ai-chat-history/", ai_chat_history, name="ai_chat_history"),
     path("ai-chat-history/<int:history_id>/", ai_chat_history_detail, name="ai_chat_history_detail"),
-
+    path("ai-chat-history/delete/<int:history_id>/", delete_ai_chat_history, name="delete_ai_chat_history"),
 ]

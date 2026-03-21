@@ -1,0 +1,20 @@
+{% extends "snippets/base.html" %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto; padding: 24px;">
+  <div style="background: #fff7ed; border: 1px solid #fdba74; padding: 20px; border-radius: 12px;">
+    <h1 style="margin-top: 0;">この履歴はプレミアムで閲覧できます</h1>
+    <p>無料プランでは最新3件まで表示されます。</p>
+
+    <a href="{% url 'pricing' %}"
+       style="display: inline-block; background: #f97316; color: white; text-decoration: none; padding: 10px 16px; border-radius: 8px; margin-right: 8px;">
+      プレミアムを見る
+    </a>
+
+    <a href="{% url 'ai_chat_history' %}"
+       style="display: inline-block; background: #6b7280; color: white; text-decoration: none; padding: 10px 16px; border-radius: 8px;">
+      履歴一覧へ戻る
+    </a>
+  </div>
+</div>
+{% endblock %}

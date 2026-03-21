@@ -2,23 +2,61 @@
 
 {% block content %}
 <div style="max-width: 800px; margin: 0 auto; padding: 24px;">
-  <h1 style="margin-bottom: 20px;">AI相談詳細</h1>
 
-  <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
-    <p style="color: #6b7280; font-size: 14px;">
-      {{ history.created_at|date:"Y/m/d H:i" }}
-    </p>
+  <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 20px;">
+    <div>
+      <h1 style="margin: 0 0 8px 0;">AI相談詳細</h1>
+      <p style="margin: 0; color: #6b7280; font-size: 14px;">
+        {{ history.created_at|date:"Y/m/d H:i" }}
+      </p>
+    </div>
 
-    <h3>相談内容</h3>
-    <p style="line-height: 1.8;">{{ history.question|linebreaksbr }}</p>
-
-    <h3 style="margin-top: 24px;">AIの回答</h3>
-    <p style="line-height: 1.8;">{{ history.answer|linebreaksbr }}</p>
+    <a href="{% url 'ai_chat_history' %}"
+       style="display: inline-block; background: #6b7280; color: white; text-decoration: none; padding: 10px 16px; border-radius: 10px;">
+      履歴一覧に戻る
+    </a>
   </div>
 
-  <a href="{% url 'ai_chat_history' %}"
-     style="display: inline-block; background: #6b7280; color: white; text-decoration: none; padding: 10px 16px; border-radius: 8px;">
-    履歴一覧に戻る
-  </a>
+  <div style="background: white; border: 1px solid #e5e7eb; border-radius: 14px; padding: 20px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+    <h2 style="margin-top: 0; margin-bottom: 14px; font-size: 20px;">相談内容</h2>
+    <div style="line-height: 1.8; font-size: 16px; color: #111827;">
+      {{ history.question|linebreaksbr }}
+    </div>
+  </div>
+
+  <div style="background: white; border: 1px solid #e5e7eb; border-radius: 14px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+    <h2 style="margin-top: 0; margin-bottom: 14px; font-size: 20px;">AIの回答</h2>
+    <div style="line-height: 1.8; font-size: 16px; color: #111827;">
+      {{ history.answer|linebreaksbr }}
+    </div>
+  </div>
+
+  <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+    <a href="{% url 'ai_chat' %}"
+        style="display: inline-block; background: #2563eb; color: white; text-decoration: none; padding: 10px 16px; border-radius: 10px;">
+        AIチャットに戻る
+    </a>
+
+    <a href="{% url 'ai_chat_history' %}"
+        style="display: inline-block; background: #e5e7eb; color: #111827; text-decoration: none; padding: 10px 16px; border-radius: 10px;">
+        履歴一覧へ
+    </a>
+
+    <form method="post" action="{% url 'delete_ai_chat_history' history.id %}" style="margin: 0;">
+        {% csrf_token %}
+        <button
+        type="submit"
+        onclick="return confirm('この相談履歴を削除しますか？');"
+        style="background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; padding: 10px 16px; border-radius: 10px; cursor: pointer; font-weight: 700;"
+        >
+        履歴を削除
+        </button>
+    </form>
+
+    <span style="font-size: 13px; color: #6b7280;">
+        削除すると元に戻せません
+    </span>
+    </div>
+
 </div>
 {% endblock %}

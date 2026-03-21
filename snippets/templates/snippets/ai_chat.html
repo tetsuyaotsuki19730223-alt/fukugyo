@@ -1,19 +1,44 @@
 {% extends "snippets/base.html" %}
+
 {% block content %}
 
 <div style="max-width: 800px; margin: 0 auto; padding: 24px;">
-  <h1 style="margin-bottom: 20px;">AI副業チャット</h1>
+
+  <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 20px;">
+    <div>
+      <h1 style="margin: 0 0 8px 0;">AI副業チャット</h1>
+      <p style="margin: 0; color: #6b7280;">
+        副業の悩みをAIに相談できます
+      </p>
+    </div>
+
+    <a
+      href="{% url 'ai_chat_history' %}"
+      style="display: inline-block; background: #6b7280; color: white; text-decoration: none; padding: 10px 16px; border-radius: 10px;"
+    >
+      相談履歴を見る
+    </a>
+  </div>
 
   <div style="background: #f8f9fa; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
     <p style="margin: 0 0 8px 0;">
       {% if is_premium %}
-        <strong>プレミアム会員</strong>：無制限で利用できます
+        <strong>プレミアム会員</strong>：AIチャット無制限・相談履歴も全件見られます
       {% else %}
-        <strong>無料会員</strong>：3回まで利用できます
+        <strong>無料会員</strong>：AIチャットは3回まで、相談履歴は最新3件まで表示されます
       {% endif %}
     </p>
     <p style="margin: 0;">現在の利用回数：{{ ai_count }}</p>
   </div>
+
+  {% if not is_premium %}
+    <div style="background: #fff7ed; border: 1px solid #fdba74; padding: 14px 16px; border-radius: 12px; margin-bottom: 20px;">
+      <p style="margin: 0; color: #9a3412; line-height: 1.7;">
+        無料プランでは、AIチャットは3回まで、相談履歴は最新3件まで表示されます。<br>
+        プレミアムでは、より深い相談と履歴の全件表示が可能です。
+      </p>
+    </div>
+  {% endif %}
 
   <form method="post" style="margin-bottom: 24px;">
     {% csrf_token %}
@@ -21,16 +46,23 @@
       name="message"
       rows="6"
       placeholder="副業の悩みや相談を書いてください"
-      style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; font-size: 16px;"
+      style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; font-size: 16px; box-sizing: border-box;"
     ></textarea>
 
-    <div style="margin-top: 12px;">
+    <div style="margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap;">
       <button
         type="submit"
         style="background: #2563eb; color: white; border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer;"
       >
         送信する
       </button>
+
+      <a
+        href="{% url 'ai_chat_history' %}"
+        style="display: inline-block; background: #e5e7eb; color: #111827; text-decoration: none; padding: 12px 16px; border-radius: 10px;"
+      >
+        履歴を確認
+      </a>
     </div>
   </form>
 
@@ -56,11 +88,7 @@
       </div>
     </div>
   {% endif %}
+
 </div>
-<div style="margin-bottom: 16px;">
-  <a href="{% url 'ai_chat_history' %}"
-     style="display: inline-block; background: #6b7280; color: white; text-decoration: none; padding: 8px 14px; border-radius: 8px;">
-    相談履歴を見る
-  </a>
-</div>
+
 {% endblock %}

@@ -2,27 +2,157 @@
 
 {% block content %}
 <div style="max-width: 800px; margin: 0 auto; padding: 24px;">
-  <h1 style="margin-bottom: 20px;">AI相談履歴</h1>
+
+  <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 20px;">
+    <div>
+      <h1 style="margin: 0 0 8px 0;">AI相談履歴</h1>
+      <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+        {% if is_premium %}
+          <span style="display: inline-block; background: #dbeafe; color: #1d4ed8; font-size: 13px; font-weight: 700; padding: 6px 10px; border-radius: 999px;">
+            プレミアム
+          </span>
+          <span style="color: #6b7280; font-size: 14px;">
+            すべての履歴を表示中
+          </span>
+        {% else %}
+          <span style="display: inline-block; background: #fef3c7; color: #92400e; font-size: 13px; font-weight: 700; padding: 6px 10px; border-radius: 999px;">
+            無料プラン
+          </span>
+          <span style="color: #6b7280; font-size: 14px;">
+            最新3件まで表示
+          </span>
+        {% endif %}
+      </div>
+    </div>
+
+    <a href="{% url 'ai_chat' %}"
+       style="display: inline-block; background: #2563eb; color: white; text-decoration: none; padding: 10px 16px; border-radius: 10px;">
+      AIチャットに戻る
+    </a>
+  </div>
+
+  <form method="get" style="background: #f8f9fa; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <input
+        type="text"
+        name="q"
+        value="{{ q }}"
+        placeholder="相談内容やAIの回答を検索"
+        style="flex: 1; min-width: 220px; padding: 12px; border: 1px solid #d1d5db; border-radius: 10px; font-size: 15px; box-sizing: border-box;"
+      >
+      <button
+        type="submit"
+        style="background: #2563eb; color: white; border: none; padding: 12px 18px; border-radius: 10px; cursor: pointer;"
+      >
+        検索
+      </button>
+      {% if q %}
+        <a href="{% url 'ai_chat_history' %}"
+           style="display: inline-block; background: #e5e7eb; color: #111827; text-decoration: none; padding: 12px 16px; border-radius: 10px;">
+          クリア
+        </a>
+      {% endif %}
+    </div>
+  </form>
+
+  {% if is_limited %}
+    <div style="background: linear-gradient(135deg, #fff7ed, #fffaf5); border: 1px solid #fdba74; padding: 18px; border-radius: 14px; margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+        <div>
+          <p style="margin: 0 0 6px 0; font-weight: 700; color: #9a3412;">
+            無料プランでは相談履歴は最新3件まで表示されます
+          </p>
+          <p style="margin: 0; color: #9a3412; line-height: 1.7; font-size: 14px;">
+            プレミアムにすると、過去の相談履歴もすべて見返せます。
+          </p>
+        </div>
+
+        <a href="{% url 'pricing' %}"
+           style="display: inline-block; background: #f97316; color: white; text-decoration: none; padding: 10px 16px; border-radius: 10px; white-space: nowrap;">
+          プレミアムを見る
+        </a>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if q %}
+    <p style="color: #6b7280; margin-bottom: 16px;">
+      「{{ q }}」の検索結果
+    </p>
+  {% endif %}
 
   {% for history in histories %}
-    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 18px; margin-bottom: 16px;">
-      <p style="margin: 0 0 8px 0; color: #6b7280; font-size: 14px;">
-        {{ history.created_at|date:"Y/m/d H:i" }}
-      </p>
+  <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 18px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+  <p style="margin: 0 0 8px 0; color: #6b7280; font-size: 14px;">
+    {{ history.created_at|date:"Y/m/d H:i" }}
+  </p>
 
-      <p style="margin: 0 0 12px 0;">
-        <strong>相談:</strong> {{ history.question|truncatechars:80 }}
-      </p>
+  <p style="margin: 0 0 10px 0; line-height: 1.7;">
+    <strong>相談:</strong> {{ history.highlighted_question|safe }}
+  </p>
 
-      <a href="{% url 'ai_chat_history_detail' history.id %}"
-         style="display: inline-block; background: #2563eb; color: white; text-decoration: none; padding: 8px 14px; border-radius: 8px;">
-        詳細を見る
-      </a>
-    </div>
+  <div style="background: #f9fafb; border-radius: 10px; padding: 12px; margin-bottom: 12px;">
+    <p style="margin: 0 0 6px 0; font-size: 13px; color: #6b7280; font-weight: 700;">
+      AIの回答（一部）
+    </p>
+    <p style="margin: 0; line-height: 1.7; color: #374151; font-size: 14px;">
+      {{ history.answer|truncatechars:120 }}
+    </p>
+  </div>
+
+  <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+    <a href="{% url 'ai_chat_history_detail' history.id %}"
+       style="display: inline-block; background: #2563eb; color: white; text-decoration: none; padding: 8px 14px; border-radius: 8px;">
+      詳細を見る
+    </a>
+
+    <form method="post" action="{% url 'delete_ai_chat_history' history.id %}" style="margin: 0;">
+      {% csrf_token %}
+      <button
+        type="submit"
+        onclick="return confirm('この相談履歴を削除しますか？');"
+        style="background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: 700;"
+      >
+        履歴を削除
+      </button>
+    </form>
+
+    <span style="font-size: 13px; color: #6b7280;">
+      削除すると元に戻せません
+    </span>
+  </div>
+</div>
   {% empty %}
     <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
-      <p style="margin: 0; color: #6b7280;">まだ相談履歴はありません。</p>
+      {% if q %}
+        <p style="margin: 0; color: #6b7280;">該当する相談履歴が見つかりませんでした。</p>
+      {% else %}
+        <p style="margin: 0; color: #6b7280;">まだ相談履歴はありません。</p>
+      {% endif %}
     </div>
   {% endfor %}
+{% if is_premium and page_obj %}
+  <div style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 24px;">
+
+    {% if page_obj.has_previous %}
+      <a href="?page={{ page_obj.previous_page_number }}{% if q %}&q={{ q }}{% endif %}"
+         style="display: inline-block; background: #e5e7eb; color: #111827; text-decoration: none; padding: 10px 16px; border-radius: 10px;">
+        前へ
+      </a>
+    {% endif %}
+
+    <span style="color: #6b7280; font-size: 14px;">
+      {{ page_obj.number }} / {{ page_obj.paginator.num_pages }} ページ
+    </span>
+
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}{% if q %}&q={{ q }}{% endif %}"
+         style="display: inline-block; background: #2563eb; color: white; text-decoration: none; padding: 10px 16px; border-radius: 10px;">
+        次へ
+      </a>
+    {% endif %}
+
+  </div>
+{% endif %}
 </div>
 {% endblock %}
