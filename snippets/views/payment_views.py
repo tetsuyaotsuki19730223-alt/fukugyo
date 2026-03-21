@@ -14,8 +14,4 @@ def checkout(request):
 
 @login_required
 def success(request):
-    profile, _ = Profile.objects.get_or_create(user=request.user)
-    profile.is_premium = True
-    profile.save()
-
     return render(request, "snippets/success.html")

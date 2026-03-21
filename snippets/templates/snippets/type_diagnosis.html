@@ -2,21 +2,201 @@
 
 {% block content %}
 
-<h1>副業タイプ診断</h1>
+<style>
+  .diagnosis-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 20px;
+  }
 
-{% if error %}
-    <p style="color:red;">{{ error }}</p>
-{% endif %}
+  .diagnosis-header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
 
-<form method="post">
+  .diagnosis-title {
+    font-size: 32px;
+    margin-bottom: 12px;
+    color: #111827;
+  }
+
+  .diagnosis-subtitle {
+    font-size: 16px;
+    color: #6b7280;
+    line-height: 1.8;
+    margin: 0;
+  }
+
+  .diagnosis-error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    padding: 14px 16px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+  }
+
+  .diagnosis-options {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .diagnosis-option input[type="radio"] {
+    display: none;
+  }
+
+  .diagnosis-card {
+    display: block;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 18px;
+    cursor: pointer;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+  }
+
+  .diagnosis-card:hover {
+    border-color: #93c5fd;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.08);
+    transform: translateY(-1px);
+  }
+
+  .diagnosis-option input[type="radio"]:checked + .diagnosis-card {
+    border: 2px solid #2563eb;
+    background: #eff6ff;
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.16);
+  }
+
+  .diagnosis-card-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .diagnosis-icon {
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  .diagnosis-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  .diagnosis-desc {
+    font-size: 15px;
+    color: #374151;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .diagnosis-submit {
+    text-align: center;
+  }
+
+  .diagnosis-button {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .diagnosis-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px rgba(37, 99, 235, 0.3);
+  }
+</style>
+
+<div class="diagnosis-wrap">
+  <div class="diagnosis-header">
+    <h1 class="diagnosis-title">副業タイプ診断</h1>
+    <p class="diagnosis-subtitle">
+      あなたに合った副業スタイルを診断します。<br>
+      いちばん近いものを1つ選んでください。
+    </p>
+  </div>
+
+  {% if error %}
+    <div class="diagnosis-error">
+      {{ error }}
+    </div>
+  {% endif %}
+
+  <form method="post">
     {% csrf_token %}
 
-    <p><label><input type="radio" name="answer" value="seller"> 商品販売や営業が得意</label></p>
-    <p><label><input type="radio" name="answer" value="build"> 作ること・仕組み化が得意</label></p>
-    <p><label><input type="radio" name="answer" value="influence"> 発信や影響力を伸ばしたい</label></p>
-    <p><label><input type="radio" name="answer" value="stable"> 安定してコツコツ進めたい</label></p>
+    <div class="diagnosis-options">
 
-    <button type="submit">診断する</button>
-</form>
+      <label class="diagnosis-option">
+        <input type="radio" name="answer" value="seller">
+        <div class="diagnosis-card">
+          <div class="diagnosis-card-head">
+            <span class="diagnosis-icon">💼</span>
+            <span class="diagnosis-name">SELLER</span>
+          </div>
+          <p class="diagnosis-desc">
+            商品販売や営業が得意。価値を伝えて、相手に提案する力を活かしたいタイプ。
+          </p>
+        </div>
+      </label>
+
+      <label class="diagnosis-option">
+        <input type="radio" name="answer" value="build">
+        <div class="diagnosis-card">
+          <div class="diagnosis-card-head">
+            <span class="diagnosis-icon">🛠</span>
+            <span class="diagnosis-name">BUILD</span>
+          </div>
+          <p class="diagnosis-desc">
+            作ること・仕組み化が得意。スキルや制作力で価値を積み上げたいタイプ。
+          </p>
+        </div>
+      </label>
+
+      <label class="diagnosis-option">
+        <input type="radio" name="answer" value="influence">
+        <div class="diagnosis-card">
+          <div class="diagnosis-card-head">
+            <span class="diagnosis-icon">📣</span>
+            <span class="diagnosis-name">INFLUENCE</span>
+          </div>
+          <p class="diagnosis-desc">
+            発信や影響力を伸ばしたい。共感や注目を集めながら広げていくタイプ。
+          </p>
+        </div>
+      </label>
+
+      <label class="diagnosis-option">
+        <input type="radio" name="answer" value="stable">
+        <div class="diagnosis-card">
+          <div class="diagnosis-card-head">
+            <span class="diagnosis-icon">🌱</span>
+            <span class="diagnosis-name">STABLE</span>
+          </div>
+          <p class="diagnosis-desc">
+            安定してコツコツ進めたい。継続力を活かして着実に積み上げるタイプ。
+          </p>
+        </div>
+      </label>
+
+    </div>
+
+    <div class="diagnosis-submit">
+      <button type="submit" class="diagnosis-button">
+        診断する
+      </button>
+    </div>
+  </form>
+</div>
 
 {% endblock %}

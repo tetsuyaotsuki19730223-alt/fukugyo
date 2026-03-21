@@ -1,89 +1,349 @@
-{% extends "base.html" %}
+{% extends "snippets/base.html" %}
 
 {% block content %}
 
-<h1>
-AIがあなたに合う副業を診断
-</h1>
+<style>
+  .lp-wrap {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px 16px 40px;
+  }
 
-<p>
-質問に答えるだけで  
-AIが副業ロードマップを作ります
-</p>
+  .lp-section {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
 
-<a href="/type-diagnosis/">
-<button style="font-size:22px;padding:20px 40px;">
-無料AI副業診断
-</button>
-</a>
+  .lp-hero {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #eff6ff, #f8fafc);
+    border-radius: 20px;
+    margin-bottom: 24px;
+  }
 
-<h2>AI副業診断</h2>
+  .lp-title {
+    font-size: 34px;
+    line-height: 1.4;
+    margin-bottom: 14px;
+    color: #111827;
+  }
 
-<p>
-3つの質問に答えるだけで  
-あなたに合う副業が分かります
-</p>
+  .lp-subtitle {
+    font-size: 17px;
+    line-height: 1.8;
+    color: #4b5563;
+    margin-bottom: 24px;
+  }
 
-<a href="/type-diagnosis/">
-AI診断を始める →
-</a>
+  .lp-button-primary {
+    display: inline-block;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    text-decoration: none;
+    border: none;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 16px 28px;
+    border-radius: 14px;
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.25);
+  }
 
-<h2>人気AI副業ランキング</h2>
+  .lp-button-secondary {
+    display: inline-block;
+    background: white;
+    color: #111827;
+    text-decoration: none;
+    border: none;
+    font-size: 17px;
+    font-weight: 700;
+    padding: 14px 24px;
+    border-radius: 12px;
+  }
 
-1位 AIブログ<br>
-2位 AIライター<br>  
-3位 SNS運用<br>  
-4位 AI動画編集<br>  
-5位 AI画像販売<br>
+  .lp-h2 {
+    font-size: 26px;
+    margin-bottom: 16px;
+    color: #111827;
+  }
 
-<h2>副業成功事例</h2>
+  .lp-text {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #4b5563;
+  }
 
-会社員 → AIブログ 月8万円<br>
-<br>
-主婦 → SNS運用 月5万円<br>
-<br>
-学生 → AIライター 月3万円<br>
-<br>
+  .lp-link {
+    color: #2563eb;
+    font-weight: 700;
+    text-decoration: none;
+  }
 
-<h2>AI副業コーチの機能</h2>
+  .lp-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
 
-AI副業診断<br>  
-AIロードマップ<br>  
-AIチャット<br>  
-副業コミュニティ<br>
-<br>
+  .lp-grid-auto {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+  }
 
-<h2>料金</h2>
+  .lp-card-soft {
+    padding: 16px;
+    border-radius: 12px;
+    background: #f9fafb;
+  }
 
-無料<br>  
-AI診断<br>
-<br>
-プレミアム<br>  
-月2980円<br>
-<br>
-<h2>プレミアムプラン</h2>
+  .lp-price-card {
+    background: linear-gradient(135deg, #eff6ff, #ffffff);
+    border: 2px solid #2563eb;
+    border-radius: 18px;
+    padding: 24px;
+  }
 
-<p>
-AI副業ロードマップ完全版
-</p>
+  .lp-dark-cta {
+    text-align: center;
+    padding: 32px 20px;
+    background: #111827;
+    border-radius: 20px;
+  }
 
-<a href="/pricing/">
-<button>
-プレミアム登録（月2980円）
-</button>
-</a>
+  .lp-dark-title {
+    font-size: 28px;
+    margin-bottom: 14px;
+    color: white;
+  }
 
-<h2>よくある質問</h2>
+  .lp-dark-text {
+    font-size: 16px;
+    color: #d1d5db;
+    line-height: 1.8;
+    margin-bottom: 22px;
+  }
 
-Q AI副業は初心者でもできますか？<br>
-<br>
-A はい。AI副業コーチが<br>
-ロードマップを作ります。<br>
-<br>
+  @media (max-width: 768px) {
+    .lp-wrap {
+      padding: 16px 12px 32px;
+    }
 
-<a href="/type-diagnosis/">
-AI診断を始める →
-</a>
+    .lp-section {
+      padding: 20px 16px;
+      border-radius: 16px;
+    }
 
+    .lp-hero {
+      padding: 32px 16px;
+      border-radius: 18px;
+    }
+
+    .lp-title {
+      font-size: 28px;
+    }
+
+    .lp-subtitle {
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .lp-h2 {
+      font-size: 22px;
+    }
+
+    .lp-text {
+      font-size: 15px;
+    }
+
+    .lp-grid-2 {
+      grid-template-columns: 1fr;
+    }
+
+    .lp-button-primary,
+    .lp-button-secondary {
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .lp-dark-title {
+      font-size: 24px;
+    }
+  }
+</style>
+
+<div class="lp-wrap">
+
+  <section class="lp-hero">
+    <h1 class="lp-title">
+      副業で何を始めればいいか、AIが診断します
+    </h1>
+
+    <p class="lp-subtitle">
+      質問に答えるだけで、<br>
+      あなたに合う副業タイプと最初の一歩が分かります。
+    </p>
+
+    <a href="/type-diagnosis/" class="lp-button-primary">
+      無料で副業タイプを診断する
+    </a>
+
+    <p style="margin-top: 12px; font-size: 14px; color: #6b7280;">
+      登録不要・30秒で完了・無料で試せます
+    </p>
+  </section>
+
+  <section class="lp-section">
+    <h2 class="lp-h2">AI副業診断とは？</h2>
+    <p class="lp-text" style="margin-bottom: 16px;">
+      たった1つの質問に答えるだけで、あなたに向いている副業タイプが分かります。<br>
+      診断後は、そのままAIレポートやAIチャットで次の一歩まで確認できます。
+    </p>
+    <a href="/type-diagnosis/" class="lp-link">まずは無料で診断してみる →</a>
+  </section>
+
+  <section class="lp-section">
+    <h2 class="lp-h2">人気AI副業ランキング</h2>
+
+    <div style="display: grid; gap: 12px;">
+      <div class="lp-card-soft">🥇 1位 AIブログ</div>
+      <div class="lp-card-soft">🥈 2位 AIライター</div>
+      <div class="lp-card-soft">🥉 3位 SNS運用</div>
+      <div class="lp-card-soft">4位 AI動画編集</div>
+      <div class="lp-card-soft">5位 AI画像販売</div>
+    </div>
+  </section>
+
+  <section class="lp-section">
+    <h2 class="lp-h2">こんな人におすすめ</h2>
+
+    <div class="lp-grid-auto">
+      <div class="lp-card-soft">副業を始めたいけど、何を選べばいいか分からない</div>
+      <div class="lp-card-soft">自分に合う副業を最短で知りたい</div>
+      <div class="lp-card-soft">AIを使って効率よく副業を進めたい</div>
+      <div class="lp-card-soft">一人だと続かないのでサポートがほしい</div>
+    </div>
+  </section>
+
+  <section class="lp-section">
+    <h2 class="lp-h2">副業成功事例</h2>
+
+    <div style="display: grid; gap: 14px;">
+      <div class="lp-card-soft"><strong>会社員</strong> → AIブログで <strong>月8万円</strong></div>
+      <div class="lp-card-soft"><strong>主婦</strong> → SNS運用で <strong>月5万円</strong></div>
+      <div class="lp-card-soft"><strong>学生</strong> → AIライターで <strong>月3万円</strong></div>
+    </div>
+  </section>
+
+  <section class="lp-section">
+    <h2 class="lp-h2">AI副業コーチでできること</h2>
+
+    <div class="lp-grid-auto">
+      <div class="lp-card-soft">AI副業診断</div>
+      <div class="lp-card-soft">AIロードマップ作成</div>
+      <div class="lp-card-soft">AIチャット相談</div>
+      <div class="lp-card-soft">副業コミュニティ参加</div>
+    </div>
+  </section>
+
+  <section style="margin-bottom: 20px;">
+  <h2 class="lp-h2">料金</h2>
+
+  <div style="overflow-x: auto; margin-bottom: 20px;">
+    <table style="width: 100%; min-width: 640px; border-collapse: collapse; background: white; border: 1px solid #e5e7eb; border-radius: 18px; overflow: hidden;">
+      <thead>
+        <tr style="background: #f8fafc;">
+          <th style="padding: 16px; text-align: left; border-bottom: 1px solid #e5e7eb; font-size: 16px;">機能</th>
+          <th style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb; font-size: 16px;">無料</th>
+          <th style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb; font-size: 16px; color: #1d4ed8;">プレミアム</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding: 16px; border-bottom: 1px solid #e5e7eb;">副業タイプ診断</td>
+          <td style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb;">○</td>
+          <td style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb;">○</td>
+        </tr>
+        <tr style="background: #fcfcfd;">
+          <td style="padding: 16px; border-bottom: 1px solid #e5e7eb;">AIレポート</td>
+          <td style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb;">○</td>
+          <td style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb;">○</td>
+        </tr>
+        <tr>
+          <td style="padding: 16px; border-bottom: 1px solid #e5e7eb;">AIチャット相談</td>
+          <td style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb;">3回まで</td>
+          <td style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb;">無制限</td>
+        </tr>
+        <tr style="background: #fcfcfd;">
+          <td style="padding: 16px; border-bottom: 1px solid #e5e7eb;">AI副業ロードマップ完全版</td>
+          <td style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb;">―</td>
+          <td style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb;">○</td>
+        </tr>
+        <tr>
+          <td style="padding: 16px; border-bottom: 1px solid #e5e7eb;">AI相談履歴</td>
+          <td style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb;">○</td>
+          <td style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb;">○</td>
+        </tr>
+        <tr style="background: #fcfcfd;">
+          <td style="padding: 16px;">副業コミュニティ</td>
+          <td style="padding: 16px; text-align: center;">○</td>
+          <td style="padding: 16px; text-align: center;">○</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="lp-grid-2">
+    <div class="lp-section" style="margin-bottom: 0;">
+      <h3 style="font-size: 22px; margin-bottom: 12px;">無料プラン</h3>
+      <p class="lp-text">
+        まずはAI診断やAIレポートを試して、<br>
+        自分に合う副業の方向性を確認したい人向けです。
+      </p>
+    </div>
+
+    <div class="lp-price-card">
+      <h3 style="font-size: 22px; margin-bottom: 8px; color: #1d4ed8;">プレミアム</h3>
+      <p style="font-size: 30px; font-weight: 700; margin: 0 0 12px 0; color: #111827;">月2980円</p>
+      <p class="lp-text" style="margin-bottom: 18px;">
+        AIチャットを無制限で使いながら、<br>
+        より深いAI相談とロードマップ完全版を活用したい人向けです。
+      </p>
+
+      <a href="/pricing/" class="lp-button-primary" style="font-size: 16px; padding: 14px 22px;">
+        プレミアム登録（月2980円）
+      </a>
+    </div>
+  </div>
+</section>
+
+  <section class="lp-section">
+    <h2 class="lp-h2">よくある質問</h2>
+
+    <div class="lp-card-soft">
+      <p style="font-weight: 700; margin-bottom: 8px;">Q. AI副業は初心者でもできますか？</p>
+      <p class="lp-text" style="margin: 0;">
+        はい。AI副業コーチが、あなたに合う副業タイプや進め方を分かりやすく提案します。<br>
+        最初の一歩が分からない人でも始めやすい設計です。
+      </p>
+    </div>
+  </section>
+
+  <section class="lp-dark-cta">
+    <h2 class="lp-dark-title">まずは無料で、自分に合う副業を見つけましょう</h2>
+    <p class="lp-dark-text">
+      今のあなたに合う副業の方向性を、AIがすぐに提案します。
+    </p>
+
+    <a href="/type-diagnosis/" class="lp-button-secondary">
+      AI診断を始める →
+    </a>
+  </section>
+
+</div>
 
 {% endblock %}
