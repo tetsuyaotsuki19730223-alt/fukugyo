@@ -1,0 +1,28 @@
+{% extends "snippets/base.html" %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto; padding: 24px;">
+  <h1 style="margin-bottom: 20px;">AI相談履歴</h1>
+
+  {% for history in histories %}
+    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 18px; margin-bottom: 16px;">
+      <p style="margin: 0 0 8px 0; color: #6b7280; font-size: 14px;">
+        {{ history.created_at|date:"Y/m/d H:i" }}
+      </p>
+
+      <p style="margin: 0 0 12px 0;">
+        <strong>相談:</strong> {{ history.question|truncatechars:80 }}
+      </p>
+
+      <a href="{% url 'ai_chat_history_detail' history.id %}"
+         style="display: inline-block; background: #2563eb; color: white; text-decoration: none; padding: 8px 14px; border-radius: 8px;">
+        詳細を見る
+      </a>
+    </div>
+  {% empty %}
+    <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
+      <p style="margin: 0; color: #6b7280;">まだ相談履歴はありません。</p>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

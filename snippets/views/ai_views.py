@@ -4,8 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from openai import OpenAI
 
-from snippets.models import Profile
-
+from snippets.models import Profile, AIChatHistory
 
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
@@ -146,6 +145,12 @@ def ai_chat(request):
                     else:
                         reply = build_free_chat_reply(user_message)
 
+                AIChatHistory.objects.create(
+                    user=request.user,
+                    question=user_message,
+                    answer=reply
+                )
+
                 profile.ai_count += 1
                 profile.save()
 
@@ -155,7 +160,6 @@ def ai_chat(request):
         "ai_count": profile.ai_count,
         "is_premium": profile.is_premium,
     })
-
 
 @login_required
 def ai_report(request):

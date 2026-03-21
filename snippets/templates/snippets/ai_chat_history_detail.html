@@ -1,0 +1,24 @@
+{% extends "snippets/base.html" %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto; padding: 24px;">
+  <h1 style="margin-bottom: 20px;">AI相談詳細</h1>
+
+  <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+    <p style="color: #6b7280; font-size: 14px;">
+      {{ history.created_at|date:"Y/m/d H:i" }}
+    </p>
+
+    <h3>相談内容</h3>
+    <p style="line-height: 1.8;">{{ history.question|linebreaksbr }}</p>
+
+    <h3 style="margin-top: 24px;">AIの回答</h3>
+    <p style="line-height: 1.8;">{{ history.answer|linebreaksbr }}</p>
+  </div>
+
+  <a href="{% url 'ai_chat_history' %}"
+     style="display: inline-block; background: #6b7280; color: white; text-decoration: none; padding: 10px 16px; border-radius: 8px;">
+    履歴一覧に戻る
+  </a>
+</div>
+{% endblock %}
