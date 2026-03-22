@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from snippets.models import Profile
 
 
 def diagnosis(request):
@@ -18,77 +19,50 @@ def result(request):
     )
 
 
+
 def type_diagnosis(request):
     if request.method == "POST":
-        answer = request.POST.get("answer", "").strip()
-
-        profile, _ = Profile.objects.get_or_create(user=request.user)
-        profile.sidejob_type = answer
-        profile.save()
+        answer = request.POST.get("answer")
 
         if not answer:
             return render(request, "snippets/type_diagnosis.html", {
-                "error": "選択してください"
+                "error": "選択してください。"
             })
 
-        type_map = {
+        if request.user.is_authenticated:
+            profile, _ = Profile.objects.get_or_create(user=request.user)
+            profile.sidejob_type = answer
+            profile.save()
+
+        results = {
             "seller": {
-                "type": "Seller型",
-                "description": "営業・販売・提案で強みを発揮しやすいタイプです。",
-                "jobs": [
-                    "営業代行",
-                    "物販",
-                    "セールスライター",
-                ],
-                "first_action": "まずは売れる商品・サービスのリサーチから始めるのがおすすめです。"
+                "type": "SELLER",
+                "description": "販売・提案・価値訴求が得意なタイプです。",
+                "jobs": ["コンテンツ販売", "SNS運用代行", "オンライン営業"],
+                "first_action": "誰に何を売るかを1文で書いてみましょう。",
             },
             "build": {
-                "type": "Build型",
-                "description": "作ること・仕組み化・積み上げで伸びやすいタイプです。",
-                "jobs": [
-                    "AIブログ",
-                    "Web制作",
-                    "アプリ開発",
-                ],
-                "first_action": "まずは小さく1つ作って公開するのがおすすめです。"
+                "type": "BUILD",
+                "description": "作る力・積み上げる力を活かしやすいタイプです。",
+                "jobs": ["Web制作", "アプリ開発", "テンプレート販売"],
+                "first_action": "作れそうなものを1つ決めてみましょう。",
             },
             "influence": {
-                "type": "Influence型",
-                "description": "発信・影響力・コンテンツ販売で伸びやすいタイプです。",
-                "jobs": [
-                    "SNS発信",
-                    "note販売",
-                    "コンテンツ販売",
-                ],
-                "first_action": "まずは発信テーマを1つ決めるのがおすすめです。"
+                "type": "INFLUENCE",
+                "description": "発信力・共感力・影響力を活かしやすいタイプです。",
+                "jobs": ["SNS発信", "コミュニティ運営", "コンテンツ販売"],
+                "first_action": "発信テーマを1つ決めてみましょう。",
             },
             "stable": {
-                "type": "Stable型",
-                "description": "安定的にコツコツ継続して成果を出しやすいタイプです。",
-                "jobs": [
-                    "データ入力",
-                    "事務代行",
-                    "継続案件",
-                ],
-                "first_action": "まずは継続できる案件を1つ選ぶのがおすすめです。"
+                "type": "STABLE",
+                "description": "堅実に継続しながら積み上げるのが得意なタイプです。",
+                "jobs": ["事務代行", "データ入力", "ブログ運営"],
+                "first_action": "10分でできる作業を1つ決めてみましょう。",
             },
         }
 
-        result = type_map.get(answer, {
-            "type": "Stable型",
-            "description": "安定的にコツコツ進める副業と相性が良いタイプです。",
-            "jobs": [
-                "データ入力",
-                "事務代行",
-                "継続案件",
-            ],
-            "first_action": "まずは継続できる案件を1つ選ぶのがおすすめです。"
-        })
-
-        return render(request, "snippets/type_result.html", {
-            "result": result,
-            "answer": answer,
-        })
+        result = results.get(answer)
+        return render(request, "snippets/type_result.html", {"result": result})
 
     return render(request, "snippets/type_diagnosis.html")
 
