@@ -2,28 +2,299 @@
 
 {% block content %}
 
-<h1>AI副業コーチ</h1>
+<style>
+  .dashboard-wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px;
+  }
 
-<div style="background:#f5f5f5;padding:20px;border-radius:10px;margin-bottom:20px;">
-    <h2>📊 あなたのステータス</h2>
+  .dashboard-subtext {
+    margin: 0;
+    color: #6b7280;
+    line-height: 1.7;
+  }
 
-    <p>🔥 連続ログイン: {{ streak }}日</p>
-    <p>🏆 レベル: {{ level }}</p>
-    <p>⭐ XP: {{ xp }}</p>
+  .dashboard-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    padding: 24px;
+    border-radius: 16px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  }
 
-    <div style="background:#ddd;height:20px;border-radius:10px;">
-        <div style="width:{{ progress }}%;background:orange;height:20px;border-radius:10px;"></div>
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .status-item {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 16px;
+  }
+
+  .status-label {
+    margin: 0 0 6px 0;
+    color: #6b7280;
+    font-size: 14px;
+  }
+
+  .status-value {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  .mission-card {
+    background: linear-gradient(135deg, #eff6ff, #f8fafc);
+    border: 1px solid #bfdbfe;
+    padding: 24px;
+    border-radius: 16px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 10px rgba(37,99,235,0.06);
+  }
+
+  .mission-preview {
+    background: white;
+    border: 1px solid #dbeafe;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 16px;
+  }
+
+  .primary-button {
+    display: inline-block;
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+    padding: 13px 22px;
+    border-radius: 12px;
+    font-weight: 700;
+    box-shadow: 0 8px 20px rgba(37,99,235,0.2);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  }
+
+  .primary-button:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(37,99,235,0.28);
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  .feature-link {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .feature-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+    border-color: #bfdbfe;
+  }
+
+  .feature-title {
+    margin-top: 0;
+    margin-bottom: 8px;
+    color: #111827;
+  }
+
+  .feature-text {
+    margin: 0;
+    color: #6b7280;
+    line-height: 1.7;
+  }
+
+  .today-message-card {
+    background: linear-gradient(135deg, #fefce8, #fff7ed);
+    border: 1px solid #fde68a;
+    border-radius: 16px;
+    padding: 18px 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 10px rgba(245,158,11,0.08);
+  }
+
+  @media (max-width: 768px) {
+    .dashboard-wrap {
+      padding: 16px 12px 28px;
+    }
+
+    .dashboard-card,
+    .mission-card,
+    .today-message-card {
+      padding: 20px 16px;
+      border-radius: 14px;
+    }
+
+    .primary-button {
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+    }
+  }
+</style>
+
+<div class="dashboard-wrap">
+
+    <div style="margin-bottom: 24px;">
+        <h1 style="margin-bottom: 8px;">AI副業コーチ</h1>
+        <p class="dashboard-subtext">
+            今日の進捗を確認して、次の一歩を進めましょう。
+        </p>
     </div>
 
-    <p>次のレベルまであと {{ next_level_xp }} XP</p>
+    <div class="today-message-card">
+        <p style="margin: 0 0 6px 0; font-size: 13px; color: #92400e; font-weight: 700;">
+            ☀️ 今日の一言
+        </p>
+        <p style="margin: 0; color: #78350f; line-height: 1.8; font-size: 16px; font-weight: 600;">
+            {{ today_message }}
+        </p>
+    </div>
 
-    {% if is_premium %}
-        <p style="color:gold;">👑 プレミアム会員</p>
-    {% else %}
-        <p style="color:gray;">無料プラン</p>
-    {% endif %}
+    <div class="dashboard-card">
+        <h2 style="margin-top: 0; margin-bottom: 18px;">📊 あなたのステータス</h2>
+
+        <div class="status-grid">
+            <div class="status-item">
+                <p class="status-label">連続ログイン</p>
+                <p class="status-value">🔥 {{ streak }}日</p>
+            </div>
+
+            <div class="status-item">
+                <p class="status-label">レベル</p>
+                <p class="status-value">🏆 {{ level }}</p>
+            </div>
+
+            <div class="status-item">
+                <p class="status-label">XP</p>
+                <p class="status-value">⭐ {{ xp }}</p>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+            <p style="margin: 0 0 8px 0; font-weight: 700;">レベル進捗</p>
+            <div style="background:#e5e7eb; height:20px; border-radius:999px; overflow:hidden;">
+                <div style="width:{{ progress }}%; background: linear-gradient(90deg, #f59e0b, #f97316); height:20px; border-radius:999px;"></div>
+            </div>
+        </div>
+
+        <p style="margin: 0 0 12px 0; color: #374151;">次のレベルまであと {{ next_level_xp }} XP</p>
+
+        {% if is_premium %}
+            <div style="display: inline-block; background: #fef3c7; color: #92400e; padding: 8px 12px; border-radius: 999px; font-weight: 700;">
+                👑 プレミアム会員
+            </div>
+        {% else %}
+            <div style="display: inline-block; background: #f3f4f6; color: #4b5563; padding: 8px 12px; border-radius: 999px; font-weight: 700;">
+                無料プラン
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="mission-card">
+        <h2 style="margin-top: 0; margin-bottom: 10px;">🎯 今日のタイプ別ミッション</h2>
+
+        {% if today_user_mission and today_user_mission.completed %}
+            <p style="margin: 0 0 14px 0; color: #374151; line-height: 1.8;">
+                今日のミッションは達成済みです。<br>
+                次はAIチャットで、次の一歩を整理してみましょう。
+            </p>
+        {% else %}
+            <p style="margin: 0 0 14px 0; color: #374151; line-height: 1.8;">
+                あなたのタイプに合わせた「今日やるべき1アクション」を確認できます。<br>
+                ミッションを達成してXPを獲得し、少しずつ前に進みましょう。
+            </p>
+        {% endif %}
+
+        {% if today_mission %}
+            <div class="mission-preview">
+                <p style="margin: 0 0 6px 0; font-size: 13px; color: #6b7280; font-weight: 700;">
+                    今日のミッション
+                </p>
+                <p style="margin: 0; font-size: 16px; font-weight: 700; color: #111827;">
+                    {{ today_mission.title }}
+                </p>
+                <p style="margin: 6px 0 0 0; font-size: 14px; color: #2563eb; font-weight: 700;">
+                    クリアで +{{ today_mission.xp }}XP
+                </p>
+
+                {% if today_user_mission and today_user_mission.completed %}
+                    <p style="margin: 10px 0 0 0; font-size: 14px; color: #059669; font-weight: 700;">
+                        ✅ 今日のミッションは達成済みです
+                    </p>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="mission-preview" style="border: 1px solid #e5e7eb;">
+                <p style="margin: 0; color: #6b7280;">
+                    まだ今日のミッションは設定されていません。
+                </p>
+            </div>
+        {% endif %}
+
+        {% if today_user_mission and today_user_mission.completed %}
+            <a href="/ai-chat/" class="primary-button">
+                AIチャットで次の一歩を相談する
+            </a>
+        {% else %}
+            <a href="/mission/" class="primary-button">
+                今日のミッションでXPを獲得する
+            </a>
+        {% endif %}
+
+        <p style="margin: 12px 0 0 0; font-size: 14px; color: #6b7280;">
+            タイプ診断の結果に合わせて、今日の行動が表示されます
+        </p>
+    </div>
+
+    <div class="feature-grid">
+        <a href="/ai-chat/" class="feature-link">
+            <div class="feature-card">
+                <h3 class="feature-title">💬 AIチャット</h3>
+                <p class="feature-text">
+                    副業の悩みや次の一歩をAIに相談できます。
+                </p>
+            </div>
+        </a>
+
+        <a href="/ai-chat-history/" class="feature-link">
+            <div class="feature-card">
+                <h3 class="feature-title">📝 相談履歴</h3>
+                <p class="feature-text">
+                    これまでのAI相談内容を見返せます。
+                </p>
+            </div>
+        </a>
+
+        <a href="/community/" class="feature-link">
+            <div class="feature-card">
+                <h3 class="feature-title">👥 コミュニティ</h3>
+                <p class="feature-text">
+                    他のユーザーの投稿を見たり、自分の進捗を共有できます。
+                </p>
+            </div>
+        </a>
+    </div>
+
 </div>
-
-<a href="/mission/">今日の副業ミッションを見る</a>
 
 {% endblock %}
