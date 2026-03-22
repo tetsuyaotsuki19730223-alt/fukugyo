@@ -18,6 +18,7 @@ from .models import (
     BlogPost,
     AIChatLog,
     Referral,
+    AIChatHistory,
 )
 
 
@@ -87,17 +88,27 @@ class ProfileAdmin(admin.ModelAdmin):
 @admin.register(Mission)
 class MissionAdmin(admin.ModelAdmin):
     list_display = ("title", "xp", "created_at")
-
+    search_fields = ("title", "description")
+    list_filter = ("created_at",)
+    ordering = ("-created_at",)
 
 @admin.register(UserMission)
 class UserMissionAdmin(admin.ModelAdmin):
     list_display = ("user", "mission", "completed")
+    search_fields = ("user__username", "mission__title")
     list_filter = ("completed",)
-
+    autocomplete_fields = ("user", "mission")
 
 @admin.register(CommunityPost)
 class CommunityPostAdmin(admin.ModelAdmin):
-    list_display = ("user", "created_at")
+    list_display = ("user", "short_content", "created_at", "is_edited")
+    search_fields = ("user__username", "content")
+    list_filter = ("created_at", "is_edited")
+    ordering = ("-created_at",)
+
+    def short_content(self, obj):
+        return obj.content[:30]
+    short_content.short_description = "content"
 
 
 @admin.register(DiagnosisResult)
@@ -164,3 +175,14 @@ class AIChatLogAdmin(admin.ModelAdmin):
 @admin.register(Referral)
 class ReferralAdmin(admin.ModelAdmin):
     list_display = ("user", "code", "invited_count", "created_at")
+
+@admin.register(AIChatHistory)
+class AIChatHistoryAdmin(admin.ModelAdmin):
+    list_display = ("user", "short_question", "created_at")
+    search_fields = ("user__username", "question", "answer")
+    list_filter = ("created_at",)
+    ordering = ("-created_at",)
+
+    def short_question(self, obj):
+        return obj.question[:40]
+    short_question.short_description = "question"

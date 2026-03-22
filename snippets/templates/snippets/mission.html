@@ -2,22 +2,98 @@
 
 {% block content %}
 
-<h1>🔥 今日の副業ミッション</h1>
+<div style="max-width: 800px; margin: 0 auto; padding: 24px;">
 
-<div style="background:#fff7e6;padding:20px;border-radius:10px;">
+  <h1 style="margin-bottom: 20px;">🔥 今日の副業ミッション</h1>
 
-    <h2>{{ mission.title }}</h2>
-    <p>{{ mission.description }}</p>
-    <p>⭐ XP: {{ mission.xp }}</p>
+  <div style="background:#f8fafc; border:1px solid #e5e7eb; border-radius:14px; padding:20px; margin-bottom:20px;">
+    <h2 style="margin-top:0; margin-bottom:14px; font-size:20px;">あなたの進捗</h2>
 
-    {% if user_mission.completed %}
-        <p style="color:green;">✅ 完了済み</p>
-    {% else %}
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:12px;">
+      <div style="background:white; border:1px solid #e5e7eb; border-radius:12px; padding:14px;">
+        <p style="margin:0 0 6px 0; color:#6b7280; font-size:14px;">XP</p>
+        <p style="margin:0; font-size:22px; font-weight:700;">{{ profile.xp }}</p>
+      </div>
+
+      <div style="background:white; border:1px solid #e5e7eb; border-radius:12px; padding:14px;">
+        <p style="margin:0 0 6px 0; color:#6b7280; font-size:14px;">レベル</p>
+        <p style="margin:0; font-size:22px; font-weight:700;">{{ profile.level }}</p>
+      </div>
+
+      <div style="background:white; border:1px solid #e5e7eb; border-radius:12px; padding:14px;">
+        <p style="margin:0 0 6px 0; color:#6b7280; font-size:14px;">連続日数</p>
+        <p style="margin:0; font-size:22px; font-weight:700;">{{ profile.streak }}</p>
+      </div>
+    </div>
+  </div>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div style="
+        margin-bottom: 16px;
+        padding: 14px 16px;
+        border-radius: 12px;
+        {% if message.tags == 'success' %}
+          background: #ecfdf5;
+          border: 1px solid #a7f3d0;
+          color: #065f46;
+        {% elif message.tags == 'info' %}
+          background: #eff6ff;
+          border: 1px solid #bfdbfe;
+          color: #1d4ed8;
+        {% else %}
+          background: #f3f4f6;
+          border: 1px solid #d1d5db;
+          color: #374151;
+        {% endif %}
+      ">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  {% if mission %}
+    <div style="background:#fff7e6; padding:24px; border-radius:14px; border:1px solid #fcd34d;">
+      <h2 style="margin-top:0; margin-bottom:12px;">{{ mission.title }}</h2>
+
+      {% if mission.description %}
+        <p style="line-height:1.8; color:#374151; margin-bottom:16px;">
+          {{ mission.description|linebreaksbr }}
+        </p>
+      {% endif %}
+
+      <p style="margin-bottom:18px; font-weight:700;">⭐ XP: {{ mission.xp }}</p>
+
+      {% if user_mission and user_mission.completed %}
+        <p style="color:green; font-weight:700; margin:0 0 12px 0;">✅ 今日のミッションは完了済みです</p>
+
+        <p style="margin:0 0 14px 0; color:#374151; line-height:1.7;">
+          次はAIチャットで、今日の行動をどう広げるか相談してみましょう。
+        </p>
+
+        <a
+          href="{% url 'ai_chat' %}"
+          style="display:inline-block; background:#2563eb; color:white; text-decoration:none; padding:12px 18px; border-radius:10px; font-weight:700;"
+        >
+          AIチャットで次の一歩を相談する
+        </a>
+      {% else %}
         <form method="post">
-            {% csrf_token %}
-            <button>ミッション完了</button>
+          {% csrf_token %}
+          <button
+            type="submit"
+            style="background:#2563eb; color:white; border:none; padding:12px 18px; border-radius:10px; cursor:pointer; font-weight:700;"
+          >
+            ミッション完了
+          </button>
         </form>
-    {% endif %}
+      {% endif %}
+    </div>
+  {% else %}
+    <div style="background:#f5f5f5; padding:20px; border-radius:10px;">
+      <p style="margin:0;">今日のミッションはまだありません。</p>
+    </div>
+  {% endif %}
 
 </div>
 

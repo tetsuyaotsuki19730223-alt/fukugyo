@@ -199,12 +199,13 @@ class TemplatePurchase(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 class Mission(models.Model):
-
     title = models.CharField(max_length=200)
-
+    description = models.TextField(blank=True, default="")
     xp = models.IntegerField(default=10)
-
     created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.title
     
 class AISearch(models.Model):
 
@@ -240,12 +241,13 @@ class BlogPost(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 class UserMission(models.Model):
-
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-
     mission = models.ForeignKey(Mission, on_delete=models.CASCADE)
-
     completed = models.BooleanField(default=False)
+    assigned_date = models.DateField(default=timezone.localdate)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.mission.title} - {self.assigned_date}"
 
 class AIChatLog(models.Model):
 
