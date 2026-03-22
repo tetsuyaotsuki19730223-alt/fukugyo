@@ -197,6 +197,10 @@ class TemplatePurchase(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     created_at = models.DateTimeField(auto_now_add=True)
+from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
+
 
 class Mission(models.Model):
     TYPE_CHOICES = [
@@ -214,6 +218,16 @@ class Mission(models.Model):
 
     def __str__(self):
         return f"[{self.mission_type}] {self.title}"
+
+
+class UserMission(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    mission = models.ForeignKey(Mission, on_delete=models.CASCADE)
+    completed = models.BooleanField(default=False)
+    assigned_date = models.DateField(default=timezone.localdate)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.mission.title} - {self.assigned_date}"
     
 class AISearch(models.Model):
 
@@ -248,14 +262,6 @@ class BlogPost(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
-class UserMission(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    mission = models.ForeignKey(Mission, on_delete=models.CASCADE)
-    completed = models.BooleanField(default=False)
-    assigned_date = models.DateField(default=timezone.localdate)
-
-    def __str__(self):
-        return f"{self.user.username} - {self.mission.title} - {self.assigned_date}"
 
 class AIChatLog(models.Model):
 
