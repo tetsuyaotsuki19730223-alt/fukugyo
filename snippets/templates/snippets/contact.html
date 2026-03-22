@@ -1,19 +1,87 @@
-{% extends "base.html" %}
+{% extends "snippets/base.html" %}
+
 {% block content %}
 
-<h1>お問い合わせ</h1>
+<div style="max-width: 860px; margin: 0 auto; padding: 24px;">
 
-<form method="POST">
+  <h1 style="margin-bottom: 20px;">お問い合わせ</h1>
 
-{% csrf_token %}
+  <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 24px; margin-bottom: 20px;">
+    <h2 style="margin-top: 0; margin-bottom: 12px;">通常のお問い合わせ</h2>
+    <p style="margin: 0; color: #4b5563; line-height: 1.8;">
+      AI副業コーチに関するご質問・不具合・ご相談などがありましたら、こちらからご連絡ください。
+    </p>
+  </div>
 
-{{ form.as_p }}
+  <div id="premium-support" style="background: linear-gradient(135deg, #eff6ff, #f8fafc); border: 1px solid #bfdbfe; border-radius: 16px; padding: 24px; margin-bottom: 20px;">
+    <h2 style="margin-top: 0; margin-bottom: 12px;">プレミアム反映のご連絡</h2>
 
-<button type="submit">
-送信
-</button>
+    <p style="margin: 0 0 14px 0; color: #374151; line-height: 1.8;">
+      Squareでご購入後、反映が遅い場合はこちらからご連絡ください。<br>
+      確認がスムーズになるよう、以下の情報を入れていただけると助かります。
+    </p>
 
-</form>
+    <div style="background: white; border: 1px solid #dbeafe; border-radius: 12px; padding: 16px;">
+      <p style="margin: 0 0 8px 0; font-weight: 700; color: #1d4ed8;">ご連絡時にあると助かる情報</p>
+      <ul style="margin: 0; padding-left: 20px; color: #374151; line-height: 1.9;">
+        <li>登録メールアドレス</li>
+        <li>購入日時</li>
+        <li>購入時のお名前（分かる範囲でOK）</li>
+      </ul>
+    </div>
 
+    <div style="margin-top: 14px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 14px;">
+    <p style="margin: 0 0 8px 0; font-weight: 700; color: #92400e;">メール件名の例</p>
+    <p style="margin: 0 0 10px 0; color: #78350f; line-height: 1.8;">
+        プレミアム反映依頼
+    </p>
+
+    <p style="margin: 0 0 8px 0; font-weight: 700; color: #92400e;">本文に入れてほしい内容</p>
+    <p style="margin: 0; color: #78350f; line-height: 1.8;">
+        ・登録メールアドレス<br>
+        ・購入日時<br>
+        ・購入時のお名前（分かる範囲でOK）
+    </p>
+    </div>
+  </div>
+
+<div style="margin-top: 14px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px;">
+  <p style="margin: 0 0 8px 0; font-weight: 700; color: #374151;">メール本文の例</p>
+  <div style="background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px; color: #4b5563; line-height: 1.8; font-size: 14px;">
+    お世話になっております。<br>
+    プレミアム反映をお願いいたします。<br><br>
+    登録メールアドレス：xxxxx@example.com<br>
+    購入日時：2026/03/22 10:30頃<br>
+    購入時のお名前：〇〇〇〇<br><br>
+    よろしくお願いいたします。
+  </div>
+</div>
+
+<div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 24px;">
+    <h2 style="margin-top: 0; margin-bottom: 12px;">連絡方法</h2>
+
+    <p style="margin: 0 0 16px 0; color: #4b5563; line-height: 1.8;">
+      お問い合わせは、以下のメールアドレスまでご連絡ください。
+    </p>
+
+    <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+        <a
+            href="mailto:tetsuyaotsuki19730223@gmail.com?subject=%E3%83%97%E3%83%AC%E3%83%9F%E3%82%A2%E3%83%A0%E5%8F%8D%E6%98%A0%E4%BE%9D%E9%A0%BC&body=%E3%81%8A%E4%B8%96%E8%A9%B1%E3%81%AB%E3%81%AA%E3%81%A3%E3%81%A6%E3%81%8A%E3%82%8A%E3%81%BE%E3%81%99%E3%80%82%0D%0A%E3%83%97%E3%83%AC%E3%83%9F%E3%82%A2%E3%83%A0%E5%8F%8D%E6%98%A0%E3%82%92%E3%81%8A%E9%A1%98%E3%81%84%E3%81%84%E3%81%9F%E3%81%97%E3%81%BE%E3%81%99%E3%80%82%0D%0A%0D%0A%E7%99%BB%E9%8C%B2%E3%83%A1%E3%83%BC%E3%83%AB%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%EF%BC%9A%0D%0A%E8%B3%BC%E5%85%A5%E6%97%A5%E6%99%82%EF%BC%9A%0D%0A%E8%B3%BC%E5%85%A5%E6%99%82%E3%81%AE%E3%81%8A%E5%90%8D%E5%89%8D%EF%BC%9A%0D%0A%0D%0A%E3%82%88%E3%82%8D%E3%81%97%E3%81%8F%E3%81%8A%E9%A1%98%E3%81%84%E3%81%84%E3%81%9F%E3%81%97%E3%81%BE%E3%81%99%E3%80%82"
+            style="display: inline-block; font-size: 16px; font-weight: 700; color: #2563eb; text-decoration: none;"
+        >
+            tetsuyaotsuki19730223@gmail.com
+        </a>
+    </div>
+
+    <p style="margin: -6px 0 16px 0; color: #6b7280; font-size: 14px; line-height: 1.7;">
+        クリックするとメール作成画面が開きます。
+    </p>    
+
+    <p style="margin: 0; color: #6b7280; font-size: 14px; line-height: 1.8;">
+      できるだけ早く確認しますが、反映まで少しお時間をいただく場合があります。
+    </p>
+  </div>
+
+</div>
 
 {% endblock %}
