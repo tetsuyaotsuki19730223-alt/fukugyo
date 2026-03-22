@@ -22,6 +22,10 @@ def type_diagnosis(request):
     if request.method == "POST":
         answer = request.POST.get("answer", "").strip()
 
+        profile, _ = Profile.objects.get_or_create(user=request.user)
+        profile.sidejob_type = answer
+        profile.save()
+
         if not answer:
             return render(request, "snippets/type_diagnosis.html", {
                 "error": "選択してください"

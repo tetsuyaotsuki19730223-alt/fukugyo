@@ -87,10 +87,10 @@ class ProfileAdmin(admin.ModelAdmin):
 
 @admin.register(Mission)
 class MissionAdmin(admin.ModelAdmin):
-    list_display = ("title", "xp", "created_at")
+    list_display = ("title", "mission_type", "xp", "created_at")
     search_fields = ("title", "description")
-    list_filter = ("created_at",)
-    ordering = ("-created_at",)
+    list_filter = ("mission_type", "created_at")
+    ordering = ("mission_type", "-created_at")
 
 @admin.register(UserMission)
 class UserMissionAdmin(admin.ModelAdmin):

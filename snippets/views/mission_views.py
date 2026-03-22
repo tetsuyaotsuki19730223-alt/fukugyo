@@ -9,9 +9,11 @@ from snippets.utils import calculate_level
 @login_required
 def mission(request):
     profile, _ = Profile.objects.get_or_create(user=request.user)
-
-    missions = Mission.objects.all().order_by("id")
     today = timezone.localdate()
+
+    user_type = profile.sidejob_type or "seller"
+
+    missions = Mission.objects.filter(mission_type=user_type).order_by("id")
 
     if not missions.exists():
         return render(request, "snippets/mission.html", {

@@ -25,7 +25,7 @@ def generate_ref_code():
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
+    sidejob_type = models.CharField(max_length=20, blank=True, default="seller")
     is_premium = models.BooleanField(default=False)
 
     xp = models.IntegerField(default=0)
@@ -199,13 +199,21 @@ class TemplatePurchase(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 class Mission(models.Model):
+    TYPE_CHOICES = [
+        ("seller", "SELLER"),
+        ("build", "BUILD"),
+        ("influence", "INFLUENCE"),
+        ("stable", "STABLE"),
+    ]
+
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, default="")
+    mission_type = models.CharField(max_length=20, choices=TYPE_CHOICES, default="seller")
     xp = models.IntegerField(default=10)
     created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return self.title
+        return f"[{self.mission_type}] {self.title}"
     
 class AISearch(models.Model):
 
