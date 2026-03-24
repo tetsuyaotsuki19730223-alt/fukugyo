@@ -1,161 +1,563 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-9H2ZNXGGH3"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9H2ZNXGGH3"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-  gtag('config', 'G-9H2ZNXGGH3');
-</script>
+    gtag('config', 'G-9H2ZNXGGH3');
+    </script>
 
-<title>AI副業コーチ | AIが副業ロードマップを作る</title>
-<link rel="canonical" href="https://www.ai-sidejob-coach.net/">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description"
-content="AIがあなたに最適な副業を診断し、稼ぐロードマップを作成するサービス">
-<style>
+    <meta charset="UTF-8">
+    <title>AI副業コーチ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="canonical" href="https://www.ai-sidejob-coach.net/">
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "Yu Gothic", sans-serif;
+            background: #f8fafc;
+            color: #111827;
+        }
 
-    body{
-            font-family: Arial;
-            background:#f5f5f5;
-    }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
 
-    .card{
-        width:400px;
-        margin:80px auto;
-        background:white;
-        padding:30px;
-        border-radius:10px;
-        box-shadow:0 5px 20px rgba(0,0,0,0.1);
-    }
+        .site-header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-    h1{
-        text-align:center;
-    }
+        .header-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
 
-    input{
-        width:100%;
-        padding:10px;
-        margin-top:10px;
-    }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            font-size: 20px;
+            color: #111827;
+            min-width: 0;
+        }
 
-    button{
-        width:100%;
-        padding:12px;
-        margin-top:20px;
-        background:#4CAF50;
-        color:white;
-        border:none;
-        border-radius:5px;
-    }
-</style>
+        .brand-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 8px 18px rgba(37, 99, 235, 0.22);
+            flex-shrink: 0;
+        }
+
+        .nav-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            display: inline-block;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #374151;
+            background: transparent;
+            transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+        }
+
+        .nav-link:hover {
+            background: #f3f4f6;
+            color: #111827;
+            transform: translateY(-1px);
+        }
+
+        .nav-link-active {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .nav-link-primary {
+            display: inline-block;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+            background: #2563eb;
+            box-shadow: 0 8px 18px rgba(37, 99, 235, 0.18);
+            transition: background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .nav-link-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 12px 22px rgba(37, 99, 235, 0.24);
+        }
+
+        .nav-link-outline {
+            display: inline-block;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+            background: #eff6ff;
+            transition: background 0.18s ease, transform 0.18s ease, color 0.18s ease;
+        }
+
+        .nav-link-outline:hover {
+            background: #dbeafe;
+            transform: translateY(-1px);
+        }
+
+        .main-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 16px 48px;
+        }
+
+        .site-footer {
+            margin-top: 40px;
+            padding: 24px 16px 40px;
+            border-top: 1px solid #e5e7eb;
+            background: white;
+        }
+
+        .footer-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .footer-links a {
+            color: #6b7280;
+        }
+
+        .footer-links a:hover {
+            color: #111827;
+        }
+
+        .page-wrap {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .page-header {
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            margin: 0 0 8px 0;
+        }
+
+        .page-subtext {
+            margin: 0;
+            color: #6b7280;
+            line-height: 1.7;
+        }
+
+        .ui-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .ui-card-title {
+            margin-top: 0;
+            margin-bottom: 14px;
+        }
+
+        .ui-message-card {
+            background: linear-gradient(135deg, #fefce8, #fff7ed);
+            border: 1px solid #fde68a;
+            border-radius: 16px;
+            padding: 18px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(245,158,11,0.08);
+        }
+
+        .ui-message-label {
+            margin: 0 0 6px 0;
+            font-size: 13px;
+            color: #92400e;
+            font-weight: 700;
+        }
+
+        .ui-message-text {
+            margin: 0;
+            color: #78350f;
+            line-height: 1.8;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .ui-badges {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .ui-badge {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .ui-badge-premium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .ui-badge-free {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .ui-badge-done {
+            background: #ecfdf5;
+            color: #065f46;
+        }
+
+        .ui-badge-pending {
+            background: #fff7ed;
+            color: #9a3412;
+        }
+
+        .ui-progress-bar {
+            background: #e5e7eb;
+            height: 20px;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .ui-progress-fill {
+            height: 20px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #f59e0b, #f97316);
+        }
+
+        .ui-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+        }
+
+        .ui-stat-box {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 14px;
+        }
+
+        .ui-stat-label {
+            margin: 0 0 6px 0;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .ui-stat-value {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .ui-action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+
+        .ui-action-card {
+            display: block;
+            text-decoration: none;
+            padding: 16px;
+            border-radius: 12px;
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .ui-action-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px rgba(0,0,0,0.10);
+        }
+
+        .ui-action-title {
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .ui-action-text {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .ui-card-blue {
+            background: #2563eb;
+            color: white;
+        }
+
+        .ui-card-blue-dark {
+            background: #1d4ed8;
+            color: white;
+        }
+
+        .ui-card-green {
+            background: #10b981;
+            color: white;
+        }
+
+        .ui-card-gray {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .ui-card-gray .ui-action-text {
+            color: #4b5563;
+        }
+
+        .ui-card-orange {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .ui-button {
+            display: inline-block;
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+        }
+
+        .ui-button-blue {
+            background: #2563eb;
+            color: white;
+        }
+
+        .ui-button-blue-dark {
+            background: #1d4ed8;
+            color: white;
+        }
+
+        .ui-button-green {
+            background: #10b981;
+            color: white;
+        }
+
+        .ui-button-gray {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .ui-button-orange {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .ui-text {
+            margin: 0;
+            color: #374151;
+            line-height: 1.8;
+        }
+
+        .ui-text-muted {
+            color: #6b7280;
+        }
+
+        .ui-text-strong {
+            font-weight: 700;
+        }
+
+        .ui-status-success {
+            color: #059669;
+            font-weight: 700;
+        }
+
+        .ui-status-warning {
+            color: #d97706;
+            font-weight: 700;
+        }
+
+        .ui-status-info {
+            color: #1d4ed8;
+            font-weight: 700;
+        }
+
+        .ui-stack-sm > * + * {
+            margin-top: 10px;
+        }
+
+        .ui-stack-md > * + * {
+            margin-top: 14px;
+        }
+
+        .ui-preview-box {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 14px;
+        }
+
+        .ui-preview-box-blue {
+            background: white;
+            border: 1px solid #dbeafe;
+            border-radius: 12px;
+            padding: 14px;
+        }
+
+        .ui-mini-label {
+            margin: 0 0 6px 0;
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 700;
+        }
+
+        .ui-subtitle {
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+
+        .ui-mb-0 { margin-bottom: 0; }
+        .ui-mb-10 { margin-bottom: 10px; }
+        .ui-mb-12 { margin-bottom: 12px; }
+        .ui-mb-14 { margin-bottom: 14px; }
+        .ui-mb-16 { margin-bottom: 16px; }
+        .ui-mb-18 { margin-bottom: 18px; }
+
+        @media (max-width: 768px) {
+            .header-inner {
+                display: block;
+                padding: 12px;
+            }
+
+            .brand {
+                font-size: 18px;
+                margin-bottom: 12px;
+            }
+
+            .nav-wrap {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 8px;
+                width: 100%;
+            }
+
+            .nav-link,
+            .nav-link-primary,
+            .nav-link-outline {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+                text-align: center;
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+
+            .main-content {
+                padding: 20px 12px 40px;
+            }
+
+            .page-wrap {
+                padding: 20px 12px 40px;
+            }
+
+            .ui-card,
+            .ui-message-card {
+                padding: 20px 16px;
+                border-radius: 14px;
+            }
+        }
+    </style>
 </head>
-
 <body>
 
-<nav>
-
-<!--    
-<a href="/type-diagnosis/">副業タイプ診断</a> |
-<a href="/ai-roadmap/">ロードマップ生成</a> |
-<a href="/roadmap-result/">ロードマップ結果</a> |
-<a href="/diagnosis/">副業診断</a> |
-<a href="/ranking/">AI副業おすすめランキング</a> |
-<a href="/ai-report/">AI副業レポート</a> |
-<a href="/my-page/">マイページ</a> |
-<a href="/sidejob-ranking/">AI副業ランキング2026</a> |
-<a href="/simulator/">副業収入シミュレーター</a> |
-<a href="/ai-sidejob-diagnosis/">AI副業診断</a> |
-<a href="/templates/">副業テンプレショップ</a> |
-<a href="/ai-roadmap-generator/">AI副業ロードマップ生成</a> |
-<a href="/success-stories/">副業成功事例</a> |
-<a href="/ai-sidejobs/">AI副業おすすめランキング</a> |
-<a href="/ai-personal-diagnosis/">AI副業パーソナル診断</a> |
-<a href="/referral/">紹介プログラム</a> |
-<a href="/ai-score/">AI副業スコア診断</a> |
-<a href="/sidejob-guide/">副業スタートガイド</a> |
-<a href="/blog/ai-sidejob/">AI副業おすすめ10選</a> |
-<a href="/diagnosis-lp/">AI副業診断</a> |
--->
-
-{% if user.is_authenticated %}
-
-<a href="/">ホーム</a> |
-<a href="/dashboard/">ダッシュボード</a> |
-<a href="/ai-chat/">AIコーチ</a> |
-<a href="/ai-chat-history/">相談履歴</a> |
-<a href="/community/">コミュニティ</a> |
-<a href="/pricing/">料金</a> |
-<a href="/logout/">ログアウト</a> |
-
-{% else %}
-
-<a href="/">ホーム</a> |
-<a href="/pricing/">料金</a> |
-<a href="/login/">ログイン</a> |
-<a href="/signup/">新規登録</a> |
-
-{% endif %}
-</nav>
-
-<hr>
-
-{% block content %}
-{% endblock %}
-
-{% if user.is_authenticated %}
-<p>
-ログイン中：{{ user.username }}
-<a href="/accounts/logout/">ログアウト</a>
-</p>
-{% endif %}
-
-<div style="position:fixed;top:10px;right:20px;z-index:999;">
-
-    {% if request.user.is_authenticated %}
-
-        {% if request.user.profile.is_premium %}
-            <span style="
-                background:gold;
-                color:black;
-                padding:8px 12px;
-                border-radius:20px;
-                font-weight:bold;
-            ">
-                👑 PREMIUM
-            </span>
-        {% else %}
-            <a href="/pricing/" style="
-                background:#ff4d4d;
-                color:white;
-                padding:8px 12px;
-                border-radius:20px;
-                text-decoration:none;
-            ">
-                🚀 アップグレード
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="/" class="brand">
+                <span class="brand-badge">AI</span>
+                <span>AI副業コーチ</span>
             </a>
-        {% endif %}
 
-    {% endif %}
+            <nav class="nav-wrap">
+                {% if request.user.is_authenticated %}
+                    <a href="/dashboard/" class="nav-link {% if request.path == '/dashboard/' %}nav-link-active{% endif %}">ダッシュボード</a>
+                    <a href="/ai-chat/" class="nav-link {% if request.path == '/ai-chat/' %}nav-link-active{% endif %}">AIチャット</a>
+                    <a href="/ai-chat-history/" class="nav-link {% if request.path == '/ai-chat-history/' or '/ai-chat-history/' in request.path %}nav-link-active{% endif %}">履歴</a>
+                    <a href="/community/" class="nav-link {% if request.path == '/community/' %}nav-link-active{% endif %}">コミュニティ</a>
+                    <a href="/pricing/" class="nav-link-outline {% if request.path == '/pricing/' or request.path == '/checkout/' or request.path == '/success/' %}nav-link-active{% endif %}">料金</a>
+                    <a href="/my-page/" class="nav-link {% if request.path == '/my-page/' %}nav-link-active{% endif %}">マイページ</a>
+                    <a href="/logout/" class="nav-link-primary">ログアウト</a>
+                {% else %}
+                    <a href="/type-diagnosis/" class="nav-link-primary {% if request.path == '/type-diagnosis/' or request.path == '/diagnosis-lp/' %}nav-link-active{% endif %}">AI副業診断</a>
+                    <a href="/pricing/" class="nav-link {% if request.path == '/pricing/' or request.path == '/checkout/' or request.path == '/success/' %}nav-link-active{% endif %}">料金</a>
+                    <a href="/login/" class="nav-link {% if request.path == '/login/' %}nav-link-active{% endif %}">ログイン</a>
+                    <a href="/signup/" class="nav-link-outline {% if request.path == '/signup/' %}nav-link-active{% endif %}">新規登録</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
 
-</div>
+    <main class="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
 
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div>© AI副業コーチ</div>
 
-<footer>
-
-<a href="/privacy/">プライバシーポリシー</a> |
-
-<a href="/terms/">利用規約</a> |
-
-<a href="/legal/">特定商取引法</a> |
-
-<a href="/contact/">お問い合わせ</a> |
-
-</footer>
+            <div class="footer-links">
+                <a href="/privacy/">プライバシーポリシー</a>
+                <a href="/terms/">利用規約</a>
+                <a href="/legal/">特商法表記</a>
+                <a href="/contact/">お問い合わせ</a>
+            </div>
+        </div>
+    </footer>
 
 </body>
 </html>

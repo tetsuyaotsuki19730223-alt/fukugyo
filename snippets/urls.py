@@ -9,8 +9,8 @@ from snippets.views.diagnosis_views import type_diagnosis, diagnosis, history, r
 from snippets.views.mission_views import mission
 from snippets.views.payment_views import pricing, checkout, success
 from snippets.views.legal_views import privacy, terms, legal, contact
-from snippets.views.community_views import community, edit_community_post, delete_community_post
-from snippets.views.mypage_views import my_page
+from snippets.views.community_views import community
+from snippets.views.my_page_views import my_page
 from snippets.views.ranking_views import ranking
 from snippets.views.simulator_views import simulator
 from snippets.views.template_views import templates
@@ -23,10 +23,12 @@ from snippets.views.ai_score_views import ai_sidejob_score
 from snippets.views.guide_views import sidejob_guide
 from snippets.views.blog_views import blog_ai_sidejob, generate_blog
 from snippets.views.history_views import (
-    ai_chat_history,
+    #ai_chat_history,
     ai_chat_history_detail,
     delete_ai_chat_history,
 )
+from snippets.views.ai_chat_history_views import ai_chat_history
+
 urlpatterns = [
     path("", landing, name="landing"),
 
@@ -73,9 +75,6 @@ urlpatterns = [
     path("sidejob-guide/", sidejob_guide, name="sidejob_guide"),
     path("blog/ai-sidejob/", blog_ai_sidejob, name="blog_ai_sidejob"),
     path("generate-blog/", generate_blog, name="generate_blog"),
-    path("community/delete/<int:post_id>/", delete_community_post, name="delete_community_post"),
-    path("community/edit/<int:post_id>/", edit_community_post, name="edit_community_post"),
-    path("community/delete/<int:post_id>/", delete_community_post, name="delete_community_post"),
     path("ai-chat-history/", ai_chat_history, name="ai_chat_history"),
     path("ai-chat-history/<int:history_id>/", ai_chat_history_detail, name="ai_chat_history_detail"),
     path("ai-chat-history/delete/<int:history_id>/", delete_ai_chat_history, name="delete_ai_chat_history"),

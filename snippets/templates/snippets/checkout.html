@@ -1,233 +1,94 @@
 {% extends "snippets/base.html" %}
-
 {% block content %}
 
-<style>
-  .checkout-wrap {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 24px 16px 40px;
-  }
+<div class="page-wrap">
 
-  .checkout-hero {
-    text-align: center;
-    padding: 40px 20px;
-    background: linear-gradient(135deg, #eff6ff, #f8fafc);
-    border-radius: 20px;
-    margin-bottom: 24px;
-  }
-
-  .checkout-title {
-    font-size: 34px;
-    line-height: 1.4;
-    margin-bottom: 14px;
-    color: #111827;
-  }
-
-  .checkout-subtitle {
-    font-size: 17px;
-    line-height: 1.8;
-    color: #4b5563;
-    margin: 0;
-  }
-
-  .checkout-section {
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 18px;
-    padding: 24px;
-    margin-bottom: 20px;
-  }
-
-  .checkout-h2 {
-    font-size: 26px;
-    margin-bottom: 16px;
-    color: #111827;
-  }
-
-  .checkout-text {
-    font-size: 16px;
-    line-height: 1.8;
-    color: #4b5563;
-  }
-
-  .checkout-price-card {
-    background: linear-gradient(135deg, #eff6ff, #ffffff);
-    border: 2px solid #2563eb;
-    border-radius: 18px;
-    padding: 24px;
-    margin-bottom: 20px;
-  }
-
-  .checkout-button-primary {
-    display: inline-block;
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
-    color: white;
-    text-decoration: none;
-    border: none;
-    font-size: 16px;
-    font-weight: 700;
-    padding: 14px 22px;
-    border-radius: 12px;
-    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.2);
-  }
-
-  .checkout-button-secondary {
-    display: inline-block;
-    background: #6b7280;
-    color: white;
-    text-decoration: none;
-    border: none;
-    font-size: 16px;
-    font-weight: 700;
-    padding: 12px 18px;
-    border-radius: 12px;
-  }
-
-  .checkout-note {
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
-    padding: 18px;
-  }
-
-  .checkout-step {
-    background: #f9fafb;
-    border-radius: 14px;
-    padding: 16px;
-    margin-bottom: 12px;
-  }
-
-  @media (max-width: 768px) {
-    .checkout-wrap {
-      padding: 16px 12px 32px;
-    }
-
-    .checkout-hero {
-      padding: 32px 16px;
-      border-radius: 18px;
-    }
-
-    .checkout-title {
-      font-size: 28px;
-    }
-
-    .checkout-subtitle,
-    .checkout-text {
-      font-size: 15px;
-    }
-
-    .checkout-h2 {
-      font-size: 22px;
-    }
-
-    .checkout-button-primary,
-    .checkout-button-secondary {
-      width: 100%;
-      box-sizing: border-box;
-      text-align: center;
-    }
-  }
-</style>
-
-<div class="checkout-wrap">
-
-  <section class="checkout-hero">
-    <h1 class="checkout-title">プレミアム登録のご案内</h1>
-    <p class="checkout-subtitle">
-      AIチャット無制限とロードマップ完全版を使いたい方は、<br>
-      こちらからプレミアム登録へ進んでください。
+  <div class="page-header">
+    <h1 class="page-title">プレミアム登録</h1>
+    <p class="page-subtext">
+      AIチャットをもっと活用したい方は、こちらからプレミアム登録へ進めます。
     </p>
-  </section>
+  </div>
 
-  <section class="checkout-price-card">
-    <h2 style="font-size: 24px; margin-bottom: 8px; color: #1d4ed8;">プレミアムプラン</h2>
-    <p style="font-size: 34px; font-weight: 700; margin: 0 0 14px 0; color: #111827;">月2980円</p>
-
-    <p class="checkout-text" style="margin-bottom: 18px;">
-      AIチャット無制限、AI副業ロードマップ完全版など、<br>
-      より深く副業を進めたい人向けのプランです。
+  <div class="ui-message-card">
+    <p class="ui-message-label">💡 ご案内</p>
+    <p class="ui-message-text">
+      購入後、確認のうえプレミアム権限を順次反映します。
     </p>
+  </div>
 
-    <ul style="padding-left: 20px; color: #374151; line-height: 1.9; margin-bottom: 22px;">
-      <li>AIチャット無制限</li>
-      <li>AI副業ロードマップ完全版</li>
-      <li>AI相談履歴の活用</li>
-      <li>副業コミュニティ参加</li>
-    </ul>
+  <div class="ui-card" style="border:2px solid #2563eb; box-shadow:0 8px 24px rgba(37,99,235,0.10);">
+    <div class="ui-badges" style="margin-bottom:14px;">
+      <span class="ui-badge" style="background:#dbeafe; color:#1d4ed8;">プレミアムプラン</span>
+    </div>
 
-    <a href="https://square.link/u/MbvxXnIM" target="_blank" rel="noopener noreferrer" class="checkout-button-primary">
+    <h2 class="ui-card-title">月額 2,980円</h2>
+
+    <div class="ui-stack-sm ui-mb-18">
+      <p class="ui-text">・AIチャット無制限</p>
+      <p class="ui-text">・プレミアム機能の利用</p>
+      <p class="ui-text">・相談履歴をより活用</p>
+      <p class="ui-text">・継続しやすい導線をフル活用</p>
+    </div>
+
+    <a href="https://square.link/u/MbvxXnIM" target="_blank" rel="noopener noreferrer" class="ui-button ui-button-blue">
       Squareでプレミアムを購入する
     </a>
 
-    <p style="margin-top: 12px; font-size: 14px; color: #6b7280;">
+    <p style="margin: 12px 0 0 0; font-size: 14px; color: #6b7280;">
       ご購入後、確認のうえプレミアム権限を順次反映します。
     </p>
+  </div>
 
-    <div style="margin-top: 16px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px;">
-      <p style="margin: 0 0 10px 0; font-size: 14px; color: #4b5563; line-height: 1.7;">
-        反映が遅い場合は、登録メールアドレスや購入日時が分かる形で運営へご連絡ください。
+  <div class="ui-card">
+    <h2 class="ui-card-title">購入の流れ</h2>
+
+    <div class="ui-stack-md">
+      <div class="ui-preview-box">
+        <p class="ui-text"><strong>1.</strong> Squareでプレミアムを購入</p>
+      </div>
+
+      <div class="ui-preview-box">
+        <p class="ui-text"><strong>2.</strong> 必要に応じて反映依頼を連絡</p>
+      </div>
+
+      <div class="ui-preview-box">
+        <p class="ui-text"><strong>3.</strong> 確認後、プレミアム反映</p>
+      </div>
+
+      <div class="ui-preview-box">
+        <p class="ui-text"><strong>4.</strong> プレミアム機能が利用可能に</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui-card">
+    <h2 class="ui-card-title">反映が遅い場合</h2>
+
+    <div class="ui-preview-box">
+      <p class="ui-text ui-mb-10">
+        反映が遅い場合は、登録メールアドレスや購入日時が分かる形でご連絡ください。
       </p>
 
       <a
         href="mailto:tetsuyaotsuki19730223@gmail.com?subject=%E3%83%97%E3%83%AC%E3%83%9F%E3%82%A2%E3%83%A0%E5%8F%8D%E6%98%A0%E4%BE%9D%E9%A0%BC&body=%E3%81%8A%E4%B8%96%E8%A9%B1%E3%81%AB%E3%81%AA%E3%81%A3%E3%81%A6%E3%81%8A%E3%82%8A%E3%81%BE%E3%81%99%E3%80%82%0D%0A%E3%83%97%E3%83%AC%E3%83%9F%E3%82%A2%E3%83%A0%E5%8F%8D%E6%98%A0%E3%82%92%E3%81%8A%E9%A1%98%E3%81%84%E3%81%84%E3%81%9F%E3%81%97%E3%81%BE%E3%81%99%E3%80%82%0D%0A%0D%0A%E7%99%BB%E9%8C%B2%E3%83%A1%E3%83%BC%E3%83%AB%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%EF%BC%9A%0D%0A%E8%B3%BC%E5%85%A5%E6%97%A5%E6%99%82%EF%BC%9A%0D%0A%E8%B3%BC%E5%85%A5%E6%99%82%E3%81%AE%E3%81%8A%E5%90%8D%E5%89%8D%EF%BC%9A%0D%0A%0D%0A%E3%82%88%E3%82%8D%E3%81%97%E3%81%8F%E3%81%8A%E9%A1%98%E3%81%84%E3%81%84%E3%81%9F%E3%81%97%E3%81%BE%E3%81%99%E3%80%82"
-        style="display: inline-block; background: #e5e7eb; color: #111827; text-decoration: none; padding: 10px 14px; border-radius: 10px; font-size: 14px; font-weight: 700;"
+        class="ui-button ui-button-gray"
       >
         反映について連絡する
       </a>
     </div>
-  </section>
+  </div>
 
-  <section class="checkout-section">
-    <h2 class="checkout-h2">購入の流れ</h2>
+  <div class="ui-action-grid">
+    <a href="/pricing/" class="ui-action-card ui-card-gray">
+      <div class="ui-action-title">💰 料金</div>
+      <div class="ui-action-text">料金プランに戻って比較できます</div>
+    </a>
 
-    <div class="checkout-step">
-      <strong>1.</strong> Squareでプレミアムを購入
-    </div>
-    <div class="checkout-step">
-      <strong>2.</strong> 購入後、必要に応じて運営へ連絡
-    </div>
-    <div class="checkout-step">
-      <strong>3.</strong> 確認後、プレミアム反映
-    </div>
-    <div class="checkout-step" style="margin-bottom: 0;">
-      <strong>4.</strong> AIチャット無制限・プレミアム機能が利用可能に
-    </div>
-  </section>
-
-  <section class="checkout-section">
-    <h2 class="checkout-h2">ご注意</h2>
-
-    <div class="checkout-note">
-      <p class="checkout-text" style="margin: 0;">
-        現在は Square 経由でのご案内となっています。<br>
-        購入後のプレミアム反映は、確認のうえ順次対応しています。<br>
-        購入完了ページが表示されても、自動でプレミアム化はされません。
-      </p>
-    </div>
-  </section>
-
-  <section class="checkout-section">
-    <h2 class="checkout-h2">よくある質問</h2>
-
-    <div class="checkout-note" style="margin-bottom: 14px;">
-      <p style="font-weight: 700; margin-bottom: 8px;">Q. 購入後すぐ使えますか？</p>
-      <p class="checkout-text" style="margin: 0;">
-        反映まで少しお時間をいただく場合があります。
-      </p>
-    </div>
-
-    <div class="checkout-note">
-      <p style="font-weight: 700; margin-bottom: 8px;">Q. 無料プランでも使えますか？</p>
-      <p class="checkout-text" style="margin: 0;">
-        無料プランでも診断やAIレポートは使えます。より深く使いたい方にプレミアムをおすすめしています。
-      </p>
-    </div>
-  </section>
-
-  <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-    <a href="/pricing/" class="checkout-button-secondary">料金ページに戻る</a>
-    <a href="/type-diagnosis/" class="checkout-button-primary">まずは無料診断をする</a>
+    <a href="/type-diagnosis/" class="ui-action-card ui-card-blue">
+      <div class="ui-action-title">✨ AI副業診断</div>
+      <div class="ui-action-text">まずは無料診断から始められます</div>
+    </a>
   </div>
 
 </div>

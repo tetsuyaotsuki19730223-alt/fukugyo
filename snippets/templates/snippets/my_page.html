@@ -1,6 +1,148 @@
-{% extends "base.html" %}
+{% extends "snippets/base.html" %}
 {% block content %}
 
-<h1>マイページ</h1>
+<div class="page-wrap">
+
+  <div class="page-header">
+    <h1 class="page-title">マイページ</h1>
+    <p class="page-subtext">
+      あなたの情報と進捗をまとめて確認できます。
+    </p>
+  </div>
+
+  <div class="ui-badges">
+    {% if profile.is_premium %}
+      <span class="ui-badge ui-badge-premium">👑 プレミアム会員</span>
+    {% else %}
+      <span class="ui-badge ui-badge-free">無料プラン</span>
+    {% endif %}
+
+    {% if today_user_mission and today_user_mission.completed %}
+      <span class="ui-badge ui-badge-done">✅ 今日のミッション達成</span>
+    {% else %}
+      <span class="ui-badge ui-badge-pending">⏳ 今日のミッション未完了</span>
+    {% endif %}
+  </div>
+
+  <div class="ui-message-card">
+    <p class="ui-message-label">☀️ 今日の一言</p>
+    <p class="ui-message-text">{{ today_message }}</p>
+  </div>
+
+  <div class="ui-card">
+    <h2 class="ui-card-title">レベル進捗</h2>
+
+    <div class="ui-mb-10">
+      <div class="ui-progress-bar">
+        <div class="ui-progress-fill" style="width: {{ progress }}%;"></div>
+      </div>
+    </div>
+
+    <p class="ui-text">次のレベルまであと {{ next_level_xp }} XP</p>
+  </div>
+
+  <div class="ui-card">
+    <h2 class="ui-card-title">アカウント情報</h2>
+
+    <div class="ui-stack-sm">
+      <p class="ui-text"><strong>ユーザー名:</strong> {{ request.user.username }}</p>
+
+      <p class="ui-text">
+        <strong>メールアドレス:</strong>
+        {% if request.user.email %}
+          {{ request.user.email }}
+        {% else %}
+          <span class="ui-text-muted">未設定</span>
+        {% endif %}
+      </p>
+
+      <p class="ui-text">
+        <strong>診断タイプ:</strong>
+        {% if profile.sidejob_type == "seller" %}
+          SELLERタイプ<span class="ui-text-muted">（販売・提案向き）</span>
+        {% elif profile.sidejob_type == "build" %}
+          BUILDタイプ<span class="ui-text-muted">（制作・構築向き）</span>
+        {% elif profile.sidejob_type == "influence" %}
+          INFLUENCEタイプ<span class="ui-text-muted">（発信・影響力向き）</span>
+        {% elif profile.sidejob_type == "stable" %}
+          STABLEタイプ<span class="ui-text-muted">（継続・安定型）</span>
+        {% else %}
+          <span class="ui-text-muted">未設定</span>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+
+  <div class="ui-card">
+    <h2 class="ui-card-title">現在の進捗</h2>
+
+    <div class="ui-stats-grid">
+      <div class="ui-stat-box">
+        <p class="ui-stat-label">XP</p>
+        <p class="ui-stat-value">{{ profile.xp }}</p>
+      </div>
+
+      <div class="ui-stat-box">
+        <p class="ui-stat-label">レベル</p>
+        <p class="ui-stat-value">{{ profile.level }}</p>
+      </div>
+
+      <div class="ui-stat-box">
+        <p class="ui-stat-label">連続日数</p>
+        <p class="ui-stat-value">{{ profile.streak }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui-card">
+    <h2 class="ui-card-title">今日のミッション</h2>
+
+    {% if today_mission %}
+      <div class="ui-stack-sm">
+        <p class="ui-text"><strong>今日のミッション:</strong> {{ today_mission.title }}</p>
+
+        {% if today_user_mission and today_user_mission.completed %}
+          <p class="ui-text ui-status-success">✅ 今日のミッションは達成済みです</p>
+        {% else %}
+          <p class="ui-text ui-status-warning">⏳ まだ今日のミッションは未完了です</p>
+        {% endif %}
+      </div>
+    {% else %}
+      <p class="ui-text ui-text-muted">まだ今日のミッションは設定されていません。</p>
+    {% endif %}
+  </div>
+
+  <div class="ui-action-grid">
+    <a href="/dashboard/" class="ui-action-card ui-card-blue">
+      <div class="ui-action-title">📊 ダッシュボード</div>
+      <div class="ui-action-text">今日の進捗を確認できます</div>
+    </a>
+
+    <a href="/ai-chat-history/" class="ui-action-card ui-card-gray">
+      <div class="ui-action-title">📝 履歴</div>
+      <div class="ui-action-text">過去の相談を見返せます</div>
+    </a>
+
+    {% if today_user_mission and today_user_mission.completed %}
+      <a href="/ai-chat/" class="ui-action-card ui-card-blue-dark">
+        <div class="ui-action-title">💬 AIチャット</div>
+        <div class="ui-action-text">次の一歩を相談できます</div>
+      </a>
+    {% else %}
+      <a href="/mission/" class="ui-action-card ui-card-green">
+        <div class="ui-action-title">🎯 今日のミッション</div>
+        <div class="ui-action-text">今日やることを確認できます</div>
+      </a>
+    {% endif %}
+
+    {% if not profile.is_premium %}
+      <a href="/pricing/" class="ui-action-card ui-card-orange">
+        <div class="ui-action-title">👑 プレミアム</div>
+        <div class="ui-action-text">プレミアム機能を確認できます</div>
+      </a>
+    {% endif %}
+  </div>
+
+</div>
 
 {% endblock %}

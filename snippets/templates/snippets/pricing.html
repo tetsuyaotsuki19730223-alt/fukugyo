@@ -1,266 +1,93 @@
 {% extends "snippets/base.html" %}
-
 {% block content %}
 
-<style>
-  .pricing-wrap {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 24px 16px 40px;
-  }
+<div class="page-wrap">
 
-  .pricing-hero {
-    text-align: center;
-    padding: 40px 20px;
-    background: linear-gradient(135deg, #eff6ff, #f8fafc);
-    border-radius: 20px;
-    margin-bottom: 24px;
-  }
-
-  .pricing-title {
-    font-size: 34px;
-    line-height: 1.4;
-    margin-bottom: 14px;
-    color: #111827;
-  }
-
-  .pricing-subtitle {
-    font-size: 17px;
-    line-height: 1.8;
-    color: #4b5563;
-    margin-bottom: 0;
-  }
-
-  .pricing-section {
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 18px;
-    padding: 24px;
-    margin-bottom: 20px;
-  }
-
-  .pricing-h2 {
-    font-size: 26px;
-    margin-bottom: 16px;
-    color: #111827;
-  }
-
-  .pricing-text {
-    font-size: 16px;
-    line-height: 1.8;
-    color: #4b5563;
-  }
-
-  .pricing-grid-2 {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
-  }
-
-  .pricing-plan-free {
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 18px;
-    padding: 24px;
-  }
-
-  .pricing-plan-premium {
-    background: linear-gradient(135deg, #eff6ff, #ffffff);
-    border: 2px solid #2563eb;
-    border-radius: 18px;
-    padding: 24px;
-  }
-
-  .pricing-button-primary {
-    display: inline-block;
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
-    color: white;
-    text-decoration: none;
-    border: none;
-    font-size: 16px;
-    font-weight: 700;
-    padding: 14px 22px;
-    border-radius: 12px;
-    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.2);
-  }
-
-  .pricing-note {
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
-    padding: 18px;
-  }
-
-  @media (max-width: 768px) {
-    .pricing-wrap {
-      padding: 16px 12px 32px;
-    }
-
-    .pricing-hero {
-      padding: 32px 16px;
-      border-radius: 18px;
-    }
-
-    .pricing-title {
-      font-size: 28px;
-    }
-
-    .pricing-subtitle,
-    .pricing-text {
-      font-size: 15px;
-    }
-
-    .pricing-h2 {
-      font-size: 22px;
-    }
-
-    .pricing-grid-2 {
-      grid-template-columns: 1fr;
-    }
-
-    .pricing-button-primary {
-      width: 100%;
-      box-sizing: border-box;
-      text-align: center;
-    }
-  }
-</style>
-
-<div class="pricing-wrap">
-
-  <section class="pricing-hero">
-    <h1 class="pricing-title">料金プラン</h1>
-    <p class="pricing-subtitle">
-      まずは無料で試して、必要になったらプレミアムへ進めます。<br>
-      あなたのペースで始められます。
+  <div class="page-header">
+    <h1 class="page-title">料金プラン</h1>
+    <p class="page-subtext">
+      まずは無料で試して、必要になったらプレミアムへ進めます。
     </p>
-  </section>
+  </div>
 
-  <section class="pricing-section">
-    <h2 class="pricing-h2">無料プランとプレミアムの違い</h2>
+  <div class="ui-message-card">
+    <p class="ui-message-label">💡 プランの考え方</p>
+    <p class="ui-message-text">
+      無料で相性を確かめて、もっと深く使いたい方にプレミアムがおすすめです。
+    </p>
+  </div>
 
-    <div style="overflow-x: auto;">
-      <table style="width: 100%; min-width: 640px; border-collapse: collapse; background: white; border: 1px solid #e5e7eb; border-radius: 18px; overflow: hidden;">
-        <thead>
-          <tr style="background: #f8fafc;">
-            <th style="padding: 16px; text-align: left; border-bottom: 1px solid #e5e7eb; font-size: 16px;">機能</th>
-            <th style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb; font-size: 16px;">無料</th>
-            <th style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb; font-size: 16px; color: #1d4ed8;">プレミアム</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style="padding: 16px; border-bottom: 1px solid #e5e7eb;">副業タイプ診断</td>
-            <td style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb;">○</td>
-            <td style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb;">○</td>
-          </tr>
-          <tr style="background: #fcfcfd;">
-            <td style="padding: 16px; border-bottom: 1px solid #e5e7eb;">AIレポート</td>
-            <td style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb;">○</td>
-            <td style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb;">○</td>
-          </tr>
-          <tr>
-            <td style="padding: 16px; border-bottom: 1px solid #e5e7eb;">AIチャット相談</td>
-            <td style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb;">3回まで</td>
-            <td style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb;">無制限</td>
-          </tr>
-          <tr style="background: #fcfcfd;">
-            <td style="padding: 16px; border-bottom: 1px solid #e5e7eb;">AI副業ロードマップ完全版</td>
-            <td style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb;">―</td>
-            <td style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb;">○</td>
-          </tr>
-          <tr>
-            <td style="padding: 16px; border-bottom: 1px solid #e5e7eb;">AI相談履歴</td>
-            <td style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb;">○</td>
-            <td style="padding: 16px; text-align: center; border-bottom: 1px solid #e5e7eb;">○</td>
-          </tr>
-          <tr style="background: #fcfcfd;">
-            <td style="padding: 16px;">副業コミュニティ</td>
-            <td style="padding: 16px; text-align: center;">○</td>
-            <td style="padding: 16px; text-align: center;">○</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
+  <div class="ui-action-grid">
 
-  <section>
-    <div class="pricing-grid-2">
+    <div class="ui-card" style="margin-bottom:0;">
+      <h2 class="ui-card-title">無料プラン</h2>
+      <p class="ui-text ui-mb-16" style="font-size:28px; font-weight:700;">0円</p>
 
-      <div class="pricing-plan-free">
-        <h2 style="font-size: 24px; margin-bottom: 12px; color: #111827;">無料プラン</h2>
-        <p class="pricing-text" style="margin-bottom: 18px;">
-          まずはAI診断やAIレポートを試して、<br>
-          自分に合う副業の方向性を確認したい人向けです。
-        </p>
-
-        <ul style="padding-left: 20px; color: #374151; line-height: 1.9; margin-bottom: 20px;">
-          <li>副業タイプ診断</li>
-          <li>AIレポート</li>
-          <li>AIチャット3回まで</li>
-          <li>AI相談履歴</li>
-          <li>副業コミュニティ</li>
-        </ul>
-
-        <p style="font-size: 14px; color: #6b7280; margin: 0;">
-          まずは無料で相性を確認したい人におすすめ
-        </p>
+      <div class="ui-stack-sm ui-mb-18">
+        <p class="ui-text">・AI副業診断</p>
+        <p class="ui-text">・AIレポート</p>
+        <p class="ui-text">・AIチャット回数制限あり</p>
+        <p class="ui-text">・相談履歴は一部表示</p>
       </div>
 
-      <div class="pricing-plan-premium">
-        <h2 style="font-size: 24px; margin-bottom: 8px; color: #1d4ed8;">プレミアム</h2>
-        <p style="font-size: 34px; font-weight: 700; margin: 0 0 14px 0; color: #111827;">月2980円</p>
+      <a href="/type-diagnosis/" class="ui-button ui-button-gray">
+        無料で試す
+      </a>
+    </div>
 
-        <p class="pricing-text" style="margin-bottom: 18px;">
-          AIチャットを無制限で使いながら、<br>
-          より深いAI相談とロードマップ完全版を活用したい人向けです。
-        </p>
-
-        <ul style="padding-left: 20px; color: #374151; line-height: 1.9; margin-bottom: 22px;">
-          <li>副業タイプ診断</li>
-          <li>AIレポート</li>
-          <li><strong>AIチャット無制限</strong></li>
-          <li><strong>AI副業ロードマップ完全版</strong></li>
-          <li>AI相談履歴</li>
-          <li>副業コミュニティ</li>
-        </ul>
-
-        <a href="/checkout/" class="pricing-button-primary">
-          プレミアムの登録へ進む
-        </a>
+    <div class="ui-card" style="margin-bottom:0; border:2px solid #2563eb; box-shadow:0 8px 24px rgba(37,99,235,0.10);">
+      <div class="ui-badges" style="margin-bottom:14px;">
+        <span class="ui-badge" style="background:#dbeafe; color:#1d4ed8;">おすすめ</span>
       </div>
 
-    </div>
-  </section>
+      <h2 class="ui-card-title">プレミアムプラン</h2>
+      <p class="ui-text ui-mb-16" style="font-size:28px; font-weight:700;">月 2,980円</p>
 
-  <section class="pricing-section">
-    <h2 class="pricing-h2">プレミアムがおすすめな人</h2>
+      <div class="ui-stack-sm ui-mb-18">
+        <p class="ui-text">・AIチャット無制限</p>
+        <p class="ui-text">・プレミアム機能の利用</p>
+        <p class="ui-text">・相談履歴をより活用</p>
+        <p class="ui-text">・継続しやすい導線をフル活用</p>
+      </div>
 
-    <div class="pricing-note">
-      <p class="pricing-text" style="margin: 0;">
-        AIチャットをもっと深く使いたい人、ロードマップを詳しく見たい人、
-        副業を本気で進めたい人にはプレミアムがおすすめです。
-      </p>
-    </div>
-  </section>
-
-  <section class="pricing-section">
-    <h2 class="pricing-h2">よくある質問</h2>
-
-    <div class="pricing-note" style="margin-bottom: 14px;">
-      <p style="font-weight: 700; margin-bottom: 8px;">Q. まずは無料で試せますか？</p>
-      <p class="pricing-text" style="margin: 0;">
-        はい。まずは無料で副業タイプ診断やAIレポートを体験できます。
-      </p>
+      <a href="/checkout/" class="ui-button ui-button-blue">
+        プレミアムの登録へ進む
+      </a>
     </div>
 
-    <div class="pricing-note">
-      <p style="font-weight: 700; margin-bottom: 8px;">Q. プレミアムにすると何が一番変わりますか？</p>
-      <p class="pricing-text" style="margin: 0;">
-        AIチャットが無制限になり、AI副業ロードマップ完全版が使えるようになります。
-      </p>
+  </div>
+
+  <div class="ui-card">
+    <h2 class="ui-card-title">こんな方におすすめ</h2>
+
+    <div class="ui-action-grid">
+      <div class="ui-preview-box">
+        <p class="ui-text ui-text-strong">無料プラン向き</p>
+        <p class="ui-text ui-text-muted">まずは自分に合うか試したい方</p>
+      </div>
+
+      <div class="ui-preview-box">
+        <p class="ui-text ui-text-strong">プレミアム向き</p>
+        <p class="ui-text ui-text-muted">AIチャットを使いながら本気で進めたい方</p>
+      </div>
     </div>
-  </section>
+  </div>
+
+  <div class="ui-card">
+    <h2 class="ui-card-title">よくある質問</h2>
+
+    <div class="ui-stack-md">
+      <div class="ui-preview-box">
+        <p class="ui-text ui-text-strong ui-mb-10">Q. 無料でも使えますか？</p>
+        <p class="ui-text">はい。無料でも診断や一部機能を利用できます。</p>
+      </div>
+
+      <div class="ui-preview-box">
+        <p class="ui-text ui-text-strong ui-mb-10">Q. プレミアムで何が変わりますか？</p>
+        <p class="ui-text">AIチャット無制限など、より深く活用できる機能が使いやすくなります。</p>
+      </div>
+    </div>
+  </div>
 
 </div>
 

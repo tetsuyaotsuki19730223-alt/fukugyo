@@ -1,93 +1,110 @@
 {% extends "snippets/base.html" %}
-
 {% block content %}
 
-<div style="max-width: 800px; margin: 0 auto; padding: 24px;">
+<div class="page-wrap">
 
-  <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 20px;">
-    <div>
-      <h1 style="margin: 0 0 8px 0;">AI副業チャット</h1>
-      <p style="margin: 0; color: #6b7280;">
-        副業の悩みをAIに相談できます
-      </p>
-    </div>
-
-    <a
-      href="{% url 'ai_chat_history' %}"
-      style="display: inline-block; background: #6b7280; color: white; text-decoration: none; padding: 10px 16px; border-radius: 10px;"
-    >
-      相談履歴を見る
-    </a>
-  </div>
-
-  <div style="background: #f8f9fa; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
-    <p style="margin: 0 0 8px 0;">
-      {% if is_premium %}
-        <strong>プレミアム会員</strong>：AIチャット無制限・相談履歴も全件見られます
-      {% else %}
-        <strong>無料会員</strong>：AIチャットは3回まで、相談履歴は最新3件まで表示されます
-      {% endif %}
+  <div class="page-header">
+    <h1 class="page-title">AIチャット</h1>
+    <p class="page-subtext">
+      副業の悩みや次の一歩を、AIにそのまま相談できます。
     </p>
-    <p style="margin: 0;">現在の利用回数：{{ ai_count }}</p>
   </div>
 
-  {% if not is_premium %}
-    <div style="background: #fff7ed; border: 1px solid #fdba74; padding: 14px 16px; border-radius: 12px; margin-bottom: 20px;">
-      <p style="margin: 0; color: #9a3412; line-height: 1.7;">
-        無料プランでは、AIチャットは3回まで、相談履歴は最新3件まで表示されます。<br>
-        プレミアムでは、より深い相談と履歴の全件表示が可能です。
-      </p>
+  {% if profile.is_premium %}
+    <div class="ui-badges">
+      <span class="ui-badge ui-badge-premium">👑 プレミアム会員</span>
+      <span class="ui-badge ui-badge-done">AIチャット無制限</span>
+    </div>
+  {% else %}
+    <div class="ui-badges">
+      <span class="ui-badge ui-badge-free">無料プラン</span>
+      <span class="ui-badge ui-badge-pending">残り {{ remaining_count }} 回</span>
     </div>
   {% endif %}
 
-  <form method="post" style="margin-bottom: 24px;">
-    {% csrf_token %}
-    <textarea
-      name="message"
-      rows="6"
-      placeholder="副業の悩みや相談を書いてください"
-      style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; font-size: 16px; box-sizing: border-box;"
-    ></textarea>
-
-    <div style="margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap;">
-      <button
-        type="submit"
-        style="background: #2563eb; color: white; border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer;"
-      >
-        送信する
-      </button>
-
-      <a
-        href="{% url 'ai_chat_history' %}"
-        style="display: inline-block; background: #e5e7eb; color: #111827; text-decoration: none; padding: 12px 16px; border-radius: 10px;"
-      >
-        履歴を確認
-      </a>
-    </div>
-  </form>
-
-  {% if reply %}
-    <div style="background: #ffffff; border: 1px solid #e5e7eb; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
-      <h2 style="margin-top: 0;">AIの回答</h2>
-      <div style="line-height: 1.8; font-size: 16px;">
-        {{ reply|linebreaksbr }}
-      </div>
-    </div>
-  {% endif %}
+  <div class="ui-message-card">
+    <p class="ui-message-label">💬 相談のコツ</p>
+    <p class="ui-message-text">
+      迷っていることをそのまま書くだけで大丈夫です。具体的な状況があるほど答えが良くなります。
+    </p>
+  </div>
 
   {% if limit_message %}
-    <div style="background: #fff7ed; border: 1px solid #fdba74; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
-      <strong>{{ limit_message }}</strong>
-      <div style="margin-top: 12px;">
-        <a
-          href="{% url 'pricing' %}"
-          style="display: inline-block; background: #f97316; color: white; text-decoration: none; padding: 10px 16px; border-radius: 10px;"
-        >
-          プレミアムを見る
-        </a>
+    <div style="margin-bottom: 16px; padding: 14px 16px; border-radius: 12px; background: #fff7ed; border: 1px solid #fdba74; color: #9a3412;">
+      {{ limit_message }}
+    </div>
+  {% endif %}
+
+  <div class="ui-card">
+    <h2 class="ui-card-title">相談する</h2>
+
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="ui-stack-md">
+        <textarea
+          name="question"
+          rows="6"
+          placeholder="例：副業で何から始めるべきですか？ 今は会社員で、平日は1日30分くらいしか時間が取れません。"
+          style="width:100%; box-sizing:border-box; border:1px solid #d1d5db; border-radius:12px; padding:14px; font:inherit; resize:vertical;"
+        >{{ question }}</textarea>
+
+        <div>
+          <button type="submit" class="ui-button ui-button-blue">AIに相談する</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  {% if not profile.is_premium %}
+    <div class="ui-card">
+      <h2 class="ui-card-title">無料プランの利用回数</h2>
+
+      <div class="ui-preview-box">
+        <p class="ui-text">
+          無料プランでは AIチャットは <strong>{{ max_free_count }} 回まで</strong> 利用できます。
+        </p>
+        <p class="ui-text ui-text-muted" style="margin-top:10px;">
+          もっと深く相談したい方は、プレミアムで無制限に利用できます。
+        </p>
       </div>
     </div>
   {% endif %}
+
+  {% if answer %}
+    <div class="ui-card">
+      <h2 class="ui-card-title">AIの回答</h2>
+
+      <div class="ui-preview-box-blue">
+        {% if question %}
+          <p class="ui-mini-label">あなたの相談</p>
+          <p class="ui-text ui-text-strong ui-mb-14">{{ question }}</p>
+        {% endif %}
+
+        <p class="ui-mini-label">AIの回答</p>
+        <p class="ui-text">{{ answer|linebreaksbr }}</p>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="ui-action-grid">
+    <a href="/ai-chat-history/" class="ui-action-card ui-card-gray">
+      <div class="ui-action-title">📝 履歴</div>
+      <div class="ui-action-text">これまでの相談内容を見返せます</div>
+    </a>
+
+    <a href="/dashboard/" class="ui-action-card ui-card-blue">
+      <div class="ui-action-title">📊 ダッシュボード</div>
+      <div class="ui-action-text">今日の進捗や次の行動を確認できます</div>
+    </a>
+
+    {% if not profile.is_premium %}
+      <a href="/pricing/" class="ui-action-card ui-card-orange">
+        <div class="ui-action-title">👑 プレミアム</div>
+        <div class="ui-action-text">AIチャットを無制限で使えます</div>
+      </a>
+    {% endif %}
+  </div>
 
 </div>
 

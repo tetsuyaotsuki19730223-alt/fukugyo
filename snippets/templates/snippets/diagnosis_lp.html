@@ -1,44 +1,110 @@
 {% extends "snippets/base.html" %}
-
 {% block content %}
 
-<h1>
-AI副業診断
-</h1>
+<div class="page-wrap">
 
-<p>
-あなたに合う副業をAIが診断します。
-</p>
+  <div class="page-header">
+    <h1 class="page-title">今日のミッション</h1>
+    <p class="page-subtext">
+      あなたに合った今日の1アクションに取り組みましょう。
+    </p>
+  </div>
 
-<p>
-質問は3つだけ。<br>
-30秒で結果がわかります。
-</p>
+  <div class="ui-badges">
+    {% if user_mission and user_mission.completed %}
+      <span class="ui-badge ui-badge-done">✅ ミッション達成</span>
+    {% else %}
+      <span class="ui-badge ui-badge-pending">⏳ ミッション未完了</span>
+    {% endif %}
 
-<a href="/type-diagnosis/">
-<button style="font-size:22px;padding:20px 40px;">
-無料AI副業診断を始める
-</button>
-</a>
+    <span class="ui-badge" style="background:#eff6ff; color:#1d4ed8;">
+      ⭐ {{ mission.xp|default:"0" }} XP
+    </span>
+  </div>
 
-<hr>
+  {% if messages %}
+    {% for message in messages %}
+      <div style="
+        margin-bottom: 16px;
+        padding: 14px 16px;
+        border-radius: 12px;
+        {% if message.tags == 'success' %}
+          background: #ecfdf5;
+          border: 1px solid #a7f3d0;
+          color: #065f46;
+        {% elif message.tags == 'info' %}
+          background: #eff6ff;
+          border: 1px solid #bfdbfe;
+          color: #1d4ed8;
+        {% else %}
+          background: #f3f4f6;
+          border: 1px solid #d1d5db;
+          color: #374151;
+        {% endif %}
+      ">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
 
-<h2>診断でわかること</h2>
+  <div class="ui-message-card">
+    <p class="ui-message-label">☀️ 今日の一言</p>
+    <p class="ui-message-text">{{ today_message }}</p>
+  </div>
 
-<ul>
-<li>あなたに合う副業</li>
-<li>月収の目安</li>
-<li>AI副業ロードマップ</li>
-</ul>
+  <div class="ui-card">
+    <h2 class="ui-card-title">内容</h2>
 
-<hr>
+    {% if mission %}
+      <div class="ui-stack-md">
+        <h3 class="ui-subtitle">{{ mission.title }}</h3>
 
-<h2>副業成功事例</h2>
+        {% if mission.description %}
+          <p class="ui-text ui-mb-16">
+            {{ mission.description|linebreaksbr }}
+          </p>
+        {% endif %}
 
-<p>会社員 → AIブログで月8万円</p>
+        <p class="ui-text ui-text-strong ui-mb-18">⭐ 獲得XP: {{ mission.xp }}</p>
 
-<p>主婦 → SNS運用で月5万円</p>
+        {% if user_mission and user_mission.completed %}
+          <p class="ui-text ui-status-success ui-mb-14">
+            ✅ 今日のミッションは達成済みです
+          </p>
 
-<p>学生 → AIライターで月3万円</p>
+          <p class="ui-text ui-mb-14">
+            次はAIチャットで、次の一歩を相談してみましょう。
+          </p>
+
+          <a href="/ai-chat/" class="ui-button ui-button-blue">
+            AIチャットで相談する
+          </a>
+        {% else %}
+          <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="ui-button ui-button-green">
+              ミッション完了
+            </button>
+          </form>
+        {% endif %}
+      </div>
+    {% else %}
+      <p class="ui-text ui-text-muted">今日のミッションはまだありません。</p>
+    {% endif %}
+  </div>
+
+  <div class="ui-action-grid">
+    <a href="/dashboard/" class="ui-action-card ui-card-blue">
+      <div class="ui-action-title">📊 ダッシュボード</div>
+      <div class="ui-action-text">今日の進捗や次の行動を確認できます</div>
+    </a>
+
+    <a href="/my-page/" class="ui-action-card ui-card-gray">
+      <div class="ui-action-title">👤 マイページ</div>
+      <div class="ui-action-text">自分の状態や進捗をまとめて見られます</div>
+    </a>
+  </div>
+
+</div>
 
 {% endblock %}

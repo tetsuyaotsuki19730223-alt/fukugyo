@@ -122,43 +122,52 @@ def build_openai_reply(user_message, is_premium=False):
 def ai_chat(request):
     profile, _ = Profile.objects.get_or_create(user=request.user)
 
-    reply = ""
+    max_free_count = 3
+    question = ""
+    answer = ""
     limit_message = ""
 
     if request.method == "POST":
-        user_message = request.POST.get("message", "").strip()
+        question = request.POST.get("question", "").strip()
 
-        if not user_message:
-            reply = "メッセージを入力してください。"
+        if not question:
+            answer = "メッセージを入力してください。"
         else:
-            if not profile.is_premium and profile.ai_count >= 3:
+            if not profile.is_premium and profile.ai_count >= max_free_count:
                 limit_message = "無料プランのAIチャットは3回までです。プレミアムで無制限に利用できます。"
+                answer = "回数上限に達しました。プレミアム登録で続きの相談ができます。"
             else:
                 try:
-                    reply = build_openai_reply(
-                        user_message=user_message,
+                    answer = build_openai_reply(
+                        user_message=question,
                         is_premium=profile.is_premium,
                     )
                 except Exception:
                     if profile.is_premium:
-                        reply = build_premium_chat_reply(user_message)
+                        answer = build_premium_chat_reply(question)
                     else:
-                        reply = build_free_chat_reply(user_message)
+                        answer = build_free_chat_reply(question)
 
                 AIChatHistory.objects.create(
                     user=request.user,
-                    question=user_message,
-                    answer=reply
+                    question=question,
+                    answer=answer
                 )
 
                 profile.ai_count += 1
                 profile.save()
 
+    remaining_count = max(max_free_count - profile.ai_count, 0)
+
     return render(request, "snippets/ai_chat.html", {
-        "reply": reply,
+        "profile": profile,
+        "question": question,
+        "answer": answer,
         "limit_message": limit_message,
         "ai_count": profile.ai_count,
         "is_premium": profile.is_premium,
+        "remaining_count": remaining_count,
+        "max_free_count": max_free_count,
     })
 
 @login_required

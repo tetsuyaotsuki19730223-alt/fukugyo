@@ -1,90 +1,78 @@
 {% extends "snippets/base.html" %}
-{% load humanize %}
-
 {% block content %}
 
-<div style="max-width: 800px; margin: 0 auto; padding: 24px;">
+<div class="page-wrap">
 
-  <h1 style="margin-bottom: 8px;">AI副業コミュニティ</h1>
-  <p style="color: #6b7280; margin-bottom: 20px;">
-    投稿件数：{{ post_count }}件
-  </p>
+  <div class="page-header">
+    <h1 class="page-title">コミュニティ</h1>
+    <p class="page-subtext">
+      学びや進捗を共有して、ゆるく続けていきましょう。
+    </p>
+  </div>
 
-  <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 24px;">
+  <div class="ui-message-card">
+    <p class="ui-message-label">💬 コミュニティについて</p>
+    <p class="ui-message-text">
+      小さな進捗でも投稿してOKです。続けるきっかけを作りましょう。
+    </p>
+  </div>
+
+  <div class="ui-card">
+    <h2 class="ui-card-title">投稿する</h2>
+
     <form method="post">
       {% csrf_token %}
-      <textarea
-        name="content"
-        rows="4"
-        placeholder="今日の進捗、悩み、気づきを投稿してみましょう"
-        style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 10px; font-size: 16px; box-sizing: border-box;"
-      ></textarea>
 
-      <div style="margin-top: 12px;">
-        <button
-          type="submit"
-          style="background: #2563eb; color: white; border: none; padding: 10px 18px; border-radius: 10px; cursor: pointer;"
-        >
-          投稿する
-        </button>
+      <div class="ui-stack-md">
+        <textarea
+          name="content"
+          rows="5"
+          placeholder="今日やったこと、気づき、悩みなどを書いてみましょう"
+          style="width:100%; box-sizing:border-box; border:1px solid #d1d5db; border-radius:12px; padding:14px; font:inherit; resize:vertical;"
+        ></textarea>
+
+        <div>
+          <button type="submit" class="ui-button ui-button-blue">投稿する</button>
+        </div>
       </div>
     </form>
   </div>
 
-  {% for post in posts %}
-    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 18px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+  <div class="ui-card">
+    <h2 class="ui-card-title">みんなの投稿</h2>
 
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 12px; flex-wrap: wrap;">
-        <div>
-          <strong style="font-size: 16px;">{{ post.user.username }}</strong>
-        </div>
+    {% if posts %}
+      <div class="ui-stack-md">
+        {% for post in posts %}
+          <div class="ui-preview-box">
+            <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:8px;">
+              <p class="ui-text ui-text-strong">{{ post.user.username }}</p>
+              <p class="ui-text ui-text-muted" style="font-size:14px;">
+                {{ post.created_at|date:"Y/m/d H:i" }}
+                {% if post.is_edited %}・編集済み{% endif %}
+              </p>
+            </div>
 
-        <div style="color: #6b7280; font-size: 14px;">
-          {{ post.created_at|naturaltime }}
-          {% if post.is_edited %}
-            <span style="margin-left: 8px; color: #f59e0b;">編集済み</span>
-          {% endif %}
-        </div>
-      </div>
-
-      <div style="line-height: 1.8; font-size: 15px; color: #111827; margin-bottom: 12px;">
-        {{ post.content|linebreaksbr }}
-      </div>
-
-      {% if request.user == post.user %}
-        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-          <a
-            href="{% url 'edit_community_post' post.id %}"
-            style="display: inline-block; background: #f59e0b; color: white; text-decoration: none; padding: 8px 14px; border-radius: 8px;"
-          >
-            編集
-          </a>
-
-          <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-            <form method="post" action="{% url 'delete_community_post' post.id %}" style="margin: 0;">
-              {% csrf_token %}
-              <button
-                type="submit"
-                onclick="return confirm('この投稿を削除しますか？');"
-                style="background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: 700;"
-              >
-                投稿を削除
-              </button>
-            </form>
-
-            <span style="font-size: 13px; color: #6b7280;">
-              削除すると元に戻せません
-            </span>
+            <p class="ui-text">{{ post.content|linebreaksbr }}</p>
           </div>
-        </div>
-      {% endif %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="ui-text ui-text-muted">まだ投稿はありません。</p>
+    {% endif %}
+  </div>
 
-    </div>
-  {% empty %}
-    <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
-      <p style="margin: 0; color: #6b7280;">まだ投稿はありません。最初の投稿をしてみましょう。</p>
-    </div>
-  {% endfor %}
+  <div class="ui-action-grid">
+    <a href="/dashboard/" class="ui-action-card ui-card-blue">
+      <div class="ui-action-title">📊 ダッシュボード</div>
+      <div class="ui-action-text">今日の進捗や次の行動を確認できます</div>
+    </a>
+
+    <a href="/my-page/" class="ui-action-card ui-card-gray">
+      <div class="ui-action-title">👤 マイページ</div>
+      <div class="ui-action-text">自分の状態や進捗をまとめて見られます</div>
+    </a>
+  </div>
 
 </div>
 

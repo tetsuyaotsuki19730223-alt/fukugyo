@@ -1,35 +1,44 @@
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.utils import timezone
-from snippets.models import Profile, UserMission, Mission
-from snippets.utils import calculate_level
+from snippets.models import Profile, Mission, UserMission
 
 
 @login_required
-def mission(request):
+def my_page(request):
     profile, _ = Profile.objects.get_or_create(user=request.user)
-    today = timezone.localdate()
 
+    xp = profile.xp
+    level = profile.level
+
+    current_level_start = (level - 1) * 100
+    next_level_target = level * 100
+
+    if next_level_target > current_level_start:
+        progress = ((xp - current_level_start) / (next_level_target - current_level_start)) * 100
+    else:
+        progress = 0
+
+    progress = max(0, min(progress, 100))
+    next_level_xp = max(next_level_target - xp, 0)
+
+    today = timezone.localdate()
     user_type = profile.sidejob_type or "seller"
+
+    today_mission = None
+    today_user_mission = None
+
     missions = Mission.objects.filter(mission_type=user_type).order_by("id")
 
-    if not missions.exists():
-        return render(request, "snippets/mission.html", {
-            "mission": None,
-            "profile": profile,
-            "user_mission": None,
-            "today_message": "今日も小さく一歩進めていきましょう。",
-        })
+    if missions.exists():
+        mission_index = today.toordinal() % missions.count()
+        today_mission = missions[mission_index]
 
-    mission_index = today.toordinal() % missions.count()
-    mission_obj = missions[mission_index]
-
-    user_mission, _ = UserMission.objects.get_or_create(
-        user=request.user,
-        mission=mission_obj,
-        assigned_date=today,
-    )
+        today_user_mission, _ = UserMission.objects.get_or_create(
+            user=request.user,
+            mission=today_mission,
+            assigned_date=today,
+        )
 
     messages_before = {
         "seller": "今日は『価値を言葉にする日』です。小さくても1つ提案してみましょう。",
@@ -45,29 +54,16 @@ def mission(request):
         "stable": "今日のミッション達成です。次はAIチャットで明日も続けやすい進め方を相談してみましょう。",
     }
 
-    if request.method == "POST":
-        if not user_mission.completed:
-            user_mission.completed = True
-            user_mission.save()
-
-            profile.xp += mission_obj.xp
-            profile.level = calculate_level(profile.xp)
-            profile.save()
-
-            messages.success(request, f"ミッション完了！ +{mission_obj.xp}XP 獲得しました。")
-        else:
-            messages.info(request, "このミッションはすでに完了しています。")
-
-        return redirect("mission")
-
-    if user_mission.completed:
+    if today_user_mission and today_user_mission.completed:
         today_message = messages_after.get(user_type, "今日のミッション達成です。次の一歩も進めていきましょう。")
     else:
         today_message = messages_before.get(user_type, "今日も小さく一歩進めていきましょう。")
 
-    return render(request, "snippets/mission.html", {
-        "mission": mission_obj,
-        "user_mission": user_mission,
+    return render(request, "snippets/my_page.html", {
         "profile": profile,
+        "today_mission": today_mission,
+        "today_user_mission": today_user_mission,
         "today_message": today_message,
+        "progress": progress,
+        "next_level_xp": next_level_xp,
     })
